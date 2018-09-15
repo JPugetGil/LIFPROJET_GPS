@@ -2,22 +2,114 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
-integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-crossorigin=""/>
-   		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-   		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
-integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-crossorigin=""></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> <!-- BOOTSTRAP -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/> <!-- LEAFLET -->
+		<link href="C3js/c3.css" rel="stylesheet"> <!-- C3JS CSS -->
+		
+   		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> <!-- jQUERY -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> <!-- POPPER -->
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> <!-- BOOTSTRAP -->
+   		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script> <!-- LEAFLET -->
+		<script src="C3js/docs/js/d3-5.4.0.min.js" charset="utf-8"></script> <!-- C3js -->
+		<script src="C3js/docs/js/c3.min.js"></script> <!-- C3js -->
+		
 
 		<title>Improve my GPX</title>
 	</head>
+	
 	<body>
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      		<a class="navbar-brand" href="#">Improve my GPX</a>
-      	</nav>
-	</body>
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
+		  <h5 class="my-0 mr-md-auto font-weight-normal text-light">Improve my GPX</h5>
+		  <nav class="my-2 my-md-0 mr-md-3">
+			<a class="btn btn-outline-primary" href="#">Importer</a>
+			<a class="p-2 text-white" href="#">Description</a>
+			<a class="p-2 text-white" href="#">A propos</a>
+		  </nav>
+		</div>
+		<div class="row" style="margin-left=10px; margin-right: 10px">
+			<div class="col-lg-8 bg-info">
+				<div class="row">
+					<div class="col-lg-11 bg-primary">
+
+							<div id="mapid" style="width: 100%; height: 500px"></div>
+							<script>
+
+								var mymap = L.map('mapid').setView([45.778873, 4.867961], 13);
+
+								L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+									maxZoom: 18,
+									attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+										'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+										'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+									id: 'mapbox.streets'
+								}).addTo(mymap);
+
+							</script>
+
+						<div class="row col-auto bg-light">
+							<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;">
+								<script>
+									var chart = c3.generate({
+										data: {
+											x: 'x',
+											columns: [
+												['x', 30, 500, 1000, 2300, 3000, 3100],
+												['data1', 627.9, 360.0, 229.0, 400, 150, 250]
+											]
+										}
+									});
+								</script>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-1 bg-secondary">BDF</div>
+				</div>
+			</div>
+			
+    		<div class="col-lg-4">
+				<table class="table table-striped table-hover table-bordered">
+				   <thead>
+					  <tr>
+						 <th scope="col">#</th>
+						 <th scope="col">Latitude</th>
+						 <th scope="col">Longitude</th>
+						 <th scope="col">Altitude</th>
+					  </tr>
+				   </thead>
+				   <tbody>
+					  <tr>
+						 <th scope="row">1</th>
+						 <td>43.977242163</td>
+						 <td>5.226244199</td>
+						 <td>627.9</td>
+					  </tr>
+					  <tr>
+						 <th scope="row">2</th>
+						 <td>43.928653306</td>
+						 <td>5.186750505</td>
+						 <td>360.0</td>
+					  </tr>
+					  <tr>
+						 <th scope="row">3</th>
+						 <td>43.893514388</td>
+						 <td>5.132144372</td>
+						 <td>229.0</td>
+					  </tr>
+					  <tr>
+						 <th scope="row">4</th>
+						 <td>43.82654128</td>
+						 <td>5.02262456</td>
+						 <td>150.0</td>
+					  </tr>
+				   </tbody>
+				</table>
+			</div>
+		</div>
+</body>
+<footer class="footer" style="position:fixed; bottom:0; width:100%; height:40px; line-height:40px; background-color: #f6f6f6">
+	<div class="d-flex flex-column flex-md-row align-items-center px-md-4 mb-3 bg-light border-bottom shadow-sm">
+		<h5 class="my-0 mr-md-auto font-weight-normal text-dark">Edition et Visualisation de traces GPS sur le WEB</h5>
+		<a class="p-2 text-dark" href="#">GIL Jérôme - PEYROT Thomas - SCRIVEN Anthony</a>
+	</div>
+</footer>
 </html>
