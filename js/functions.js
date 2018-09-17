@@ -1,33 +1,52 @@
 // JavaScript Document
 
-var StravaApiV3 = require('strava_api_v3');
-var defaultClient = StravaApiV3.ApiClient.instance;
+// DYN GEN. //
 
-// Configure OAuth2 access token for authorization: strava_oauth
-var strava_oauth = defaultClient.authentications['strava_oauth'];
-strava_oauth.accessToken = "YOUR ACCESS TOKEN"
+$(generationDynamique())
 
-var api = new StravaApiV3.UploadsApi()
+function generationDynamique(){
+	var listeDeLatitude = [1,2,3,4,5,6,7,8,9,10];
+	var listeDeLongitude = [1,2,3,4,5,6,7,8,9,10];
+	var centreTraceLatitude = moyenneDunTableau(listeDeLatitude);
+	var centreTraceLongitude = moyenneDunTableau(listeDeLongitude);
+	var elevationCarte = plusGrandModule(listeDeLatitude, listeDeLongitude, centreTraceLatitude, centreTraceLongitude);
+	
+	var mymap = L.map('mapid').setView([centreTraceLatitude, centreTraceLongitude], elevationCarte);
 
-var opts = { 
-  'file': /path/to/file.txt, // {File} The uploaded file.
-  'name': name_example, // {String} The desired name of the resulting activity.
-  'description': description_example, // {String} The desired description of the resulting activity.
-  'private': 56, // {Integer} Whether the resulting activity should be private.
-  'trainer': trainer_example, // {String} Whether the resulting activity should be marked as having been performed on a trainer.
-  'commute': commute_example, // {String} Whether the resulting activity should be tagged as a commute.
-  'dataType': dataType_example, // {String} The format of the uploaded file.
-  'externalId': externalId_example // {String} The desired external identifier of the resulting activity.
-};
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+	
+}
 
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.createUpload(opts, callback);
+
+// MAP FUNCTIONS //
+
+function moyenneDunTableau(tab){
+	var somme = 0.0;
+	for (i=0; i<tab.length; i++){
+		somme += tab[i];
+	}
+	return (somme/tab.length);
+}
+
+function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLongitude){
+	var module = 0;
+	for(i=0; i<tabLatitude.length; i++){
+		if(Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude)) > module){
+			module = Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude));
+		}
+	}
+	return module;
+}
+
+
+// CONVERT FUNCTION //
+
 
 var toGeoJSON = (function() {
     'use strict';
