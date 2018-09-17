@@ -44,6 +44,20 @@
 										'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 									id: 'mapbox.streets'
 								}).addTo(mymap);
+								
+								var geojsonMarkerOptions = {
+									opacity: 0,
+									fillOpacity: 0
+								};
+																
+								var myPath = fetch("data/runinlyon.json")
+									.then(content => content.json())
+									.then(content => L.geoJSON(content, {
+										pointToLayer: function (feature, latlng) {
+											return L.circleMarker(latlng, geojsonMarkerOptions);
+										}
+									}).addTo(mymap))
+									.catch(error => console.log(error));
 
 							</script>
 
