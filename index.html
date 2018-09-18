@@ -20,98 +20,13 @@
 		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
 		  <h5 class="my-0 mr-md-auto font-weight-normal text-light"><a class="p-2 text-white" href="index.html">Improve my GPX</a></h5>
 		  <nav class="my-2 my-md-0 mr-md-3">
-			<a class="btn btn-outline-primary" href="#">Importer</a>
-			<a class="p-2 text-white" href="description.html">Description</a>
-			<a class="p-2 text-white" href="aboutus.html">A propos</a>
+			<button type="button" class="btn btn-outline-primary" onClick="importer()">Importer</button>
+			<button type="button" class="btn btn-info" onClick="generationDescription()">Description</button>
+			<button type="button" class="btn btn-default" onClick="generationAboutUs()">A Propos</button>
 		  </nav>
 		</div>
-		<div id="PlanDeTravail" class="row" style="margin-left: 10px; margin-bottom: 40px">
-			<div class="col-lg-8">
-				<div class="row">
-					<div class="col-lg-11 bg-light">
-						<div id="mapid" style="width: 100%; height: 500px"></div>
-						<div id="graphe" class="row col-auto bg-light">
-							<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;">
-							</div>
-						</div>
-					</div>
-					<div class="col-lg-1 bg-light">
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-redo"></i></button>
-						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-minus"></i></button>
-						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-link"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-unlink"></i></button>
-						<br>
-						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-question"></i></button>
-						<button type="button" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
-					</div>
-				</div>
-
-			</div>
-			<div class="col-lg-4">
-				<table class="table table-striped table-hover table-bordered">
-				   <thead>
-					  <tr>
-						 <th scope="col">#</th>
-						 <th scope="col">Latitude</th>
-						 <th scope="col">Longitude</th>
-						 <th scope="col">Altitude</th>
-					  </tr>
-				   </thead>
-				   <tbody id="dataTable">
-					  <tr>
-						 <th scope="row">1</th>
-						 <td>43.977242163</td>
-						 <td>5.226244199</td>
-						 <td>627.9</td>
-					  </tr>
-					  <tr>
-						 <th scope="row">2</th>
-						 <td>43.928653306</td>
-						 <td>5.186750505</td>
-						 <td>360.0</td>
-					  </tr>
-					  <tr>
-						 <th scope="row">3</th>
-						 <td>43.893514388</td>
-						 <td>5.132144372</td>
-						 <td>229.0</td>
-					  </tr>
-					  <tr>
-						 <th scope="row">4</th>
-						 <td>43.82654128</td>
-						 <td>5.02262456</td>
-						 <td>150.0</td>
-					  </tr>
-				   </tbody>
-				</table>
-
-				<table class="table table-striped table-hover table-bordered">
-				   <thead>
-					  <tr>
-						 <th scope="col">#</th>
-						 <th scope="col">Nom du fichier</th>
-						 <th scope="col">Distance</th>
-						 <th scope="col">Durée</th>
-						 <th scope="col"><i class="fas fa-trash"></i></th>
-					  </tr>
-				   </thead>
-				   <tbody id="fileTable">
-					  <tr>
-						 <th scope="row">1</th>
-						 <td>rspg-quet-en-beaumont.gpx</td>
-						 <td>10.6km</td>
-						 <td>6h 34min</td>
-						 <td><button class="btn btn-danger" type="button">X</button></td>
-					  </tr>
-				   </tbody>
-				</table>
-			</div>
+		<div id="planDeTravail" class="row" style="margin-left: 10px; margin-bottom: 40px">
+			
 		</div>
 		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script> <!-- LEAFLET -->
 		<script src="js/functions.js"></script> <!-- FONCTIONS -->
