@@ -242,6 +242,23 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 	return module;
 }
 
+// Draw path from a geoJson variable in a map
+// Var : L - LeafLet
+// Var : myMap - the map
+// Var : geoJsonPath - the path
+// Returns : none
+function drawPath(L, myMap, geoJsonPath) {
+	let geojsonMarkerOptions = {
+		opacity: 0,
+		fillOpacity: 0
+	};
+	
+	L.geoJSON(geoJsonPath, {
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, geojsonMarkerOptions);
+		}
+	}).addTo(myMap);
+}
 
 // CONVERT FUNCTION //
 
