@@ -169,11 +169,6 @@ function generationAboutUs(){
 		  </div>`;
 }
 
-function getfile(){
-    document.getElementById('hiddenbutton').click();
-    document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value
-}
-
 function importer(){
 	if (State == "index"){
 		console.log("Nous allons importer le fichier...");
@@ -182,8 +177,9 @@ function importer(){
 		generationDynamique();
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
+	document.getElementById('hiddenbutton').click();
+    	document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value;
 }
-
 /*
 
 	var mymap = L.map('mapid').setView([45.778873, 4.867961], 13);
