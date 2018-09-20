@@ -169,6 +169,11 @@ function generationAboutUs(){
 		  </div>`;
 }
 
+function getfile(){
+    document.getElementById('hiddenbutton').click();
+    document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value
+}
+
 function importer(){
 	if (State == "index"){
 		console.log("Nous allons importer le fichier...");
