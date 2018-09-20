@@ -257,7 +257,7 @@ function drawPath(L, myMap, geoJsonPath) {
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
-	}).addTo(myMap))
+	}).addTo(myMap);
 }
 
 // CONVERT FUNCTION //
