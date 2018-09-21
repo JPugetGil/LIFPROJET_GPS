@@ -178,7 +178,6 @@ function importer(){
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
 	document.getElementById('hiddenbutton').click();
-    document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value;
 }
 
 function aide(){
