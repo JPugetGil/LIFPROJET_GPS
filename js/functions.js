@@ -78,19 +78,19 @@ function generationIndex(){
 						</div>
 					</div>
 					<div class="col-lg-1 bg-light">
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-redo"></i></button>
+						<button type="button"  alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
+						<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-redo"></i></button>
 						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-plus"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-minus"></i></button>
+						<button type="button" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-plus"></i></button>
+						<button type="button" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-minus"></i></button>
 						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-link"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-unlink"></i></button>
+						<button type="button" alt="Lier" title="Lier" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-link"></i></button>
+						<button type="button" alt="Délier" title="Délier" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-unlink"></i></button>
 						<br>
 						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="aide()"><i class="fas fa-question"></i></button>
-						<button type="button" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
+						<button type="button" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-secondary btn-lg btn-block" onclick="aide()"><i class="fas fa-question"></i></button>
+						<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
+						<button type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
 					</div>
 				</div>
 
