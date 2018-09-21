@@ -88,7 +88,6 @@ function generationIndex(){
 						<button type="button" alt="Délier" title="Délier" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-unlink"></i></button>
 						<br>
 						<br>
-						<button type="button" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-secondary btn-lg btn-block" onclick="aide()"><i class="fas fa-question"></i></button>
 						<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
 						<button type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
 					</div>
