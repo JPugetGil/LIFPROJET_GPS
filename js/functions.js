@@ -63,13 +63,13 @@ function generationDynamique(){
 	var State = "index";
 	
 	generationIndex(); //Permet de générer la page index.html
-	var listeDeLatitude = [1,2,3,4,5,6,7,8,9,10];
-	var listeDeLongitude = [1,2,3,4,5,6,7,8,9,10];
+	var listeDeLatitude = [45.754915,45.756043,45.765045,45.76649,45.772683,45.772556,45.769301,45.767426,45.763782,45.756855];
+	var listeDeLongitude = [4.825789,4.824429,4.829082,4.818843,4.810368,4.838639,4.841204,4.833317,4.836033,4.831408];
 	var centreTraceLatitude = moyenneDunTableau(listeDeLatitude);
 	var centreTraceLongitude = moyenneDunTableau(listeDeLongitude);
 	var elevationCarte = plusGrandModule(listeDeLatitude, listeDeLongitude, centreTraceLatitude, centreTraceLongitude);
 	
-	var mymap = L.map('mapid').setView([centreTraceLatitude, centreTraceLongitude], elevationCarte);
+	var mymap = L.map('mapid').setView([centreTraceLatitude, centreTraceLongitude], elevationCarte*25);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -100,21 +100,33 @@ function generationDynamique(){
 						   </thead>`;
 	
 	document.getElementById("tableData").innerHTML = headTableData;
-	document.getElementById("tableData").innerHTML += JSONtoHTML([0,1,2,3]);
+
+	var jsontest = '{ "coordinates" : [' +
+'{ "Latitude":"1" , "Longitude":"2", "Elevation":"3" },' +
+'{ "Latitude":"4" , "Longitude":"5", "Elevation":"6" },' +
+'{ "Latitude":"7" , "Longitude":"8", "Elevation":"9" } ]}'; 
+
+	document.getElementById("tableData").innerHTML += JSONtoHTML(JSON.parse(jsontest));
 	
 	return mymap;
 }
 
 function JSONtoHTML(jsonData){
 	var tableContent = `<tbody>`;
-	for (i=0; i<jsonData.length; i++){
+	for (i=0; i<jsonData.coordinates.length; i++){
 		tableContent += `<tr>
 							<th scope="row">`;
 		tableContent += i+1;
 		tableContent += `</th>
-							<td>43.977242163</td>
-							<td>5.226244199</td>
-							<td>627.9</td>
+							<td>`;
+		tableContent += jsonData.coordinates[i].Latitude;
+		tableContent += `</td>
+							<td>`;
+		tableContent += jsonData.coordinates[i].Longitude;
+		tableContent += `</td>
+							<td>`;
+		tableContent += jsonData.coordinates[i].Elevation;
+		tableContent += `</td>
 						  </tr>`;
 	}
 	tableContent += `</tbody>`;
