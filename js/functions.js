@@ -2,7 +2,61 @@
 
 // DYN GEN. //
 
-$(generationDynamique())
+$(startPage());
+
+function startPage() {
+	let myMap = generationDynamique();
+	(function(myMap) {
+		$.ajax('data/runinlyon_10km.gpx').done(gpx => {
+			console.log(toGeoJSON.gpx(gpx));
+			coucou = toGeoJSON.gpx(gpx);
+			drawPath(myMap, toGeoJSON.gpx(gpx));
+		});
+	})(myMap);
+}
+
+function drawPath(myMap, geoJsonPath) {
+	let geojsonMarkerOptions = {
+		opacity: 0,
+		fillOpacity: 0
+	};
+	L.geoJSON(geoJsonPath, {
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, geojsonMarkerOptions);
+		}
+	}).addTo(myMap);
+}
+
+/*
+function startPage() {
+	let map = generationDynamique();
+	console.log("A");
+	let geoPromise = geoJsonFromGpx('data/runinlyon_10km.gpx');
+	console.log(geoPromise);
+	drawPath(map, geoPromise);
+}
+
+function geoJsonFromGpx(file) {
+	return $.ajax(file).done(gpx => toGeoJSON.gpx(gpx)).then(gpx => gpx.text());
+}
+
+function drawPath(map, geoJsonPromise) {
+	let geoJsonMarkerOptions = {
+		opacity: 0,
+		fillOpacity: 0
+	};
+	console.log(geoJsonPromise);
+	geoJsonPromise
+		.then(geo => {
+			console.log(geo);
+			console.log(map);
+			L.geoJSON(geo, {
+				pointToLayer: function (feature, latlng) {
+					return L.circleMarker(latlng, geoJsonMarkerOptions);
+				}
+			}).addTo(map);
+		});
+}*/
 
 function generationDynamique(){
 	
@@ -47,6 +101,8 @@ function generationDynamique(){
 	
 	document.getElementById("tableData").innerHTML = headTableData;
 	document.getElementById("tableData").innerHTML += JSONtoHTML([0,1,2,3]);
+	
+	return mymap;
 }
 
 function JSONtoHTML(jsonData){
@@ -245,24 +301,6 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 		}
 	}
 	return module;
-}
-
-// Draw path from a geoJson variable in a map
-// Var : L - LeafLet
-// Var : myMap - the map
-// Var : geoJsonPath - the path
-// Returns : none
-function drawPath(L, myMap, geoJsonPath) {
-	let geojsonMarkerOptions = {
-		opacity: 0,
-		fillOpacity: 0
-	};
-	
-	L.geoJSON(geoJsonPath, {
-		pointToLayer: function (feature, latlng) {
-			return L.circleMarker(latlng, geojsonMarkerOptions);
-		}
-	}).addTo(myMap);
 }
 
 // CONVERT FUNCTION //
@@ -647,7 +685,8 @@ var toGeoJSON = (function() {
                             if (line.heartRates && line.heartRates.length) {
                                 heartRates.push(line.heartRates);
                             } else {
-                                heartRates.push(initializeArray([], line.line.length || 0));
+                                //heartRates.push(initializeArray([], line.line.length || 0));
+                                heartRates.push(initializeArray([], line.length || 0));
                             }
                         }
                     }
