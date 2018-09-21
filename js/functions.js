@@ -88,7 +88,7 @@ function generationIndex(){
 						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-unlink"></i></button>
 						<br>
 						<br>
-						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-question"></i></button>
+						<button type="button" class="btn btn-secondary btn-lg btn-block" onclick="aide()"><i class="fas fa-question"></i></button>
 						<button type="button" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
 						<button type="button" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
 					</div>
@@ -178,7 +178,11 @@ function importer(){
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
 	document.getElementById('hiddenbutton').click();
-    	document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value;
+    document.getElementById('selectedfile').value=document.getElementById('hiddenbutton').value;
+}
+
+function aide(){
+	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
 /*
 
