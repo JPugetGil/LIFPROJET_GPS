@@ -1,5 +1,7 @@
 // JavaScript Document
 
+let geoPaths = [];
+
 // DYN GEN. //
 
 $(startPage());
@@ -8,9 +10,9 @@ function startPage() {
 	let myMap = generationDynamique();
 	(function(myMap) {
 		$.ajax('data/runinlyon_10km.gpx').done(gpx => {
-			console.log(toGeoJSON.gpx(gpx));
-			coucou = toGeoJSON.gpx(gpx);
-			drawPath(myMap, toGeoJSON.gpx(gpx));
+			let index = geoPaths.length;
+			geoPaths[index] = toGeoJSON.gpx(gpx);
+			drawPath(myMap, geoPaths[index]);
 		});
 	})(myMap);
 }
@@ -26,37 +28,6 @@ function drawPath(myMap, geoJsonPath) {
 		}
 	}).addTo(myMap);
 }
-
-/*
-function startPage() {
-	let map = generationDynamique();
-	console.log("A");
-	let geoPromise = geoJsonFromGpx('data/runinlyon_10km.gpx');
-	console.log(geoPromise);
-	drawPath(map, geoPromise);
-}
-
-function geoJsonFromGpx(file) {
-	return $.ajax(file).done(gpx => toGeoJSON.gpx(gpx)).then(gpx => gpx.text());
-}
-
-function drawPath(map, geoJsonPromise) {
-	let geoJsonMarkerOptions = {
-		opacity: 0,
-		fillOpacity: 0
-	};
-	console.log(geoJsonPromise);
-	geoJsonPromise
-		.then(geo => {
-			console.log(geo);
-			console.log(map);
-			L.geoJSON(geo, {
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, geoJsonMarkerOptions);
-				}
-			}).addTo(map);
-		});
-}*/
 
 function generationDynamique(){
 	
@@ -250,48 +221,6 @@ function importer(){
 function aide(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
-/*
-
-	var mymap = L.map('mapid').setView([45.778873, 4.867961], 13);
-
-								L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-									maxZoom: 18,
-									attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-										'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-										'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-									id: 'mapbox.streets'
-								}).addTo(mymap);
-								
-								var geojsonMarkerOptions = {
-									opacity: 0,
-									fillOpacity: 0
-								};
-																
-								var myPath = fetch("data/runinlyon.json")
-									.then(content => content.json())
-									.then(content => L.geoJSON(content, {
-										pointToLayer: function (feature, latlng) {
-											return L.circleMarker(latlng, geojsonMarkerOptions);
-										}
-									}).addTo(mymap))
-									.catch(error => console.log(error));
-
-							</script>
-
-						<div class="row col-auto bg-light">
-							<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;">
-								<script>
-									var chart = c3.generate({
-										data: {
-											x: 'x',
-											columns: [
-												['x', 30, 500, 1000, 2300, 3000, 3100],
-												['data1', 627.9, 360.0, 229.0, 400, 150, 250]
-											]
-										}
-									});
-
-*/
 
 // MAP FUNCTIONS //
 
