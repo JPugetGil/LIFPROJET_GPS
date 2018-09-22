@@ -1,23 +1,28 @@
 // JavaScript Document
 
-let geoPaths = [];
+let geoPaths = {
+	map: undefined,
+	paths: []
+};
 
 // DYN GEN. //
 
 $(startPage());
 
 function startPage() {
-	let myMap = generationDynamique();
-	(function(myMap) {
-		$.ajax('data/runinlyon_10km.gpx').done(gpx => {
-			let index = geoPaths.length;
-			geoPaths[index] = toGeoJSON.gpx(gpx);
-			drawPath(myMap, geoPaths[index]);
-		});
-	})(myMap);
+	geoPaths.map = generationDynamique();
+	addFileToPath("data/runinlyon_10km.gpx");
 }
 
-function drawPath(myMap, geoJsonPath) {
+function addFileToPath(file) {
+	$.ajax(file).done(gpx => {
+		let index = geoPaths.paths.length;
+		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
+		drawPath(geoPaths.paths[index]);
+	});
+}
+
+function drawPath(geoJsonPath) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
 		fillOpacity: 0
@@ -26,7 +31,7 @@ function drawPath(myMap, geoJsonPath) {
 		pointToLayer: function (feature, latlng) {
 			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
-	}).addTo(myMap);
+	}).addTo(geoPaths.map);
 }
 
 function generationDynamique(){
