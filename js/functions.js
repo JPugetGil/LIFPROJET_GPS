@@ -247,8 +247,26 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 	return module;
 }
 
-// CONVERT FUNCTION //
+// CONVERSION FUNCTIONS //
 
+function geoJsonToXml(geoJS) {
+	let xml = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><gpx version='1.1'>";
+	
+	if (geoJS.hasOwnProperty("features")) {
+		geoJS = geoJS.features[0];
+	}
+	let hasProperties = geoJS.hasOwnProperty("properties");
+	
+	if (hasProperties) {
+		if (geoJS.hasOwnProperty("name")) {
+			xml += "<metadata><name>" + geoJS.name + "</name></metadata>";
+		}
+	}
+	
+	xml += "<trk>";
+	
+	xml += "</trk></gpx>";	
+}
 
 var toGeoJSON = (function() {
     'use strict';
