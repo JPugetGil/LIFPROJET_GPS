@@ -224,8 +224,7 @@ function upload(){
 	document.getElementById('hiddenbutton').click();
 	var path = document.getElementById('hiddenbutton').value;
 	
-	addFileToPath(path);
-	console.log(2+2);
+	//addFileToPath(path);
 	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
 }
 
