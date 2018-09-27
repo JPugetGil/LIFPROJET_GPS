@@ -1,12 +1,15 @@
 // JavaScript Document
 
+// Global variable
 let geoPaths = {
-	map: undefined,
-	paths: []
+	map: undefined, // A leaflet map
+	paths: [] // An array of geoJSON variable
 };
 
 // DYN GEN. //
 
+// Used with the site first launch
+// Return : none
 function startPage() {
 	jQuery.ajaxSetup({async : false});
 	geoPaths.map = generationDynamique();
@@ -15,6 +18,8 @@ function startPage() {
 	setListeners();
 }
 
+// Set up the listeners
+// Return : none
 function setListeners() {
 	let saveButton = document.getElementById("saveButton");
 	if (saveButton !== undefined) {
@@ -22,6 +27,9 @@ function setListeners() {
 	}
 }
 
+// Add the content of a .gpx file into the global variable geoPaths.paths[]
+// Param : file -> a .gpx file
+// Return : none
 function addFileToPath(file) {
 	$.ajax(file).done(gpx => {
 		let index = geoPaths.paths.length;
@@ -31,6 +39,9 @@ function addFileToPath(file) {
 	});
 }
 
+// Draw a path in the map from a geoJSON variable
+// Param : geoJsonPath -> the path we want to draw, a geoJSON variable
+// Return : none
 function drawPath(geoJsonPath) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
@@ -43,6 +54,8 @@ function drawPath(geoJsonPath) {
 	}).addTo(geoPaths.map);
 }
 
+// Generate the map
+// Return : the map
 function generationDynamique(){
 	
 	var State = "index";
@@ -78,6 +91,9 @@ function generationDynamique(){
 	return mymap;
 }
 
+// Fill an HTML table with the points of a geoJSON variable
+// Param : To complete -> a geoJSON variable
+// Return : none
 function JSONtoHTML(){
 	document.getElementById("tableauFichiers").style.height = '20%';
 	document.getElementById("tableauPoints").style.height = '500px';
@@ -114,6 +130,8 @@ function JSONtoHTML(){
 	document.getElementById("tableData").innerHTML += tableContent;
 }
 
+// Generate the main section (with the map)
+// Return : none
 function generationIndex(){
 	State = "index";
 	document.getElementById("planDeTravail").innerHTML =
@@ -172,6 +190,8 @@ function generationIndex(){
 			</div>`;
 }
 
+// Generate the "Description" section
+// Return : none
 function generationDescription(){
 	State = "description";
 	document.getElementById("planDeTravail").innerHTML = 
@@ -200,6 +220,8 @@ function generationDescription(){
 			</div>`;
 }
 
+// Generate the "About us" section
+// Return : none
 function generationAboutUs(){
 	State = "aboutus";
 	document.getElementById("planDeTravail").innerHTML =
@@ -220,6 +242,8 @@ function generationAboutUs(){
 		  </div>`;
 }
 
+// Upload a file into the page from your own computer
+// Return : none
 function upload(){
 	if (State == "index"){
 		console.log("Nous allons importer le fichier...");
@@ -235,6 +259,9 @@ function upload(){
 	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
 }
 
+// Generate the bottom graph from a geoJSON trace
+// Param : trace -> a geoJSON variable
+// Return : none
 function generationGraphe(trace) {
 	var abscisse = ['x'];
 	//console.log(trace.features[0].geometry.coordinates);
@@ -254,10 +281,14 @@ function generationGraphe(trace) {
 	});
 }
 
+// Open the help window
+// Return : none
 function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
 
+// Open a window enabling the user to download a .gpx file
+// Return : none
 function saveAndGet() {
 	let geoJS = geoPaths.paths[0];
 	let xml = geoJsonToXml(geoJS);
@@ -294,6 +325,10 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
+// Make a string longer by copying its content nb times
+// Param : text -> the string to copy
+// Param : nb -> the number of times you want to copy
+// Return : the result string
 function repeatString(text, nb) {
 	let repeated = text;
 	for (let i = 0; i < nb-1; i++) {
@@ -302,6 +337,9 @@ function repeatString(text, nb) {
 	return repeated;
 }
 
+// Convert a geoJSON variable into a text corresponding to its .gpx
+// Param : geoJS -> the geoJSON variable
+// Return : a string corresponding to a .gpx file
 function geoJsonToXml(geoJS) {
 	let feed = "\n";
 	let tab = "\t";
@@ -355,6 +393,7 @@ function geoJsonToXml(geoJS) {
 	return xml;
 }
 
+// Convert a .gpx file into a geoJSON variable
 var toGeoJSON = (function() {
     'use strict';
 
@@ -814,6 +853,5 @@ var toGeoJSON = (function() {
     return t;
 })();
 
-if (typeof module !== 'undefined') module.exports = toGeoJSON;
-
+// Launch after page is ready
 $(startPage());
