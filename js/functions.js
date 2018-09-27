@@ -383,9 +383,9 @@ function reSample(fileNumber){
 }
 		
 // Resample geoJSON coordinates
-// Param : factor -> factor of resampling
 // Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
-function reSample(factor, fileNumber){
+function reSample(fileNumber){
+	let factor = prompt("Par combien voulez-vous divisez le nombre de valeur ?", "Insérez ici");
 	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
 	for(let i=0; i<length/factor;i++){
 		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
