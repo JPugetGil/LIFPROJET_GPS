@@ -303,7 +303,7 @@ function repeatString(text, nb) {
 }
 
 function geoJsonToXml(geoJS) {
-	let feed = "\n\r";
+	let feed = "\n";
 	let tab = "\t";
 	let xml = `<?xml version='1.0' encoding='UTF-8' standalone='yes'?>${feed}<gpx version='1.1'>`;
 	
