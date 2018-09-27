@@ -11,18 +11,7 @@ function startPage() {
 	jQuery.ajaxSetup({async : false});
 	geoPaths.map = generationDynamique();
 	addFileToPath("data/runinlyon_10km.gpx");
-	var headTableData = `<thead>
-							  <tr>
-								 <th scope="col">#</th>
-								 <th scope="col">Latitude</th>
-								 <th scope="col">Longitude</th>
-								 <th scope="col">Altitude</th>
-							  </tr>
-						   </thead>`;
-	
-	document.getElementById("tableData").innerHTML = headTableData;
-	
-	document.getElementById("tableData").innerHTML += JSONtoHTML();
+	JSONtoHTML();
 	
 }
 
@@ -31,7 +20,6 @@ function addFileToPath(file) {
 		let index = geoPaths.paths.length;
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		drawPath(geoPaths.paths[index]);
-		//console.log(geoPaths.paths.length);
 
 
 	});
@@ -86,7 +74,18 @@ function generationDynamique(){
 
 function JSONtoHTML(){
 	var tableContent = `<tbody>`;
-	console.log(geoPaths.paths);
+	var headTableData = `<thead>
+							  <tr>
+								 <th scope="col">#</th>
+								 <th scope="col">Latitude</th>
+								 <th scope="col">Longitude</th>
+								 <th scope="col">Altitude</th>
+							  </tr>
+						   </thead>`;
+	
+	document.getElementById("tableData").innerHTML = headTableData;
+	
+	
 	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
 							<th scope="row">`;
@@ -104,7 +103,7 @@ function JSONtoHTML(){
 						  </tr>`;
 	}
 	tableContent += `</tbody>`;
-	return tableContent;
+	document.getElementById("tableData").innerHTML += tableContent;
 }
 
 function generationIndex(){
