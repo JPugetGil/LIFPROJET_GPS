@@ -7,11 +7,23 @@ let geoPaths = {
 
 // DYN GEN. //
 
-$(startPage());
-
 function startPage() {
+	jQuery.ajaxSetup({async : false});
 	geoPaths.map = generationDynamique();
 	addFileToPath("data/runinlyon_10km.gpx");
+	var headTableData = `<thead>
+							  <tr>
+								 <th scope="col">#</th>
+								 <th scope="col">Latitude</th>
+								 <th scope="col">Longitude</th>
+								 <th scope="col">Altitude</th>
+							  </tr>
+						   </thead>`;
+	
+	document.getElementById("tableData").innerHTML = headTableData;
+	
+	document.getElementById("tableData").innerHTML += JSONtoHTML();
+	
 }
 
 function addFileToPath(file) {
@@ -19,6 +31,9 @@ function addFileToPath(file) {
 		let index = geoPaths.paths.length;
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		drawPath(geoPaths.paths[index]);
+		//console.log(geoPaths.paths.length);
+
+
 	});
 }
 
@@ -66,42 +81,25 @@ function generationDynamique(){
 		}
 	});
 	
-	var headTableData = `<thead>
-							  <tr>
-								 <th scope="col">#</th>
-								 <th scope="col">Latitude</th>
-								 <th scope="col">Longitude</th>
-								 <th scope="col">Altitude</th>
-							  </tr>
-						   </thead>`;
-	
-	document.getElementById("tableData").innerHTML = headTableData;
-
-	var jsontest = '{ "coordinates" : [' +
-'{ "Latitude":"1" , "Longitude":"2", "Elevation":"3" },' +
-'{ "Latitude":"4" , "Longitude":"5", "Elevation":"6" },' +
-'{ "Latitude":"7" , "Longitude":"8", "Elevation":"9" } ]}'; 
-
-	document.getElementById("tableData").innerHTML += JSONtoHTML(JSON.parse(jsontest));
-	
 	return mymap;
 }
 
-function JSONtoHTML(jsonData){
+function JSONtoHTML(){
 	var tableContent = `<tbody>`;
-	for (i=0; i<jsonData.coordinates.length; i++){
+	console.log(geoPaths.paths);
+	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
 							<th scope="row">`;
 		tableContent += i+1;
 		tableContent += `</th>
 							<td>`;
-		tableContent += jsonData.coordinates[i].Latitude;
+		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][0];
 		tableContent += `</td>
 							<td>`;
-		tableContent += jsonData.coordinates[i].Longitude;
+		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][1];
 		tableContent += `</td>
 							<td>`;
-		tableContent += jsonData.coordinates[i].Elevation;
+		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][2];
 		tableContent += `</td>
 						  </tr>`;
 	}
@@ -710,3 +708,5 @@ var toGeoJSON = (function() {
 })();
 
 if (typeof module !== 'undefined') module.exports = toGeoJSON;
+
+$(startPage());
