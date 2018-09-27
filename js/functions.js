@@ -96,8 +96,9 @@ function generationDynamique(){
 // Param : To complete -> a geoJSON variable
 // Return : none
 function JSONtoHTML(){
-	document.getElementById("tableauFichiers").style.height = '20%';
-	document.getElementById("tableauPoints").style.height = '500px';
+	document.getElementById("tableauFichiers").style.height = '150px';
+	document.getElementById("tableauFichiers").style.overflowY = 'auto';
+	document.getElementById("tableauPoints").style.height = '400px';
 	document.getElementById("tableauPoints").style.overflowY = 'auto';
 	var tableContent = `<tbody>`;
 	var headTableData = `<thead>
