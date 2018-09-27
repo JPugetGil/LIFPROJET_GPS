@@ -77,7 +77,7 @@ function generationDynamique(){
 	generationIndex(); //Permet de générer la page index.html
 	
 	
-	var mymap = L.map('mapid').setView([45.754915, 4.825789], 10);
+	var mymap = L.map('mapid').setView([0,0], 0);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -322,7 +322,8 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 // CONVERSION FUNCTIONS //
 
 function reSample(factor, fileNumber){
-	for(i=0; i<geoPaths.paths[fileNumber].features[0].geometry.coordinates.length/(factor-1);i++){
+	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
+	for(i=0; i<length/factor;i++){
 		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
 	}
 }
