@@ -12,6 +12,14 @@ function startPage() {
 	geoPaths.map = generationDynamique();
 	addFileToPath("data/runinlyon_10km.gpx");
 	JSONtoHTML();
+	setListeners();
+}
+
+function setListeners() {
+	let saveButton = document.getElementById("saveButton");
+	if (saveButton !== undefined) {
+		saveButton.addEventListener("click", saveAndGet);
+	}
 }
 
 function addFileToPath(file) {
@@ -130,7 +138,7 @@ function generationIndex(){
 						<br>
 						<br>
 						<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
-						<button type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
+						<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
 					</div>
 				</div>
 
@@ -248,6 +256,12 @@ function generationGraphe(trace) {
 
 function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
+}
+
+function saveAndGet() {
+	let geoJS = geoPaths.paths[0];
+	let xml = geoJsonToXml(geoJS);
+	console.log(xml);
 }
 
 // MAP FUNCTIONS //
