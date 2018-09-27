@@ -248,13 +248,6 @@ function generationFileRow(trace, index) {
 			<td>${time}</td>
 			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
 		</tr>`
-	/*<tr>
-		<th scope="row">1</th>
-		<td>run-in-lyon.gpx</td>
-		<td>10.0km</td>
-		<td>45min</td>
-		<td><button class="btn btn-danger" type="button" onclick="deleteTrace();">X</button></td>
-	</tr>*/
 	
 }
 
