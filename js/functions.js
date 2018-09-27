@@ -20,8 +20,8 @@ function addFileToPath(file) {
 		let index = geoPaths.paths.length;
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		drawPath(geoPaths.paths[index]);
-
-
+		generationGraphe(geoPaths.paths[index]);
+		//console.log(geoPaths.paths);
 	});
 }
 
@@ -209,7 +209,7 @@ function generationAboutUs(){
 		  </div>`;
 }
 
-function importer(){
+function upload(){
 	if (State == "index"){
 		console.log("Nous allons importer le fichier...");
 	}
@@ -218,10 +218,33 @@ function importer(){
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
 	document.getElementById('hiddenbutton').click();
-	addFileToPath(document.getElementById('hiddenbutton').value);
+	var path = document.getElementById('hiddenbutton').value;
+	
+	addFileToPath(path);
+	console.log(2+2);
+	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
 }
 
-function aide(){
+function generationGraphe(trace) {
+	var abscisse = ['x'];
+	//console.log(trace.features[0].geometry.coordinates);
+	var ordonnee = ['data1'];
+	for (i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
+		abscisse.push(i);
+		ordonnee.push(trace.features[0].geometry.coordinates[i][2]);
+	}
+	var chart = c3.generate({
+		data: {
+			x: 'x',
+			columns: [
+				abscisse,
+				ordonnee
+			]
+		}
+	});
+}
+
+function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
 
