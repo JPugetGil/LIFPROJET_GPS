@@ -33,6 +33,20 @@ function drawPath(geoJsonPath) {
 			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
 	}).addTo(geoPaths.map);
+
+
+	var tabLatitude = [];
+	var tabLongitude = [];
+	for (i = 0; i < geoJsonPath.features[0].geometry.coordinates.length ; i++) {
+		tabLatitude.push(geoJsonPath.features[0].geometry.coordinates[i][1]);
+		tabLongitude.push(geoJsonPath.features[0].geometry.coordinates[i][0]);
+	}
+	var centreTraceLatitude = moyenneDunTableau(tabLatitude);
+	var centreTraceLongitude = moyenneDunTableau(tabLongitude);
+	var elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
+	console.log(elevationCarte);
+	geoPaths.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
+	console.log(geoJsonPath);
 }
 
 function generationDynamique(){
@@ -40,13 +54,9 @@ function generationDynamique(){
 	var State = "index";
 	
 	generationIndex(); //Permet de générer la page index.html
-	var listeDeLatitude = [45.754915,45.756043,45.765045,45.76649,45.772683,45.772556,45.769301,45.767426,45.763782,45.756855];
-	var listeDeLongitude = [4.825789,4.824429,4.829082,4.818843,4.810368,4.838639,4.841204,4.833317,4.836033,4.831408];
-	var centreTraceLatitude = moyenneDunTableau(listeDeLatitude);
-	var centreTraceLongitude = moyenneDunTableau(listeDeLongitude);
-	var elevationCarte = plusGrandModule(listeDeLatitude, listeDeLongitude, centreTraceLatitude, centreTraceLongitude);
 	
-	var mymap = L.map('mapid').setView([centreTraceLatitude, centreTraceLongitude], elevationCarte*25);
+	
+	var mymap = L.map('mapid').setView([45.754915, 4.825789], 10);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -55,17 +65,6 @@ function generationDynamique(){
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(mymap);
-	
-	
-	var chart = c3.generate({
-		data: {
-			x: 'x',
-			columns: [
-				['x', 30, 500, 1000, 2300, 3000, 3100],
-				['data1', 627.9, 360.0, 229.0, 400, 150, 250]
-			]
-		}
-	});
 	
 	return mymap;
 }
@@ -88,18 +87,16 @@ function JSONtoHTML(){
 	
 	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
-							<th scope="row">`;
-		tableContent += i+1;
-		tableContent += `</th>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][0];
-		tableContent += `</td>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][1];
-		tableContent += `</td>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][2];
-		tableContent += `</td>
+							<th scope="row"> ${i+1}</th>
+								<td>
+									${geoPaths.paths[0].features[0].geometry.coordinates[i][0]}
+								</td>
+							<td>
+								${geoPaths.paths[0].features[0].geometry.coordinates[i][1]}
+							</td>
+							<td>
+								${geoPaths.paths[0].features[0].geometry.coordinates[i][2]}
+							</td>
 						  </tr>`;
 	}
 	tableContent += `</tbody>`;
@@ -229,7 +226,6 @@ function upload(){
 
 function generationGraphe(trace) {
 	var abscisse = ['x'];
-	//console.log(trace.features[0].geometry.coordinates);
 	var ordonnee = ['data1'];
 	for (i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
 		abscisse.push(i);
@@ -271,6 +267,12 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 }
 
 // CONVERSION FUNCTIONS //
+
+function reSample(factor, fileNumber){
+	for(i=0; i<geoPaths.paths[fileNumber].features[0].geometry.coordinates.length/(factor-1);i++){
+		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+	}
+}
 
 function repeatString(text, nb) {
 	let repeated = text;
