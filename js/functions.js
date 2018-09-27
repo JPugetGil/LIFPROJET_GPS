@@ -97,8 +97,9 @@ function generationDynamique(){
 // Param : To complete -> a geoJSON variable
 // Return : none
 function JSONtoHTML(trace){
-	document.getElementById("tableauFichiers").style.height = '20%';
-	document.getElementById("tableauPoints").style.height = '500px';
+	document.getElementById("tableauFichiers").style.height = '150px';
+	document.getElementById("tableauFichiers").style.overflowY = 'auto';
+	document.getElementById("tableauPoints").style.height = '400px';
 	document.getElementById("tableauPoints").style.overflowY = 'auto';
 	var tableContent = `<tbody>`;
 	var headTableData = `<thead>
@@ -164,7 +165,7 @@ function generationIndex(){
 
 			</div>
 			<div class="col-lg-4">
-				<div id="tableauFichiers">
+				<div id="tableauFichiers" style="margin-bottom:15px">
 					<table class="table table-striped table-hover table-bordered">
 					   <thead>
 						  <tr>
@@ -419,9 +420,9 @@ function reSample(fileNumber){
 }
 		
 // Resample geoJSON coordinates
-// Param : factor -> factor of resampling
 // Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
-function reSample(factor, fileNumber){
+function reSample(fileNumber){
+	let factor = prompt("Par combien voulez-vous divisez le nombre de valeur ?", "Insérez ici");
 	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
 	for(let i=0; i<length/factor;i++){
 		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
