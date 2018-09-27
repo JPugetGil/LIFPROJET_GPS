@@ -144,7 +144,9 @@ function generationIndex(){
 						</div>
 					</div>
 					<div class="col-lg-1 bg-light">
-						<button type="button"  alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
+						<button type="button" id="reSample" alt="reSample" title="Rééchantillonner" onClick="reSample(0)" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-divide"></i></button>
+						<br>
+						<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
 						<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-redo"></i></button>
 						<br>
 						<button type="button" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-plus"></i></button>
@@ -371,6 +373,19 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
+function reSample(fileNumber){
+	let factor = prompt("Par combien voulez vous diviser le nombre de valeur? (2 par défaut)", 2);
+	console.log(factor);
+	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
+	for(i=0; i<length/factor;i++){
+		var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+		var removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
+		if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
+			var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
+		}
+	}
+}
+		
 // Resample geoJSON coordinates
 // Param : factor -> factor of resampling
 // Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
