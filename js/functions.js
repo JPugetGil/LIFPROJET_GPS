@@ -40,7 +40,7 @@ function addFileToPath(file) {
 		drawPath(geoPaths.paths[index]);
 		generationGraphe(geoPaths.paths[index]);
 		generationFileRow(geoPaths.paths[index], index);
-	});
+	}).catch(console.log);
 }
 
 // Draw a path in the map from a geoJSON variable
@@ -255,7 +255,7 @@ function generationFileRow(trace, index) {
 		</tr>`;
 }
 
-// Upload a file into the page from your own computer
+// Upload a file into the page from data/
 // Return : none
 function upload(){
 	if (State == "index"){
@@ -266,10 +266,14 @@ function upload(){
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
 	document.getElementById('hiddenbutton').click();
-	var path = document.getElementById('hiddenbutton').value;
-	
-	addFileToPath(path);
-	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
+}
+
+// Used to upload
+// Return : none
+function hiddenUpload() {
+	let path = document.getElementById("hiddenbutton").value;
+	console.log(path);
+	//addFileToPath(path);
 }
 
 // Generate the bottom graph from a geoJSON trace
