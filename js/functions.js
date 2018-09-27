@@ -1,33 +1,51 @@
 // JavaScript Document
 
+// Global variable
 let geoPaths = {
-	map: undefined,
-	paths: []
+	map: undefined, // A leaflet map
+	paths: [] // An array of geoJSON variable
 };
 
 // DYN GEN. //
 
+// Used with the site first launch
+// Return : none
 function startPage() {
 	jQuery.ajaxSetup({async : false});
 	geoPaths.map = generationDynamique();
-	geoPaths.paths.file = [];
 	addFileToPath("data/runinlyon_10km.gpx");
 	JSONtoHTML();
+	setListeners();
 }
 
+// Set up the listeners
+// Return : none
+function setListeners() {
+	let saveButton = document.getElementById("saveButton");
+	if (saveButton !== undefined) {
+		saveButton.addEventListener("click", saveAndGet);
+	}
+}
+
+// Add the content of a .gpx file into the global variable geoPaths.paths[]
+// Param : file -> a .gpx file
+// Return : none
 function addFileToPath(file) {
-	var indexFile = file.lastIndexOf("/");
-	var filename = file.substr(indexFile+1);
-	geoPaths.paths.file.push(filename);
 	$.ajax(file).done(gpx => {
 		let index = geoPaths.paths.length;
+		var indexFile = file.lastIndexOf("/");
+		var filename = file.substr(indexFile+1);
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
+		geoPaths.paths[index].file = filename;
 		drawPath(geoPaths.paths[index]);
 		generationGraphe(geoPaths.paths[index]);
 		generationFileRow(geoPaths.paths[index], index);
 	});
 }
 
+// Draw a path in the map from a geoJSON variable
+// Param : geoJsonPath -> the path we want to draw, a geoJSON variable
+// Return : none
 function drawPath(geoJsonPath) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
@@ -38,20 +56,30 @@ function drawPath(geoJsonPath) {
 			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
 	}).addTo(geoPaths.map);
+
+
+	var tabLatitude = [];
+	var tabLongitude = [];
+	for (i = 0; i < geoJsonPath.features[0].geometry.coordinates.length ; i++) {
+		tabLatitude.push(geoJsonPath.features[0].geometry.coordinates[i][1]);
+		tabLongitude.push(geoJsonPath.features[0].geometry.coordinates[i][0]);
+	}
+	var centreTraceLatitude = moyenneDunTableau(tabLatitude);
+	var centreTraceLongitude = moyenneDunTableau(tabLongitude);
+	var elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
+	geoPaths.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
 }
 
+// Generate the map
+// Return : the map
 function generationDynamique(){
 	
 	var State = "index";
 	
 	generationIndex(); //Permet de générer la page index.html
-	var listeDeLatitude = [45.754915,45.756043,45.765045,45.76649,45.772683,45.772556,45.769301,45.767426,45.763782,45.756855];
-	var listeDeLongitude = [4.825789,4.824429,4.829082,4.818843,4.810368,4.838639,4.841204,4.833317,4.836033,4.831408];
-	var centreTraceLatitude = moyenneDunTableau(listeDeLatitude);
-	var centreTraceLongitude = moyenneDunTableau(listeDeLongitude);
-	var elevationCarte = plusGrandModule(listeDeLatitude, listeDeLongitude, centreTraceLatitude, centreTraceLongitude);
 	
-	var mymap = L.map('mapid').setView([centreTraceLatitude, centreTraceLongitude], elevationCarte*25);
+	
+	var mymap = L.map('mapid').setView([45.754915, 4.825789], 10);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -61,20 +89,12 @@ function generationDynamique(){
 		id: 'mapbox.streets'
 	}).addTo(mymap);
 	
-	
-	var chart = c3.generate({
-		data: {
-			x: 'x',
-			columns: [
-				['x', 30, 500, 1000, 2300, 3000, 3100],
-				['data1', 627.9, 360.0, 229.0, 400, 150, 250]
-			]
-		}
-	});
-	
 	return mymap;
 }
 
+// Fill an HTML table with the points of a geoJSON variable
+// Param : To complete -> a geoJSON variable
+// Return : none
 function JSONtoHTML(){
 	document.getElementById("tableauFichiers").style.height = '20%';
 	document.getElementById("tableauPoints").style.height = '500px';
@@ -93,24 +113,24 @@ function JSONtoHTML(){
 	
 	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
-							<th scope="row">`;
-		tableContent += i+1;
-		tableContent += `</th>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][0];
-		tableContent += `</td>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][1];
-		tableContent += `</td>
-							<td>`;
-		tableContent += geoPaths.paths[0].features[0].geometry.coordinates[i][2];
-		tableContent += `</td>
+							<th scope="row"> ${i+1}</th>
+								<td>
+									${geoPaths.paths[0].features[0].geometry.coordinates[i][0]}
+								</td>
+							<td>
+								${geoPaths.paths[0].features[0].geometry.coordinates[i][1]}
+							</td>
+							<td>
+								${geoPaths.paths[0].features[0].geometry.coordinates[i][2]}
+							</td>
 						  </tr>`;
 	}
 	tableContent += `</tbody>`;
 	document.getElementById("tableData").innerHTML += tableContent;
 }
 
+// Generate the main section (with the map)
+// Return : none
 function generationIndex(){
 	State = "index";
 	document.getElementById("planDeTravail").innerHTML =
@@ -135,7 +155,7 @@ function generationIndex(){
 						<br>
 						<br>
 						<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-print"></i></button>
-						<button type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
+						<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-file-download"></i></button>
 					</div>
 				</div>
 
@@ -162,6 +182,8 @@ function generationIndex(){
 			</div>`;
 }
 
+// Generate the "Description" section
+// Return : none
 function generationDescription(){
 	State = "description";
 	document.getElementById("planDeTravail").innerHTML = 
@@ -190,6 +212,8 @@ function generationDescription(){
 			</div>`;
 }
 
+// Generate the "About us" section
+// Return : none
 function generationAboutUs(){
 	State = "aboutus";
 	document.getElementById("planDeTravail").innerHTML =
@@ -209,7 +233,6 @@ function generationAboutUs(){
 				<p>Design, Gestion du cahier des charges, Programmation HTML/CSS</p>
 		  </div>`;
 }
-
 function generationFileRow(trace, index) {
 	var lasttime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
 	var firsttime = trace.features[0].properties.time;
@@ -220,7 +243,7 @@ function generationFileRow(trace, index) {
 	var table = document.getElementById("fileTable").innerHTML +=
 		`<tr id="row + ${index + 1}">
 			<th scope="row">${index + 1}</th>
-			<td>${geoPaths.paths.file}</td>
+			<td>${trace.file}</td>
 			<td></td>
 			<td>${time}</td>
 			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
@@ -235,6 +258,8 @@ function generationFileRow(trace, index) {
 	
 }
 
+// Upload a file into the page from your own computer
+// Return : none
 function upload(){
 	if (State == "index"){
 		console.log("Nous allons importer le fichier...");
@@ -250,9 +275,11 @@ function upload(){
 	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
 }
 
+// Generate the bottom graph from a geoJSON trace
+// Param : trace -> a geoJSON variable
+// Return : none
 function generationGraphe(trace) {
 	var abscisse = ['x'];
-	//console.log(trace.features[0].geometry.coordinates);
 	var ordonnee = ['data1'];
 	for (i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
 		abscisse.push(i);
@@ -273,6 +300,8 @@ function deleteTrace(id) {
 	//geoPaths.paths[id].splice(id, 1);
 }
 
+// Open the help window
+// Return : none
 function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
@@ -294,6 +323,21 @@ function secondsToHours(sec) {
   return hrs + ":" + min + ":" + sec;
 }
 
+// Open a window enabling the user to download a .gpx file
+// Return : none
+function saveAndGet() {
+	let geoJS = geoPaths.paths[0];
+	let xml = geoJsonToXml(geoJS);
+	
+	let filename = "export.gpx";
+	let element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+}
 
 // MAP FUNCTIONS //
 
@@ -317,6 +361,16 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
+function reSample(factor, fileNumber){
+	for(i=0; i<geoPaths.paths[fileNumber].features[0].geometry.coordinates.length/(factor-1);i++){
+		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+	}
+}
+
+// Make a string longer by copying its content nb times
+// Param : text -> the string to copy
+// Param : nb -> the number of times you want to copy
+// Return : the result string
 function repeatString(text, nb) {
 	let repeated = text;
 	for (let i = 0; i < nb-1; i++) {
@@ -325,8 +379,11 @@ function repeatString(text, nb) {
 	return repeated;
 }
 
+// Convert a geoJSON variable into a text corresponding to its .gpx
+// Param : geoJS -> the geoJSON variable
+// Return : a string corresponding to a .gpx file
 function geoJsonToXml(geoJS) {
-	let feed = "\n\r";
+	let feed = "\n";
 	let tab = "\t";
 	let xml = `<?xml version='1.0' encoding='UTF-8' standalone='yes'?>${feed}<gpx version='1.1'>`;
 	
@@ -378,6 +435,7 @@ function geoJsonToXml(geoJS) {
 	return xml;
 }
 
+// Convert a .gpx file into a geoJSON variable
 var toGeoJSON = (function() {
     'use strict';
 
@@ -837,6 +895,5 @@ var toGeoJSON = (function() {
     return t;
 })();
 
-if (typeof module !== 'undefined') module.exports = toGeoJSON;
-
+// Launch after page is ready
 $(startPage());
