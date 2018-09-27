@@ -164,7 +164,7 @@ function generationIndex(){
 
 			</div>
 			<div class="col-lg-4">
-				<div id="tableauFichiers">
+				<div id="tableauFichiers" style="margin-bottom:15px">
 					<table class="table table-striped table-hover table-bordered">
 					   <thead>
 						  <tr>
