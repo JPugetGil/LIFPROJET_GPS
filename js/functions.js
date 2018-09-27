@@ -241,12 +241,15 @@ function generationAboutUs(){
 // Param : index -> the index of trace in geoPaths.paths
 // Return : none
 function generationFileRow(trace, index) {
-	var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
-	var firstTime = trace.features[0].properties.time;
-	var date1 = new Date(lastTime);
-	var date2 = new Date(firstTime);
-	var date = date1 - date2;
-	var time = secondsToHours(date/1000);
+	let time = "Non défini";
+	if (trace.features[0].properties.hasOwnProperty("coordTimes")) {
+		var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
+		var firstTime = trace.features[0].properties.time;
+		var date1 = new Date(lastTime);
+		var date2 = new Date(firstTime);
+		var date = date1 - date2;
+		time = secondsToHours(date/1000);
+	}
 	var table = document.getElementById("fileTable").innerHTML +=
 		`<tr id="row + ${index + 1}">
 			<th scope="row">${index + 1}</th>
