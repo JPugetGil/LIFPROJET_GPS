@@ -19,7 +19,6 @@ function addFileToPath(file) {
 		let index = geoPaths.paths.length;
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		drawPath(geoPaths.paths[index]);
-
 		generationGraphe(geoPaths.paths[index]);
 	});
 }
@@ -273,23 +272,65 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
+function repeatString(text, nb) {
+	let repeated = text;
+	for (let i = 0; i < nb-1; i++) {
+		repeated += text;
+	}
+	return repeated;
+}
+
 function geoJsonToXml(geoJS) {
-	let xml = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><gpx version='1.1'>";
+	let feed = "\n\r";
+	let tab = "\t";
+	let xml = `<?xml version='1.0' encoding='UTF-8' standalone='yes'?>${feed}<gpx version='1.1'>`;
 	
 	if (geoJS.hasOwnProperty("features")) {
 		geoJS = geoJS.features[0];
 	}
 	let hasProperties = geoJS.hasOwnProperty("properties");
 	
+	xml += `${feed}${tab}<trk>`;
 	if (hasProperties) {
-		if (geoJS.hasOwnProperty("name")) {
-			xml += "<metadata><name>" + geoJS.name + "</name></metadata>";
+		if (geoJS.properties.hasOwnProperty("name")) {
+			xml += `${feed}${repeatString(tab,2)}<name>${geoJS.properties.name}</name>`;
 		}
 	}
 	
-	xml += "<trk>";
+	xml += `${feed}${repeatString(tab,2)}<trkseg>`;
 	
-	xml += "</trk></gpx>";	
+	let hasElevation = geoJS.geometry.coordinates[0].length > 2;
+	let hasTime = false;
+	let hasHeart = false;
+	if (hasProperties) {
+		hasTime = geoJS.properties.hasOwnProperty("coordTimes");
+		hasHeart = geoJS.properties.hasOwnProperty("heartRates");
+	}
+	
+	geoJS.geometry.coordinates.forEach( (current, index) => {
+		xml += `${feed}${repeatString(tab,3)}<trkpt lat='${current[1]}' lon='${current[0]}'>`;
+		if (hasElevation) {
+			xml += `${feed}${repeatString(tab,4)}<ele>${current[2]}</ele>`;
+		}
+		if (hasTime) {
+			let time = geoJS.properties.coordTimes[index];
+			xml += `${feed}${repeatString(tab,4)}<time>${time}</time>`;
+		}
+		if (hasHeart) {
+			let heartRate = geoJS.properties.heartRates[index];
+			xml += `${feed}${repeatString(tab,4)}<extensions>`;
+			xml += `${feed}${repeatString(tab,5)}<gpxtpx:TrackPointExtension>`;
+			xml += `${feed}${repeatString(tab,6)}<gpxtpx:hr>${heartRate}</gpxtpx:hr>`;
+			xml += `${feed}${repeatString(tab,5)}</gpxtpx:TrackPointExtension>`;
+			xml += `${feed}${repeatString(tab,4)}</extensions>`;
+		}
+		xml += `${feed}${repeatString(tab,3)}</trkpt>`;
+	});
+	
+	xml += `${feed}${repeatString(tab,2)}</trkseg>`;
+	xml += `${feed}${tab}</trk>${feed}</gpx>`;
+	
+	return xml;
 }
 
 var toGeoJSON = (function() {
