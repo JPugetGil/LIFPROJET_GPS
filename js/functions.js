@@ -171,8 +171,8 @@ function generationIndex(){
 						  <tr>
 							 <th scope="col">#</th>
 							 <th scope="col">Nom du fichier</th>
-							 <th scope="col">Distance</th>
-							 <th scope="col">Durée</th>
+							 <th scope="col">Distance (en km)</th>
+							 <th scope="col">Durée (en h)</th>
 							 <th scope="col"><i class="fas fa-trash"></i></th>
 						  </tr>
 					   </thead>
@@ -304,7 +304,9 @@ function generationGraphe(trace) {
 		}
 	});
 }
-
+// Delete a row in the trace table
+// Param : id -> index of the row you want to delete
+// Return : none
 function deleteTrace(id) {
 	geoPaths.paths[id].splice(id, 1);
 }
@@ -315,6 +317,9 @@ function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
 }
 
+// Convert a time in seconds to a time in hours
+// Param : sec -> time in seconds
+// Return : a time in hours
 function secondsToHours(sec) {
 
   var hrs = Math.floor(sec/3600);
@@ -332,21 +337,30 @@ function secondsToHours(sec) {
   return hrs + ":" + min + ":" + sec;
 }
 
+// Convert a number in degrees to radians
+// Param : degrees -> number in degrees
+// Return : a number in radians
 function Deg2Rad(degrees) {
 	return degrees * (Math.PI/180);
 }
 
+// Calculate the distance between 2 points from the latitude and the longitude of these points
+// Param : 2 points -> 2 tables with latitude, longitude and altitude
+// Return : the distance between these 2 points
 function DistanceBetween2Points(point1, point2) {
 	return 6367445*Math.acos(Math.sin(Deg2Rad(point1[1]))*Math.sin(Deg2Rad(point2[1]))+Math.cos(Deg2Rad(point1[1]))*Math.cos(Deg2Rad(point2[1]))*Math.cos(Deg2Rad(point1[0])-Deg2Rad(point2[0])))/1000;
 }
 
+// Calculate the global distance of the trace
+// Param : a trace
+// Return : the global distance
 function calculateDistance(trace) {
 	var distance = 0;
 	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
 	for(let i = 0; i<trace.features[0].geometry.coordinates.length-1; i++) {
 		distance += DistanceBetween2Points(trace.features[0].geometry.coordinates[i],trace.features[0].geometry.coordinates[i+1]);
 	}
-	return distance;
+	return distance.toFixed(2);
 }
 
 // Open a window enabling the user to download a .gpx file
