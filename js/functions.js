@@ -379,6 +379,8 @@ function reSample(fileNumber){
 		if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
 			var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
 		}
+	}
+}
 		
 // Resample geoJSON coordinates
 // Param : factor -> factor of resampling
