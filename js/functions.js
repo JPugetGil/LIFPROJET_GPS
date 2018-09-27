@@ -337,17 +337,7 @@ function Deg2Rad(degrees) {
 }
 
 function DistanceBetween2Points(point1, point2) {
-	//console.log(point1[1], point1[0],point2[1],point2[0]);
-	
-	var xA = Math.cos(Deg2Rad(point1[1])) * Math.cos(Deg2Rad(point1[0]));
-	var yA = Math.cos(Deg2Rad(point1[1])) * Math.sin(Deg2Rad(point1[0]));
-	var zA = Math.sin(Deg2Rad(point1[1]));
-	
-	var xB = Math.cos(Deg2Rad(point2[1])) * Math.cos(Deg2Rad(point2[0]));
-	var yB = Math.cos(Deg2Rad(point2[1])) * Math.sin(Deg2Rad(point2[0]));
-	var zB = Math.sin(Deg2Rad(point2[1]));
-	
-	return Math.acos(xA*yA+xB*yB+zA*zB)*20000/Math.PI;
+	return 6367445*Math.acos(Math.sin(Deg2Rad(point1[1]))*Math.sin(Deg2Rad(point2[1]))+Math.cos(Deg2Rad(point1[1]))*Math.cos(Deg2Rad(point2[1]))*Math.cos(Deg2Rad(point1[0])-Deg2Rad(point2[0])))/1000;
 }
 
 function calculateDistance(trace) {
@@ -406,6 +396,8 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
+// Resample geoJSON coordinates
+// Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
 function reSample(fileNumber){
 	let factor = prompt("Par combien voulez vous diviser le nombre de valeur? (2 par défaut)", 2);
 	console.log(factor);
@@ -418,16 +410,7 @@ function reSample(fileNumber){
 		}
 	}
 }
-		
-// Resample geoJSON coordinates
-// Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
-function reSample(fileNumber){
-	let factor = prompt("Par combien voulez-vous divisez le nombre de valeur ?", "Insérez ici");
-	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
-	for(let i=0; i<length/factor;i++){
-		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
-	}
-}
+
 
 // Make a string longer by copying its content nb times
 // Param : text -> the string to copy
