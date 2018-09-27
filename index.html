@@ -12,7 +12,11 @@
 		<script src="js/C3js/docs/js/d3-5.4.0.min.js" charset="utf-8"></script> <!-- C3js -->
 		<script src="js/C3js/docs/js/c3.min.js"></script> <!-- C3js -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> <!-- FONTAWESOME -->
-
+		<style>
+			#descriptionButton:hover {
+				color: white;
+			}
+		</style>
 		<title>Improve my GPX</title>
 	</head>
 	
@@ -22,7 +26,7 @@
 		  <nav class="my-2 my-md-0 mr-md-3">
 			<input type="file" id="hiddenbutton" style="display:none"/>
 			<input type="button" class="btn btn-outline-success" value="Importer" onclick="upload()"/>
-			<button type="button" class="btn btn-outline-warning" onClick="generationDescription()">Description</button>
+			<button id="descriptionButton" type="button" class="btn btn-outline-warning" onClick="generationDescription()">Description</button>
 			<button type="button" class="btn btn-outline-info" onClick="generationAboutUs()">A Propos</button>
 			<button type="button" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onClick="help();">Besoin d'aide ?</button> 
 		  </nav>

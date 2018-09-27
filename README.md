@@ -6,3 +6,5 @@ Participants :
 - SCRIVEN Anthony 11607550
 
 Sujet : AMRC4. Edition et visualisation de traces GPS sur le web
+
+Cahier des charges disponible : ./PROJET_GPS.odt
