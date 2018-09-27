@@ -241,17 +241,20 @@ function generationAboutUs(){
 // Param : index -> the index of trace in geoPaths.paths
 // Return : none
 function generationFileRow(trace, index) {
-	var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
-	var firstTime = trace.features[0].properties.time;
-	var date1 = new Date(lastTime);
-	var date2 = new Date(firstTime);
-	var date = date1 - date2;
-	var time = secondsToHours(date/1000);
+	let time = "Non défini";
+	if (trace.features[0].properties.hasOwnProperty("coordTimes")) {
+		var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
+		var firstTime = trace.features[0].properties.time;
+		var date1 = new Date(lastTime);
+		var date2 = new Date(firstTime);
+		var date = date1 - date2;
+		time = secondsToHours(date/1000);
+	}
 	var table = document.getElementById("fileTable").innerHTML +=
 		`<tr id="row + ${index + 1}">
 			<th scope="row">${index + 1}</th>
 			<td>${trace.file}</td>
-			<td></td>
+			<td>${calculateDistance(trace)}</td>
 			<td>${time}</td>
 			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
 		</tr>`;
@@ -325,6 +328,33 @@ function secondsToHours(sec) {
   }
 
   return hrs + ":" + min + ":" + sec;
+}
+
+function Deg2Rad(degrees) {
+	return degrees * (Math.PI/180);
+}
+
+function DistanceBetween2Points(point1, point2) {
+	//console.log(point1[1], point1[0],point2[1],point2[0]);
+	
+	var xA = Math.cos(Deg2Rad(point1[1])) * Math.cos(Deg2Rad(point1[0]));
+	var yA = Math.cos(Deg2Rad(point1[1])) * Math.sin(Deg2Rad(point1[0]));
+	var zA = Math.sin(Deg2Rad(point1[1]));
+	
+	var xB = Math.cos(Deg2Rad(point2[1])) * Math.cos(Deg2Rad(point2[0]));
+	var yB = Math.cos(Deg2Rad(point2[1])) * Math.sin(Deg2Rad(point2[0]));
+	var zB = Math.sin(Deg2Rad(point2[1]));
+	
+	return Math.acos(xA*yA+xB*yB+zA*zB)*20000/Math.PI;
+}
+
+function calculateDistance(trace) {
+	var distance = 0;
+	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
+	for(let i = 0; i<trace.features[0].geometry.coordinates.length-1; i++) {
+		distance += DistanceBetween2Points(trace.features[0].geometry.coordinates[i],trace.features[0].geometry.coordinates[i+1]);
+	}
+	return distance;
 }
 
 // Open a window enabling the user to download a .gpx file
