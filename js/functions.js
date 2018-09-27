@@ -14,7 +14,7 @@ function startPage() {
 	jQuery.ajaxSetup({async : false});
 	geoPaths.map = generationDynamique();
 	addFileToPath("data/runinlyon_10km.gpx");
-	JSONtoHTML();
+	JSONtoHTML(geoPaths.paths[0]);
 	setListeners();
 }
 
@@ -38,6 +38,7 @@ function addFileToPath(file) {
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		geoPaths.paths[index].file = filename;
 		drawPath(geoPaths.paths[index]);
+		JSONtoHTML(geoPaths.paths[index]);
 		generationGraphe(geoPaths.paths[index]);
 		generationFileRow(geoPaths.paths[index], index);
 	}).catch(console.log);
@@ -95,7 +96,7 @@ function generationDynamique(){
 // Fill an HTML table with the points of a geoJSON variable
 // Param : To complete -> a geoJSON variable
 // Return : none
-function JSONtoHTML(){
+function JSONtoHTML(trace){
 	document.getElementById("tableauFichiers").style.height = '20%';
 	document.getElementById("tableauPoints").style.height = '500px';
 	document.getElementById("tableauPoints").style.overflowY = 'auto';
@@ -109,24 +110,24 @@ function JSONtoHTML(){
 							  </tr>
 						   </thead>`;
 	
-	document.getElementById("tableData").innerHTML = headTableData;
+	//document.getElementById("tableData").innerHTML = headTableData;
 	
-	for (let i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
+	for (let i=0; i<trace.features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
 							<th scope="row"> ${i+1}</th>
 								<td>
-									${geoPaths.paths[0].features[0].geometry.coordinates[i][0]}
+									${trace.features[0].geometry.coordinates[i][0]}
 								</td>
 							<td>
-								${geoPaths.paths[0].features[0].geometry.coordinates[i][1]}
+								${trace.features[0].geometry.coordinates[i][1]}
 							</td>
 							<td>
-								${geoPaths.paths[0].features[0].geometry.coordinates[i][2]}
+								${trace.features[0].geometry.coordinates[i][2]}
 							</td>
 						  </tr>`;
 	}
 	tableContent += `</tbody>`;
-	document.getElementById("tableData").innerHTML += tableContent;
+	document.getElementById("tableData").innerHTML = headTableData + tableContent;
 }
 
 // Generate the main section (with the map)
@@ -304,7 +305,7 @@ function generationGraphe(trace) {
 }
 
 function deleteTrace(id) {
-	//geoPaths.paths[id].splice(id, 1);
+	geoPaths.paths[id].splice(id, 1);
 }
 
 // Open the help window
