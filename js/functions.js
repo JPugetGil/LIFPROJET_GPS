@@ -40,7 +40,7 @@ function addFileToPath(file) {
 		drawPath(geoPaths.paths[index]);
 		generationGraphe(geoPaths.paths[index]);
 		generationFileRow(geoPaths.paths[index], index);
-	});
+	}).catch(console.log);
 }
 
 // Draw a path in the map from a geoJSON variable
@@ -60,7 +60,7 @@ function drawPath(geoJsonPath) {
 
 	var tabLatitude = [];
 	var tabLongitude = [];
-	for (i = 0; i < geoJsonPath.features[0].geometry.coordinates.length ; i++) {
+	for (let i = 0; i < geoJsonPath.features[0].geometry.coordinates.length ; i++) {
 		tabLatitude.push(geoJsonPath.features[0].geometry.coordinates[i][1]);
 		tabLongitude.push(geoJsonPath.features[0].geometry.coordinates[i][0]);
 	}
@@ -111,7 +111,7 @@ function JSONtoHTML(){
 	
 	document.getElementById("tableData").innerHTML = headTableData;
 	
-	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
+	for (let i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
 							<th scope="row"> ${i+1}</th>
 								<td>
@@ -144,7 +144,9 @@ function generationIndex(){
 						</div>
 					</div>
 					<div class="col-lg-1 bg-light">
-						<button type="button"  alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
+						<button type="button" id="reSample" alt="reSample" title="Rééchantillonner" onClick="reSample(0)" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-divide"></i></button>
+						<br>
+						<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
 						<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-redo"></i></button>
 						<br>
 						<button type="button" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-plus"></i></button>
@@ -233,11 +235,16 @@ function generationAboutUs(){
 				<p>Design, Gestion du cahier des charges, Programmation HTML/CSS</p>
 		  </div>`;
 }
+
+// Generate the upper left table rows
+// Param : trace -> a geoJSON variable
+// Param : index -> the index of trace in geoPaths.paths
+// Return : none
 function generationFileRow(trace, index) {
-	var lasttime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
-	var firsttime = trace.features[0].properties.time;
-	var date1 = new Date(lasttime);
-	var date2 = new Date(firsttime);
+	var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
+	var firstTime = trace.features[0].properties.time;
+	var date1 = new Date(lastTime);
+	var date2 = new Date(firstTime);
 	var date = date1 - date2;
 	var time = secondsToHours(date/1000);
 	var table = document.getElementById("fileTable").innerHTML +=
@@ -247,11 +254,10 @@ function generationFileRow(trace, index) {
 			<td>${calculateDistance(trace)}</td>
 			<td>${time}</td>
 			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
-		</tr>`
-	
+		</tr>`;
 }
 
-// Upload a file into the page from your own computer
+// Upload a file into the page from data/
 // Return : none
 function upload(){
 	if (State == "index"){
@@ -262,10 +268,15 @@ function upload(){
 		console.log("Maintenant que index est chargé, nous allons importer...");
 	}
 	document.getElementById('hiddenbutton').click();
-	var path = document.getElementById('hiddenbutton').value;
-	
-	addFileToPath(path);
-	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
+}
+
+// Used to upload
+// Return : none
+function hiddenUpload() {
+	let path = document.getElementById("hiddenbutton").value;
+	let length = path.length - 11;
+	let realPath = "data/" + path.substr(12, length);
+	addFileToPath(realPath);
 }
 
 // Generate the bottom graph from a geoJSON trace
@@ -274,7 +285,7 @@ function upload(){
 function generationGraphe(trace) {
 	var abscisse = ['x'];
 	var ordonnee = ['data1'];
-	for (i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
+	for (let i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
 		abscisse.push(i);
 		ordonnee.push(trace.features[0].geometry.coordinates[i][2]);
 	}
@@ -361,17 +372,26 @@ function saveAndGet() {
 
 // MAP FUNCTIONS //
 
+// Return the mean of all numbers in an array
+// Param : tab -> an array of numbers
+// Return : number
 function moyenneDunTableau(tab){
 	var somme = 0.0;
-	for (i=0; i<tab.length; i++){
+	for (let i=0; i<tab.length; i++){
 		somme += tab[i];
 	}
 	return (somme/tab.length);
 }
 
+// Return a zoom abling us to see all points given in parameters
+// Param : tabLatitude -> all latitudes
+// Param : tabLongitude -> all longitudes
+// Param : moyenneLatitude -> mean of all latitudes
+// Param : moyenneLongitude -> mean of all longitudes
+// Return : a number corresponding to a zoom
 function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLongitude){
 	var module = 0;
-	for(i=0; i<tabLatitude.length; i++){
+	for(let i=0; i<tabLatitude.length; i++){
 		if(Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude)) > module){
 			module = Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude));
 		}
@@ -381,9 +401,25 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 // CONVERSION FUNCTIONS //
 
-function reSample(factor, fileNumber){
+function reSample(fileNumber){
+	let factor = prompt("Par combien voulez vous diviser le nombre de valeur? (2 par défaut)", 2);
+	console.log(factor);
 	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
 	for(i=0; i<length/factor;i++){
+		var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+		var removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
+		if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
+			var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
+		}
+	}
+}
+		
+// Resample geoJSON coordinates
+// Param : factor -> factor of resampling
+// Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
+function reSample(factor, fileNumber){
+	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
+	for(let i=0; i<length/factor;i++){
 		var removedItems = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
 	}
 }
