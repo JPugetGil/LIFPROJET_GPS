@@ -33,9 +33,13 @@ function setListeners() {
 function addFileToPath(file) {
 	$.ajax(file).done(gpx => {
 		let index = geoPaths.paths.length;
+		var indexFile = file.lastIndexOf("/");
+		var filename = file.substr(indexFile+1);
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
+		geoPaths.paths[index].file = filename;
 		drawPath(geoPaths.paths[index]);
 		generationGraphe(geoPaths.paths[index]);
+		generationFileRow(geoPaths.paths[index], index);
 	});
 }
 
@@ -63,9 +67,7 @@ function drawPath(geoJsonPath) {
 	var centreTraceLatitude = moyenneDunTableau(tabLatitude);
 	var centreTraceLongitude = moyenneDunTableau(tabLongitude);
 	var elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
-	console.log(elevationCarte);
 	geoPaths.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
-	console.log(geoJsonPath);
 }
 
 // Generate the map
@@ -171,13 +173,6 @@ function generationIndex(){
 						  </tr>
 					   </thead>
 					   <tbody id="fileTable">
-						  <tr>
-							 <th scope="row">1</th>
-							 <td>run-in-lyon.gpx</td>
-							 <td>10.0km</td>
-							 <td>45min</td>
-							 <td><button class="btn btn-danger" type="button">X</button></td>
-						  </tr>
 					   </tbody>
 					</table>
 				</div>
@@ -238,6 +233,30 @@ function generationAboutUs(){
 				<p>Design, Gestion du cahier des charges, Programmation HTML/CSS</p>
 		  </div>`;
 }
+function generationFileRow(trace, index) {
+	var lasttime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
+	var firsttime = trace.features[0].properties.time;
+	var date1 = new Date(lasttime);
+	var date2 = new Date(firsttime);
+	var date = date1 - date2;
+	var time = secondsToHours(date/1000);
+	var table = document.getElementById("fileTable").innerHTML +=
+		`<tr id="row + ${index + 1}">
+			<th scope="row">${index + 1}</th>
+			<td>${trace.file}</td>
+			<td></td>
+			<td>${time}</td>
+			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
+		</tr>`
+	/*<tr>
+		<th scope="row">1</th>
+		<td>run-in-lyon.gpx</td>
+		<td>10.0km</td>
+		<td>45min</td>
+		<td><button class="btn btn-danger" type="button" onclick="deleteTrace();">X</button></td>
+	</tr>*/
+	
+}
 
 // Upload a file into the page from your own computer
 // Return : none
@@ -252,7 +271,7 @@ function upload(){
 	document.getElementById('hiddenbutton').click();
 	var path = document.getElementById('hiddenbutton').value;
 	
-	//addFileToPath(path);
+	addFileToPath(path);
 	//console.log(geoPaths.paths[1].features[0].geometry.coordinates.length);
 }
 
@@ -277,10 +296,31 @@ function generationGraphe(trace) {
 	});
 }
 
+function deleteTrace(id) {
+	//geoPaths.paths[id].splice(id, 1);
+}
+
 // Open the help window
 // Return : none
 function help(){
 	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
+}
+
+function secondsToHours(sec) {
+
+  var hrs = Math.floor(sec/3600);
+  var min = Math.floor((sec%3600)/60);
+  sec = sec % 60;
+
+  if(sec<10) {
+      sec = "0" + sec;
+  }
+
+  if(min<10) {
+      min = "0" + min;
+  }
+
+  return hrs + ":" + min + ":" + sec;
 }
 
 // Open a window enabling the user to download a .gpx file
