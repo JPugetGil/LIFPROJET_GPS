@@ -262,6 +262,15 @@ function saveAndGet() {
 	let geoJS = geoPaths.paths[0];
 	let xml = geoJsonToXml(geoJS);
 	console.log(xml);
+	
+	let filename = "test.gpx";
+	let element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
 }
 
 // MAP FUNCTIONS //
