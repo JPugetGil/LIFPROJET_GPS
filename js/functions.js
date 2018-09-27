@@ -12,7 +12,6 @@ function startPage() {
 	geoPaths.map = generationDynamique();
 	addFileToPath("data/runinlyon_10km.gpx");
 	JSONtoHTML();
-	
 }
 
 function addFileToPath(file) {
@@ -20,8 +19,8 @@ function addFileToPath(file) {
 		let index = geoPaths.paths.length;
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		drawPath(geoPaths.paths[index]);
+
 		generationGraphe(geoPaths.paths[index]);
-		//console.log(geoPaths.paths);
 	});
 }
 
@@ -73,6 +72,9 @@ function generationDynamique(){
 }
 
 function JSONtoHTML(){
+	document.getElementById("tableauFichiers").style.height = '20%';
+	document.getElementById("tableauPoints").style.height = '500px';
+	document.getElementById("tableauPoints").style.overflowY = 'auto';
 	var tableContent = `<tbody>`;
 	var headTableData = `<thead>
 							  <tr>
@@ -84,7 +86,6 @@ function JSONtoHTML(){
 						   </thead>`;
 	
 	document.getElementById("tableData").innerHTML = headTableData;
-	
 	
 	for (i=0; i<geoPaths.paths[0].features[0].geometry.coordinates.length; i++){
 		tableContent += `<tr>
@@ -136,28 +137,31 @@ function generationIndex(){
 
 			</div>
 			<div class="col-lg-4">
-				<table id="tableData" class="table table-striped table-hover table-bordered"></table>
-
-				<table class="table table-striped table-hover table-bordered">
-				   <thead>
-					  <tr>
-						 <th scope="col">#</th>
-						 <th scope="col">Nom du fichier</th>
-						 <th scope="col">Distance</th>
-						 <th scope="col">Durée</th>
-						 <th scope="col"><i class="fas fa-trash"></i></th>
-					  </tr>
-				   </thead>
-				   <tbody id="fileTable">
-					  <tr>
-						 <th scope="row">1</th>
-						 <td>rspg-quet-en-beaumont.gpx</td>
-						 <td>10.6km</td>
-						 <td>6h 34min</td>
-						 <td><button class="btn btn-danger" type="button">X</button></td>
-					  </tr>
-				   </tbody>
-				</table>
+				<div id="tableauFichiers">
+					<table class="table table-striped table-hover table-bordered">
+					   <thead>
+						  <tr>
+							 <th scope="col">#</th>
+							 <th scope="col">Nom du fichier</th>
+							 <th scope="col">Distance</th>
+							 <th scope="col">Durée</th>
+							 <th scope="col"><i class="fas fa-trash"></i></th>
+						  </tr>
+					   </thead>
+					   <tbody id="fileTable">
+						  <tr>
+							 <th scope="row">1</th>
+							 <td>run-in-lyon.gpx</td>
+							 <td>10.0km</td>
+							 <td>45min</td>
+							 <td><button class="btn btn-danger" type="button">X</button></td>
+						  </tr>
+					   </tbody>
+					</table>
+				</div>
+				<div id="tableauPoints">
+					<table id="tableData" class="table table-striped table-hover table-bordered"></table>
+				</div>
 			</div>`;
 }
 
