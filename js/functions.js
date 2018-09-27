@@ -261,9 +261,8 @@ function help(){
 function saveAndGet() {
 	let geoJS = geoPaths.paths[0];
 	let xml = geoJsonToXml(geoJS);
-	console.log(xml);
 	
-	let filename = "test.gpx";
+	let filename = "export.gpx";
 	let element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
 	element.setAttribute('download', filename);
