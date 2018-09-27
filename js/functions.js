@@ -274,8 +274,9 @@ function upload(){
 // Return : none
 function hiddenUpload() {
 	let path = document.getElementById("hiddenbutton").value;
-	console.log(path);
-	//addFileToPath(path);
+	let length = path.length - 11;
+	let realPath = "data/" + path.substr(12, length);
+	addFileToPath(realPath);
 }
 
 // Generate the bottom graph from a geoJSON trace
