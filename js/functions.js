@@ -187,8 +187,8 @@ function generationIndex(){
 						  <tr>
 							 <th scope="col">#</th>
 							 <th scope="col">Nom du fichier</th>
-							 <th scope="col">Distance (en km)</th>
-							 <th scope="col">Durée (en h)</th>
+							 <th scope="col">Distance <br />(en km)</th>
+							 <th scope="col">Durée <br />(en h)</th>
 							 <th scope="col"><i class="fas fa-trash"></i></th>
 						  </tr>
 					   </thead>
@@ -269,8 +269,8 @@ function generationFileRow(trace, index) {
 		time = secondsToHours(date/1000);
 	}
 	var table = document.getElementById("fileTable").innerHTML +=
-		`<tr id="row + ${index + 1}">
-			<th scope="row">${index + 1}</th>
+		`<tr id="row${index}">
+			<th scope="row" id="cell${index}">${index + 1}</th>
 			<td>${trace.file}</td>
 			<td>${calculateDistance(trace)}</td>
 			<td>${time}</td>
@@ -325,13 +325,24 @@ function generationGraphe(trace) {
 // Param : id -> index of the row you want to delete
 // Return : none
 function deleteTrace(id) {
-	geoPaths.paths[id].splice(id, 1);
+	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+   		geoPaths.paths.splice(id, 1);
+		document.getElementById("fileTable").deleteRow(id);
+		for (let i = id + 1 ; i<geoPaths.paths.length; i++) {
+			geoPaths.paths[i-1] = geoPaths.paths[i];
+			document.getElementById("row" + i).id = "row" + i-1;
+			document.getElementById("cell" + i).innerHTML = i-1;
+			document.getElementById("cell" + i).id = "cell" + i-1;
+		}
+		geoPaths.paths.splice(geoPaths.paths.length, 1);
+		//TO DO : Il faudra gérer la mise à jour de l'id des lignes lors du passage à la version asynchrone.
+	}
 }
 
 // Open the help window
 // Return : none
 function help(){
-	window.open('aide.html',"Aide pour le site Improve my GPX",	'width = 400, height = 800, left = 1000');
+	window.open('aide.html', "Aide pour le site Improve my GPX", 'width = 400, height = 800, left = 1000');
 }
 
 // Convert a time in seconds to a time in hours
