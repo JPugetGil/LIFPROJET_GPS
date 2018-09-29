@@ -442,7 +442,7 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 // Param : factor -> corresponding to the reduction's factor of the table data
 // Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
 function reSample(factor, fileNumber){
-	if (Number.isInteger(facteur) && facteur > 2){
+	if (Number.isInteger(facteur) && facteur > 2 && facteur < geoPaths.paths[fileNumber].features[0].geometry.coordinates.length){
 		let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
 		for(i=0; i<length/factor;i++){
 			var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
