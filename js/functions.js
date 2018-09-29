@@ -27,6 +27,20 @@ function setListeners() {
 	}
 }
 
+// Set up the listeners for the file rows
+// Return : none
+function rowListeners() {
+	Array.from(document.getElementById("fileTable").children).forEach((current, index) => {
+		current.addEventListener("click", rowClick(current));
+	});
+}
+
+function rowClick(row) {
+	return function() {
+		console.log("Hey");
+	}
+}
+
 // Add the content of a .gpx file into the global variable geoPaths.paths[]
 // Param : file -> a .gpx file
 // Return : none
@@ -262,6 +276,7 @@ function generationFileRow(trace, index) {
 			<td>${time}</td>
 			<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
 		</tr>`;
+	rowListeners();
 }
 
 // Upload a file into the page from data/
