@@ -47,8 +47,8 @@ function rowClick(row) {
 function addFileToPath(file) {
 	$.ajax(file).done(gpx => {
 		let index = geoPaths.paths.length;
-		var indexFile = file.lastIndexOf("/");
-		var filename = file.substr(indexFile+1);
+		let indexFile = file.lastIndexOf("/");
+		let filename = file.substr(indexFile+1);
 		geoPaths.paths[index] = toGeoJSON.gpx(gpx);
 		geoPaths.paths[index].file = filename;
 		drawPath(geoPaths.paths[index]);
@@ -73,15 +73,15 @@ function drawPath(geoJsonPath) {
 	}).addTo(geoPaths.map);
 
 
-	var tabLatitude = [];
-	var tabLongitude = [];
+	let tabLatitude = [];
+	let tabLongitude = [];
 	for (let i = 0; i < geoJsonPath.features[0].geometry.coordinates.length ; i++) {
 		tabLatitude.push(geoJsonPath.features[0].geometry.coordinates[i][1]);
 		tabLongitude.push(geoJsonPath.features[0].geometry.coordinates[i][0]);
 	}
-	var centreTraceLatitude = moyenneDunTableau(tabLatitude);
-	var centreTraceLongitude = moyenneDunTableau(tabLongitude);
-	var elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
+	let centreTraceLatitude = moyenneDunTableau(tabLatitude);
+	let centreTraceLongitude = moyenneDunTableau(tabLongitude);
+	let elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
 	geoPaths.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
 }
 
@@ -89,12 +89,12 @@ function drawPath(geoJsonPath) {
 // Return : the map
 function generationDynamique(){
 	
-	var State = "index";
+	let State = "index";
 	
 	generationIndex(); //Permet de générer la page index.html
 	
 	
-	var mymap = L.map('mapid').setView([0,0], 0);
+	let mymap = L.map('mapid').setView([0,0], 0);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -115,8 +115,8 @@ function JSONtoHTML(trace){
 	document.getElementById("tableauFichiers").style.overflowY = 'auto';
 	document.getElementById("tableauPoints").style.height = '400px';
 	document.getElementById("tableauPoints").style.overflowY = 'auto';
-	var tableContent = `<tbody>`;
-	var headTableData = `<thead>
+	let tableContent = `<tbody>`;
+	let headTableData = `<thead>
 							  <tr>
 								 <th scope="col">#</th>
 								 <th scope="col">Latitude</th>
@@ -261,14 +261,14 @@ function generationAboutUs(){
 function generationFileRow(trace, index) {
 	let time = "Non défini";
 	if (trace.features[0].properties.hasOwnProperty("coordTimes")) {
-		var lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
-		var firstTime = trace.features[0].properties.time;
-		var date1 = new Date(lastTime);
-		var date2 = new Date(firstTime);
-		var date = date1 - date2;
+		let lastTime = trace.features[0].properties.coordTimes[trace.features[0].geometry.coordinates.length - 1];
+		let firstTime = trace.features[0].properties.time;
+		let date1 = new Date(lastTime);
+		let date2 = new Date(firstTime);
+		let date = date1 - date2;
 		time = secondsToHours(date/1000);
 	}
-	var table = document.getElementById("fileTable").innerHTML +=
+	let table = document.getElementById("fileTable").innerHTML +=
 		`<tr id="row${index}">
 			<th scope="row" id="cell${index}">${index + 1}</th>
 			<td>${trace.file}</td>
@@ -305,13 +305,13 @@ function hiddenUpload() {
 // Param : trace -> a geoJSON variable
 // Return : none
 function generationGraphe(trace) {
-	var abscisse = ['x'];
-	var ordonnee = ['data1'];
+	let abscisse = ['x'];
+	let ordonnee = ['data1'];
 	for (let i = 0; i < trace.features[0].geometry.coordinates.length ; i++) {
 		abscisse.push(i);
 		ordonnee.push(trace.features[0].geometry.coordinates[i][2]);
 	}
-	var chart = c3.generate({
+	let chart = c3.generate({
 		data: {
 			x: 'x',
 			columns: [
@@ -350,8 +350,8 @@ function help(){
 // Return : a time in hours
 function secondsToHours(sec) {
 
-  var hrs = Math.floor(sec/3600);
-  var min = Math.floor((sec%3600)/60);
+  let hrs = Math.floor(sec/3600);
+  let min = Math.floor((sec%3600)/60);
   sec = sec % 60;
 
   if(sec<10) {
@@ -383,7 +383,7 @@ function DistanceBetween2Points(point1, point2) {
 // Param : a trace
 // Return : the global distance
 function calculateDistance(trace) {
-	var distance = 0;
+	let distance = 0;
 	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
 	for(let i = 0; i<trace.features[0].geometry.coordinates.length-1; i++) {
 		distance += DistanceBetween2Points(trace.features[0].geometry.coordinates[i],trace.features[0].geometry.coordinates[i+1]);
@@ -413,7 +413,7 @@ function saveAndGet() {
 // Param : tab -> an array of numbers
 // Return : number
 function moyenneDunTableau(tab){
-	var somme = 0.0;
+	let somme = 0.0;
 	for (let i=0; i<tab.length; i++){
 		somme += tab[i];
 	}
@@ -427,7 +427,7 @@ function moyenneDunTableau(tab){
 // Param : moyenneLongitude -> mean of all longitudes
 // Return : a number corresponding to a zoom
 function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLongitude){
-	var module = 0;
+	let module = 0;
 	for(let i=0; i<tabLatitude.length; i++){
 		if(Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude)) > module){
 			module = Math.sqrt((tabLatitude[i]-moyenneLatitude)*(tabLatitude[i]-moyenneLongitude)+(tabLongitude[i]-moyenneLongitude)*(tabLongitude[i]-moyenneLongitude));
@@ -445,10 +445,10 @@ function reSample(factor, fileNumber){
 	if (Number.isInteger(facteur) && facteur > 2 && facteur < geoPaths.paths[fileNumber].features[0].geometry.coordinates.length){
 		let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
 		for(i=0; i<length/factor;i++){
-			var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
-			var removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
+			let removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+			let removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
 			if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
-				var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
+				let removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
 			}
 		}
 	} else {
