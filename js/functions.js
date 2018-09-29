@@ -161,7 +161,7 @@ function generationIndex(){
 					</div>
 					<div class="col-lg-1 bg-light">
 						<div class="form-group">
-					      <input type="number" class="form-control" id="samplingFactor" placeholder="X">
+					      <input type="text" class="form-control" id="samplingFactor" placeholder="X">
 					      <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-divide"></i></button>
 					    </div>
 						<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-lg btn-block"><i class="fas fa-undo"></i></button>
@@ -442,14 +442,19 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 // Param : factor -> corresponding to the reduction's factor of the table data
 // Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
 function reSample(factor, fileNumber){
-	let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
-	for(i=0; i<length/factor;i++){
-		var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
-		var removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
-		if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
-			var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
+	if (Number.isInteger(facteur) && facteur > 2 && facteur < geoPaths.paths[fileNumber].features[0].geometry.coordinates.length){
+		let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
+		for(i=0; i<length/factor;i++){
+			var removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
+			var removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
+			if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
+				var removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
+			}
 		}
+	} else {
+		alert("Vous devez mettre un entier supérieur ou égal à 2 dans le champs, SVP. ");
 	}
+	
 }
 
 
