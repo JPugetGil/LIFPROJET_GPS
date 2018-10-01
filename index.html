@@ -27,11 +27,11 @@
 		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
 		  <h5 class="my-0 mr-md-auto font-weight-normal text-light"><a class="p-2 text-white" href="index.html">Improve my GPX</a></h5>
 		  <nav class="my-2 my-md-0 mr-md-3">
-			<input type="file" id="hiddenbutton" style="display:none" onchange="hiddenUpload()"/>
-			<input type="button" class="btn btn-outline-success" value="Importer" onclick="upload()"/>
-			<button id="descriptionButton" type="button" class="btn btn-outline-warning" onClick="generationDescription()">Description</button>
-			<button type="button" class="btn btn-outline-info" onClick="generationAboutUs()">A Propos</button>
-			<button type="button" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onClick="help();">Besoin d'aide ?</button> 
+			<input type="file" id="hiddenButton" style="display:none"/>
+			<input type="button" id="importButton" class="btn btn-outline-success" value="Importer"/>
+			<button id="descriptionButton" type="button" class="btn btn-outline-warning">Description</button>
+			<button type="button" id="aboutButton" class="btn btn-outline-info">A Propos</button>
+			<button type="button" id="helpButton" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onClick="help();">Besoin d'aide ?</button> 
 		  </nav>
 		</div>
 		<div id="planDeTravail" class="row" style="margin-left:1%; width: 99%; margin-bottom: 40px">
