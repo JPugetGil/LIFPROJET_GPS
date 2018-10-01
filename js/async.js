@@ -13,10 +13,10 @@ createGeoData()
 
 function createGeoData() {
 	return new Promise((resolve, reject) => {
-		jQuery.ajaxSetup({async : false});
 		let geoData = {
 			map: undefined,
-			paths: []
+			paths: [],
+			page: undefined
 		};
 		resolve(geoData);
 		reject("Error when initializing the global variable");
@@ -26,6 +26,7 @@ function createGeoData() {
 // Generate the main section (with the map)
 // Return : none
 function generateIndex(geoData) {
+    geoData.page = "index";
 	document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8">
 			<div class="row">
@@ -96,16 +97,16 @@ function generateMap(geoData) {
 
 function addPath(geoData) {
 	let file = "data/runinlyon_10km.gpx";
-	$.ajax(file).done(gpx => {
+    return Promise.resolve($.ajax(file)).then(gpx => {
 		let index = geoData.paths.length;
 		let indexFile = file.lastIndexOf("/");
 		let filename = file.substr(indexFile+1);
 		geoData.paths[index] = toGeoJSON.gpx(gpx);
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
-	}).catch(console.error);
-
-	return geoData;
+        return geoData; 
+	})
+    .catch(console.error);
 }
 
 // MAP FUNCTIONS //
