@@ -1,7 +1,7 @@
 createGeoData()
 .then(generateIndex)
 .then(generateMap)
-.then(addPath)
+.then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(movePOV)
 .then(displayPath)
 .then(generateFilesTab)
@@ -95,8 +95,7 @@ function generateMap(geoData) {
 	return geoData;
 }
 
-function addPath(geoData) {
-	let file = "data/runinlyon_10km.gpx";
+function addPath(geoData, file) {
     return Promise.resolve($.ajax(file)).then(gpx => {
 		let index = geoData.paths.length;
 		let indexFile = file.lastIndexOf("/");
@@ -302,7 +301,41 @@ function generatePoints(geoData) {
 }
 
 function setListeners(geoData) {
+    document.getElementById("importButton").addEventListener("click", upload(geoData));
+    document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+    
 	return geoData;
+}
+
+// Upload a file into the page from data/
+// Return : none
+function upload(geoData) {
+    return function() {
+        if (geoData.page == "index"){
+            console.log("Nous allons importer le fichier...");
+        }
+        else {
+            generateIndex(geoData);
+            console.log("Maintenant que index est chargé, nous allons importer...");
+        }
+        document.getElementById('hiddenButton').click();
+    }
+}
+
+// Used to upload
+// Return : none
+function hiddenUpload(geoData) {
+    return function() {
+        let path = document.getElementById("hiddenButton").value;
+        let length = path.length - 11;
+        let realPath = "data/" + path.substr(12, length);
+        /*addPath(geoData, realPath);
+        movePOV(geoData);
+        displayPath(geoData);
+        generateFilesTab(geoData);
+        generateGraph(geoData);
+        generatePoints(geoData);*/
+    }
 }
 
 // CONVERSIONS //
