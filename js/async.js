@@ -163,7 +163,6 @@ function addPath(geoData, file) {
 		geoData.paths[index].shown = true;
         return geoData; 
 	})
-    .catch(console.error);
 }
 
 // MAP FUNCTIONS //
@@ -229,8 +228,9 @@ function displayPath(geoData) {
 }
 
 function generateFilesTab(geoData) {
-	let time = "Non défini";
+	document.getElementById("fileTable").innerHTML = "";
 	geoData.paths.forEach( (current, index) => {
+		let time = "Non défini";
 		if (current.features[0].properties.hasOwnProperty("coordTimes")) {
 			let lastTime = current.features[0].properties.coordTimes[current.features[0].geometry.coordinates.length - 1];
 			let firstTime = current.features[0].properties.time;
@@ -239,7 +239,7 @@ function generateFilesTab(geoData) {
 			let date = date1 - date2;
 			time = secondsToHours(date/1000);
 		}
-		let table = document.getElementById("fileTable").innerHTML +=
+		document.getElementById("fileTable").innerHTML +=
 			`<tr id="row${index}">
 				<th scope="row" id="cell${index}">${index + 1}</th>
 				<td>${current.file}</td>
@@ -389,12 +389,14 @@ function hiddenUpload(geoData) {
         let path = document.getElementById("hiddenButton").value;
         let length = path.length - 11;
         let realPath = "data/" + path.substr(12, length);
-        /*addPath(geoData, realPath);
-        movePOV(geoData);
-        displayPath(geoData);
-        generateFilesTab(geoData);
-        generateGraph(geoData);
-        generatePoints(geoData);*/
+        addPath(geoData, realPath)
+        //movePOV(geoData);
+        //displayPath(geoData);
+        .then(generateFilesTab)
+        .then(console.log)
+        .catch(console.error);
+        //generateGraph(geoData);
+      	//generatePoints(geoData);
     }
 }
 
