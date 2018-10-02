@@ -136,7 +136,7 @@ function generationAboutUs(geoData){
 // Open the help window
 // Return : none
 function help(){
-	window.open('aide.html', "Aide pour le site Improve my GPX", 'width = 400, height = 800, left = 1000');
+	window.open('html/aide.html', "Aide pour le site Improve my GPX", 'width = 400, height = 800, left = 1000');
 }
 
 function generateMap(geoData) {
