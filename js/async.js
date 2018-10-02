@@ -390,13 +390,13 @@ function hiddenUpload(geoData) {
         let length = path.length - 11;
         let realPath = "data/" + path.substr(12, length);
         addPath(geoData, realPath)
-        //movePOV(geoData);
-        //displayPath(geoData);
+        .then(movePOV)
+        .then(displayPath)
         .then(generateFilesTab)
+        .then(generateGraph)
+		.then(generatePoints)
         .then(console.log)
         .catch(console.error);
-        //generateGraph(geoData);
-      	//generatePoints(geoData);
     }
 }
 
