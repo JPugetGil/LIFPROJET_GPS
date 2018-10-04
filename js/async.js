@@ -251,7 +251,7 @@ function generateFilesTab(geoData) {
 				<td>${current.file}</td>
 				<td>${calculateDistance(current)}</td>
 				<td>${time}</td>
-				<td><button class="btn btn-danger" type="button" onclick="deleteTrace(${index});">X</button></td>
+				<td><button id="suppr${index}" class="btn btn-danger" type="button" onclick="deleteTrace(${geoData},${index});">X</button></td>
 			</tr>`;
 	});
 	
@@ -363,6 +363,25 @@ function generatePoints(geoData) {
 
 	return geoData;
 }
+
+// Delete a row in the trace table
+// Param : id -> index of the row you want to delete
+// Return : none
+function deleteTrace(geoData, id) {
+	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+   		geoData.paths.splice(id, 1);
+		document.getElementById("fileTable").deleteRow(id);
+		for (let i = id + 1 ; i<geoData.paths.length; i++) {
+			geoData.paths[i-1] = geoData.paths[i];
+			document.getElementById("row" + i).id = "row" + i-1;
+			document.getElementById("cell" + i).innerHTML = i-1;
+			document.getElementById("cell" + i).id = "cell" + i-1;
+		}
+		geoData.paths.splice(geoData.paths.length, 1);
+	}
+	return geoData;
+}
+
 
 function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
