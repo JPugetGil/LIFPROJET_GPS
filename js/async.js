@@ -8,6 +8,7 @@ createGeoData()
 .then(generateGraph)
 .then(generatePoints)
 .then(setListeners)
+.then(setListenersUpdate)
 .then(console.log)
 .catch(console.error);
 
@@ -390,6 +391,16 @@ function setListeners(geoData) {
 	document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
 
     return geoData;
+}
+
+function setListenersUpdate(geoData){
+	
+	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => { 
+		//console.log(event.target.id);
+		deleteTrace(geoData, event.buttons);
+	}));
+	
+	return geoData;
 }
 
 // Upload a file into the page from data/
