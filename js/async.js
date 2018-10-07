@@ -319,24 +319,30 @@ function calculateDistance(trace) {
 }
 
 function generateGraph(geoData) {
+	let xs = {};
+	let cols = [];
 	geoData.paths.forEach(current => {
 		if (current.shown) {
-			let abscisse = ['x'];
-			let ordonnee = ['data1'];
+			let file = current.file;
+			let x = "x" + file;
+			xs[file] = x;
+
+			let abscisse = [x];
+			let ordonnee = [file];
 			for (let i = 0; i < current.features[0].geometry.coordinates.length ; i++) {
 				abscisse.push(i+1);
 				ordonnee.push(current.features[0].geometry.coordinates[i][2]);
 			}
-			let chart = c3.generate({
-				data: {
-					x: 'x',
-					columns: [
-						abscisse,
-						ordonnee
-					]
-				}
-			});
+
+			cols.push(abscisse);
+			cols.push(ordonnee);
 		}
+	});
+	c3.generate({
+	    data: {
+	        xs: xs,
+	        columns: cols
+	    }
 	});
 
 	return geoData;
