@@ -371,16 +371,9 @@ function generatePoints(geoData) {
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
    		geoData.paths.splice(id, 1);
-		document.getElementById("fileTable").deleteRow(id);
-		for (let i = id + 1 ; i<geoData.paths.length; i++) {
-			geoData.paths[i-1] = geoData.paths[i];
-			document.getElementById("row" + i).id = "row" + i-1;
-			document.getElementById("cell" + i).innerHTML = i-1;
-			document.getElementById("cell" + i).id = "cell" + i-1;
-		}
-		geoData.paths.splice(geoData.paths.length, 1);
+   		generateFilesTab(geoData);
+   		setListenersUpdate(geoData);
 	}
-	return geoData;
 }
 
 
@@ -394,10 +387,9 @@ function setListeners(geoData) {
 }
 
 function setListenersUpdate(geoData){
-	
 	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => { 
-		//console.log(event.target.id);
-		deleteTrace(geoData, event.buttons);
+		let id = event.target.id;
+		deleteTrace(geoData, id.substr(5, id.length-5));
 	}));
 	
 	return geoData;
@@ -431,6 +423,7 @@ function hiddenUpload(geoData) {
         .then(generateFilesTab)
         .then(generateGraph)
 		.then(generatePoints)
+		.then(setListenersUpdate)
         .then(console.log)
         .catch(console.error);
     }
