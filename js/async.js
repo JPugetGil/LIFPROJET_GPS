@@ -219,8 +219,8 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 
 function displayPath(geoData, index = undefined) {
 	let geojsonMarkerOptions = {
-			opacity: 0,
-			fillOpacity: 0
+		opacity: 0,
+		fillOpacity: 0
 	};
 	if (index === undefined) {
 		geoData.paths.forEach( (current, index) => {
