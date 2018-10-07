@@ -217,22 +217,34 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 	return module;
 }
 
-function displayPath(geoData) {
+function displayPath(geoData, index = undefined) {
 	let geojsonMarkerOptions = {
-		opacity: 0,
-		fillOpacity: 0
+			opacity: 0,
+			fillOpacity: 0
 	};
-	geoData.paths.forEach( (current, index) => {
-		if (current.shown) {
+	if (index === undefined) {
+		geoData.paths.forEach( (current, index) => {
 			let marker = L.geoJSON(current, {
 				pointToLayer: function (feature, latlng) {
 					return L.circleMarker(latlng, geojsonMarkerOptions);
 				}
-			})
+			});
 			geoData.markers[index] = marker;
+			if (current.shown) {
+				geoData.map.addLayer(marker);
+			}
+		});
+	} else {
+		let marker = L.geoJSON(geoData.paths[index], {
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, geojsonMarkerOptions);
+			}
+		});
+		geoData.markers[index] = marker;
+		if (geoData.paths[index].shown) {
 			geoData.map.addLayer(marker);
 		}
-	});
+	}
 	return geoData;
 }
 
@@ -424,7 +436,7 @@ function hiddenUpload(geoData) {
         let realPath = "data/" + path.substr(12, length);
         addPath(geoData, realPath)
         .then(movePOV)
-        .then(displayPath)
+        .then(geoData => displayPath(geoData, geoData.paths.length-1))
         .then(generateFilesTab)
         .then(generateGraph)
 		.then(generatePoints)
