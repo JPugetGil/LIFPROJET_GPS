@@ -324,7 +324,7 @@ function generateGraph(geoData) {
 			let abscisse = ['x'];
 			let ordonnee = ['data1'];
 			for (let i = 0; i < current.features[0].geometry.coordinates.length ; i++) {
-				abscisse.push(i);
+				abscisse.push(i+1);
 				ordonnee.push(current.features[0].geometry.coordinates[i][2]);
 			}
 			let chart = c3.generate({
