@@ -17,6 +17,7 @@ function createGeoData() {
 		let geoData = {
 			map: undefined,
 			paths: [],
+			markers: [],
 			page: undefined
 		};
 		resolve(geoData);
@@ -221,16 +222,17 @@ function displayPath(geoData) {
 		opacity: 0,
 		fillOpacity: 0
 	};
-	geoData.paths.forEach(current => {
+	geoData.paths.forEach( (current, index) => {
 		if (current.shown) {
-			L.geoJSON(current, {
+			let marker = L.geoJSON(current, {
 				pointToLayer: function (feature, latlng) {
 					return L.circleMarker(latlng, geojsonMarkerOptions);
 				}
-			}).addTo(geoData.map);
+			})
+			geoData.markers[index] = marker;
+			geoData.map.addLayer(marker);
 		}
 	});
-	
 	return geoData;
 }
 
@@ -370,9 +372,12 @@ function generatePoints(geoData) {
 // Return : none
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+   		geoData.map.removeLayer(geoData.markers[id]);
    		geoData.paths.splice(id, 1);
+   		geoData.markers.splice(id, 1);
    		generateFilesTab(geoData);
    		setListenersUpdate(geoData);
+   		console.log(geoData);
 	}
 }
 
