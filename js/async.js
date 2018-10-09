@@ -88,7 +88,7 @@ function generateIndex(geoData) {
 
 // Generate the "Description" section
 // Return : none
-function generateDescription(geoData){
+/*function generateDescription(geoData){
 	return function() {
         if (confirm("Voulez vous vraiment quitter l'éditeur de traces ? Toutes les données non sauvegardées seront perdues.")) {
             geoData.page = "description";
@@ -144,7 +144,7 @@ function generateAboutUs(geoData){
                 </div>`;
         }
 	}
-}
+}*/
 
 // Open the help window
 // Return : none
@@ -410,8 +410,8 @@ function deleteTrace(geoData, id) {
 function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
-	document.getElementById("descriptionButton").addEventListener("click", generateDescription(geoData), false);
-	document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
+	//document.getElementById("descriptionButton").addEventListener("click", generateDescription(geoData), false);
+	//document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
 
     return geoData;
 }
