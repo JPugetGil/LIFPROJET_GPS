@@ -80,7 +80,18 @@ function generateIndex(geoData) {
 				</table>
 			</div>
 			<div id="tableauPoints">
-				<table id="tableData" class="table table-striped table-hover table-bordered"></table>
+				<table id="tableData" class="table table-striped table-hover table-bordered">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Latitude</th>
+							<th scope="col">Longitude</th>
+							<th scope="col">Altitude</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
 			</div>
 		</div>`;
 	return geoData;
@@ -365,34 +376,30 @@ function generatePoints(geoData) {
 	document.getElementById("tableauFichiers").style.overflowY = 'auto';
 	document.getElementById("tableauPoints").style.height = '400px';
 	document.getElementById("tableauPoints").style.overflowY = 'auto';
-	let tableContent = `<tbody>`;
-	let headTableData = `<thead>
-							  <tr>
-								 <th scope="col">#</th>
-								 <th scope="col">Latitude</th>
-								 <th scope="col">Longitude</th>
-								 <th scope="col">Altitude</th>
-							  </tr>
-						   </thead>`;
 	
+	let tableContent = "";
 	let lastIndex = geoData.paths.length -1;
-	let trace = geoData.paths[lastIndex];
-	for (let i=0; i < trace.features[0].geometry.coordinates.length; i++) {
-		tableContent += `<tr>
-							<th scope="row"> ${i+1}</th>
-								<td>
-									${trace.features[0].geometry.coordinates[i][0]}
-								</td>
-							<td>
-								${trace.features[0].geometry.coordinates[i][1]}
-							</td>
-							<td>
-								${trace.features[0].geometry.coordinates[i][2]}
-							</td>
-						  </tr>`;
+	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
+		lastIndex--;
 	}
-	tableContent += `</tbody>`;
-	document.getElementById("tableData").innerHTML = headTableData + tableContent;
+	if (lastIndex >= 0) {
+		let trace = geoData.paths[lastIndex];
+		for (let i=0; i < trace.features[0].geometry.coordinates.length; i++) {
+			tableContent += `<tr>
+								<th scope="row"> ${i+1}</th>
+									<td>
+										${trace.features[0].geometry.coordinates[i][0]}
+									</td>
+								<td>
+									${trace.features[0].geometry.coordinates[i][1]}
+								</td>
+								<td>
+									${trace.features[0].geometry.coordinates[i][2]}
+								</td>
+							  </tr>`;
+		}
+	}
+	document.querySelector("#tableData > tbody").innerHTML = tableContent;
 
 	return geoData;
 }
@@ -406,9 +413,10 @@ function deleteTrace(geoData, id) {
    		geoData.paths.splice(id, 1);
    		geoData.markers.splice(id, 1);
    		generateFilesTab(geoData);
-   		setListenersUpdate(geoData);
    		generateGraph(geoData);
+   		generatePoints(geoData);
    		movePOV(geoData);
+   		setListenersUpdate(geoData);
 	}
 }
 
