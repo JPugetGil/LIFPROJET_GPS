@@ -372,11 +372,6 @@ function generateGraph(geoData) {
 }
 
 function generatePoints(geoData) {
-	document.getElementById("tableauFichiers").style.height = '150px';
-	document.getElementById("tableauFichiers").style.overflowY = 'auto';
-	document.getElementById("tableauPoints").style.height = '400px';
-	document.getElementById("tableauPoints").style.overflowY = 'auto';
-	
 	let tableContent = "";
 	let lastIndex = geoData.paths.length -1;
 	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {

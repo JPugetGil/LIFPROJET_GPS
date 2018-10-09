@@ -1,0 +1,17 @@
+#descriptionButton:hover {
+	color: white;
+}
+
+#tableauFichiers {
+	height: 150px;
+	overflow-y: auto;
+}
+
+#fileTable > tr:hover {
+	cursor: pointer; 
+}
+
+#tableauPoints {
+	height: 400px;
+	overflow-y: auto;
+}
