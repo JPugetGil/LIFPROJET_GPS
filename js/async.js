@@ -18,6 +18,7 @@ function createGeoData() {
 			map: undefined,
 			paths: [],
 			markers: [],
+			focus: undefined,
 			page: undefined
 		};
 		resolve(geoData);
@@ -185,6 +186,7 @@ function addPath(geoData, file) {
 		geoData.paths[index] = toGeoJSON.gpx(gpx);
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
+		geoData.focus = index;
         return geoData; 
 	})
 }
@@ -373,9 +375,12 @@ function generateGraph(geoData) {
 
 function generatePoints(geoData) {
 	let tableContent = "";
-	let lastIndex = geoData.paths.length -1;
-	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
-		lastIndex--;
+	let lastIndex = geoData.focus;
+	if (lastIndex === undefined) {
+		lastIndex = geoData.paths.length -1;
+		while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
+			lastIndex--;
+		}
 	}
 	if (lastIndex >= 0) {
 		let trace = geoData.paths[lastIndex];
@@ -404,13 +409,19 @@ function generatePoints(geoData) {
 // Return : none
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+		let wasShown = geoData.paths[id].shown;
    		geoData.map.removeLayer(geoData.markers[id]);
    		geoData.paths.splice(id, 1);
    		geoData.markers.splice(id, 1);
    		generateFilesTab(geoData);
-   		generateGraph(geoData);
-   		generatePoints(geoData);
-   		movePOV(geoData);
+   		if (wasShown) {
+   			generateGraph(geoData);
+   		}
+   		if (geoData.focus === id) {
+   			geoData.focus = undefined;
+   			generatePoints(geoData);
+	   		movePOV(geoData);
+	   	}
    		setListenersUpdate(geoData);
 	}
 }
@@ -428,7 +439,7 @@ function setListeners(geoData) {
 function setListenersUpdate(geoData){
 	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => { 
 		let id = event.target.id;
-		deleteTrace(geoData, id.substr(5, id.length-5));
+		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
 	}));
 	
 	return geoData;
