@@ -182,17 +182,22 @@ function addPath(geoData, file) {
 
 function movePOV(geoData) {
 	let lastIndex = geoData.paths.length -1;
-	let path = geoData.paths[lastIndex];
-	let tabLatitude = [];
-	let tabLongitude = [];
-	for (let i = 0; i < path.features[0].geometry.coordinates.length ; i++) {
-		tabLatitude.push(path.features[0].geometry.coordinates[i][1]);
-		tabLongitude.push(path.features[0].geometry.coordinates[i][0]);
+	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
+		lastIndex--;
 	}
-	let centreTraceLatitude = moyenneDunTableau(tabLatitude);
-	let centreTraceLongitude = moyenneDunTableau(tabLongitude);
-	let elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
-	geoData.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
+	if (lastIndex >= 0) {
+		let path = geoData.paths[lastIndex];
+		let tabLatitude = [];
+		let tabLongitude = [];
+		for (let i = 0; i < path.features[0].geometry.coordinates.length ; i++) {
+			tabLatitude.push(path.features[0].geometry.coordinates[i][1]);
+			tabLongitude.push(path.features[0].geometry.coordinates[i][0]);
+		}
+		let centreTraceLatitude = moyenneDunTableau(tabLatitude);
+		let centreTraceLongitude = moyenneDunTableau(tabLongitude);
+		let elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
+		geoData.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
+	}
 
 	return geoData;
 }
@@ -402,7 +407,8 @@ function deleteTrace(geoData, id) {
    		geoData.markers.splice(id, 1);
    		generateFilesTab(geoData);
    		setListenersUpdate(geoData);
-   		console.log(geoData);
+   		generateGraph(geoData);
+   		movePOV(geoData);
 	}
 }
 
