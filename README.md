@@ -7,4 +7,4 @@ Participants :
 
 Sujet : AMRC4. Edition et visualisation de traces GPS sur le web
 
-Cahier des charges disponible : ./PROJET_GPS.odt
+Cahier des charges disponible : "doc/Cahier des Charges.pdf"
