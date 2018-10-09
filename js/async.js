@@ -285,6 +285,7 @@ function generateFilesTab(geoData) {
 			let date = date1 - date2;
 			time = secondsToHours(date/1000);
 		}
+
 		document.getElementById("fileTable").innerHTML +=
 			`<tr id="row${index}">
 				<th scope="row" id="cell${index}">${index + 1}</th>
@@ -294,6 +295,11 @@ function generateFilesTab(geoData) {
 				<td><button id="suppr${index}" class="btn btn-danger" type="button" onclick="deleteTrace(${geoData},${index});">X</button></td>
 			</tr>`;
 	});
+
+	if (geoData.focus !== undefined) {
+		console.log(geoData.focus);
+		document.getElementById("row" + geoData.focus).classList.add("focus");
+	}
 	
 	return geoData;
 }
@@ -413,15 +419,22 @@ function deleteTrace(geoData, id) {
    		geoData.map.removeLayer(geoData.markers[id]);
    		geoData.paths.splice(id, 1);
    		geoData.markers.splice(id, 1);
-   		generateFilesTab(geoData);
    		if (wasShown) {
    			generateGraph(geoData);
    		}
    		if (geoData.focus === id) {
-   			geoData.focus = undefined;
+   			geoData.focus = geoData.paths.length -1;
+   			if (geoData.focus < 0) {
+   				geoData.focus = undefined;
+   			}
    			generatePoints(geoData);
 	   		movePOV(geoData);
+	   	} else {
+	   		if (geoData.focus > id) {
+	   			geoData.focus--;
+	   		}
 	   	}
+	   	generateFilesTab(geoData);
    		setListenersUpdate(geoData);
 	}
 }
