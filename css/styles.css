@@ -6,10 +6,38 @@
 	color: white;
 }
 
+#loadImage {
+	/*background-color: #E0E0E0;*/
+	/*opacity: 0.5;*/
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	display: flex;
+	justify-content: center;
+}
+
+#loadImage > div {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+} 
+
+#loadImage i {
+	width: 1%;
+	height: 1%;
+}
+
 #planDeTravail {
 	margin-left:1%;
 	width: 99%;
-	margin-bottom: 40px
+	margin-bottom: 40px;
+	z-index: 2;
+}
+
+#mapid {
+	opacity: 0.99;
 }
 
 #tableauFichiers {
