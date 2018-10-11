@@ -6,9 +6,8 @@
 	color: white;
 }
 
+/* TODO if we decide to not implement a loading time with font awesome this will need to be remove */
 #loadImage {
-	/*background-color: #E0E0E0;*/
-	/*opacity: 0.5;*/
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -28,6 +27,7 @@
 	width: 1%;
 	height: 1%;
 }
+/* End of possible remove */
 
 #planDeTravail {
 	margin-left:1%;

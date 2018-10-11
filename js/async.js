@@ -1,5 +1,5 @@
 createGeoData()
-.then(geoData => loadingTimeActivate(geoData, true))
+//.then(geoData => loadingTimeActivate(geoData, true))
 .then(generateIndex)
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
@@ -10,8 +10,12 @@ createGeoData()
 .then(generatePoints)
 .then(setListeners)
 .then(setListenersUpdate)
+//.then(geoData => loadingTimeActivate(geoData, false))
 .then(console.log)
-.catch(console.error);
+.catch(error => {
+	loadingTimeActivate(error, false)
+	console.error(error);
+});
 
 function createGeoData() {
 	return new Promise((resolve, reject) => {
@@ -28,6 +32,22 @@ function createGeoData() {
 }
 
 function loadingTimeActivate(geoData, activate) {
+	if (activate) {
+		let container = document.querySelector("#loadImage div");
+		if (container !== null) {
+			let image = document.createElement("i");
+			image.classList.add("fas");
+			image.classList.add("fa-circle");
+			image.classList.add("fa-10x");
+			image.classList.add("fa-spin");
+			container.appendChild(image);
+		}
+	} else {
+		let container = document.querySelector("#loadImage div");
+		if (container !== null) {
+			container.removeChild(container.children[0]);
+		}
+	}
 	return geoData;
 }
 
@@ -302,7 +322,6 @@ function generateFilesTab(geoData) {
 	});
 
 	if (geoData.focus !== undefined) {
-		console.log(geoData.focus);
 		document.getElementById("row" + geoData.focus).classList.add("focus");
 	}
 	
