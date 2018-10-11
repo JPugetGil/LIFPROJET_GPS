@@ -1,4 +1,5 @@
 createGeoData()
+.then(geoData => loadingTimeActivate(geoData, true))
 .then(generateIndex)
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
@@ -24,6 +25,10 @@ function createGeoData() {
 		resolve(geoData);
 		reject("Error when initializing the global variable");
 	});
+}
+
+function loadingTimeActivate(geoData, activate) {
+	return geoData;
 }
 
 // Generate the main section (with the map)
