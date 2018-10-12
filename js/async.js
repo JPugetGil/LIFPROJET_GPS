@@ -461,8 +461,8 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
-    document.getElementById("importButton").addEventListener("click", upload(geoData));
-    document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+    document.getElementById("importButton").addEventListener("click", () => upload(geoData));
+    document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
 	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
 
     return geoData;
@@ -480,35 +480,31 @@ function setListenersUpdate(geoData){
 // Upload a file into the page from data/
 // Return : none
 function upload(geoData) {
-    return function() {
-        if (geoData.page == "index"){
-            console.log("Nous allons importer le fichier...");
-        }
-        else {
-            generateIndex(geoData);
-            console.log("Maintenant que index est chargé, nous allons importer...");
-        }
-        document.getElementById('hiddenButton').click();
+	if (geoData.page == "index"){
+        console.log("Nous allons importer le fichier...");
     }
+    else {
+        generateIndex(geoData);
+        console.log("Maintenant que index est chargé, nous allons importer...");
+    }
+   	document.getElementById('hiddenButton').click();
 }
 
 // Used to upload
 // Return : none
 function hiddenUpload(geoData) {
-    return function() {
-        let path = document.getElementById("hiddenButton").value;
-        let length = path.length - 11;
-        let realPath = "data/" + path.substr(12, length);
-        addPath(geoData, realPath)
-        .then(movePOV)
-        .then(geoData => displayPath(geoData, geoData.paths.length-1))
-        .then(generateFilesTab)
-        .then(generateGraph)
+    let path = document.getElementById("hiddenButton").value;
+    let length = path.length - 11;
+    let realPath = "data/" + path.substr(12, length);
+    addPath(geoData, realPath)
+		.then(movePOV)
+		.then(geoData => displayPath(geoData, geoData.paths.length-1))
+		.then(generateFilesTab)
+		.then(generateGraph)
 		.then(generatePoints)
 		.then(setListenersUpdate)
-        .then(console.log)
-        .catch(console.error);
-    }
+		.then(console.log)
+		.catch(console.error);
 }
 
 // CONVERSIONS //
