@@ -24,7 +24,8 @@ function createGeoData() {
 			paths: [],
 			markers: [],
 			focus: undefined,
-			page: undefined
+            page: undefined,
+            mode: "default" 
 		};
 		resolve(geoData);
 		reject("Error when initializing the global variable");
@@ -122,8 +123,8 @@ function generateIndex(geoData) {
 					</div>
 				</div>
 				<div class="col-lg-1 bg-light">
-						<button type="button" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
-						<button type="button" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
+						<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
+						<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 						<br>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="X">
@@ -132,11 +133,11 @@ function generateIndex(geoData) {
 						<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
 						<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-redo"></i></button>
 						<br>
-						<button type="button" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-plus"></i></button>
-						<button type="button" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-minus"></i></button>
+						<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-plus"></i></button>
+						<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-minus"></i></button>
 						<br>
-						<button type="button" alt="Lier" title="Lier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-link"></i></button>
-						<button type="button" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
+						<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-link"></i></button>
+						<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
 						<br>
 						<br>
 						<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
@@ -524,7 +525,13 @@ function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
 	//document.getElementById("descriptionButton").addEventListener("click", generateDescription(geoData), false);
-	//document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
+    //document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
+    geoData.map.on("click", function(e) {
+        if (geoData.mode === "addpoint") {
+            console.log("j'ai cliqué sur la map");
+            var Marker = L.marker(e.latlng).addTo(geoData.map);
+        }
+    });
 
     return geoData;
 }
@@ -533,8 +540,12 @@ function setListenersUpdate(geoData){
 	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => { 
 		let id = event.target.id;
 		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
-	}));
-	
+    }));
+    document.getElementById("addPoint").addEventListener("click", function(geoData) {
+        geoData.mode = "addpoint";
+        console.log(geoData.mode); 
+    });
+
 	return geoData;
 }
 
