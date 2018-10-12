@@ -179,66 +179,6 @@ function generateIndex(geoData) {
 	return geoData;
 }
 
-// Generate the "Description" section
-// Return : none
-/*function generateDescription(geoData){
-	return function() {
-        if (confirm("Voulez vous vraiment quitter l'éditeur de traces ? Toutes les données non sauvegardées seront perdues.")) {
-            geoData.page = "description";
-            document.getElementById("planDeTravail").innerHTML = 
-                `<div class="col-lg-4">
-                        <h1>Description</h1>
-                        <p>Ce site web doit pouvoir proposer le chargement, la visualisation et l’édition de trace GPS au format GPX. Il se peut que les traces GPS soient erronées (à cause d’une perte de réseau, d’un GPS peu précis, etc.). Ce site doit être léger et très ergonomique pour simplifier au maximum l’utilisation. L'utilisateur doit pouvoir importer un fichier .gpx, afficher et modifier la trace du fichier de sorte à corriger les données dans le but de télécharger un nouveau fichier GPX contenant les données améliorées.</p>
-                        <h1>Fonctionnalités détaillées</h1>
-                        <p>Voici la liste des fonctionnalités demandée pour cette application :</p>
-                        <ol>
-                            <li>Une visualisation de la trace sur la carte avec choix du fond de carte,</li>
-                            <li>Une visualisation du dénivelé de la trace avec la possibilité de sélectionner les points également sur cette zone,</li>
-                            <li>Un mode de sélection des points efficaces, visuellement propre afin ensuite de n'appliquer les traitements que sur les points sélectionnés,</li>
-                            <li>Rééchantillonnage des points sélectionnés (plus ou moins de points),</li>
-                            <li>Annulation possible d'une opération,</li>
-                            <li>Insertion/Suppression de points ou groupe de points,</li>
-                            <li>Déplacement d’un point ou d’un groupe de points,</li>
-                            <li>Chargement, sauvegarde d'un fichier .gpx,</li>
-                            <li>Des outils qui garantissent un respect des temps et des altitudes de passage à chaque point,</li>
-                            <li>Afficher le tableau de points de la trace étudiée,</li>
-                            <li>Import/export de traces provenant de Strava (API Strava).</li>
-                        </ol>
-                    </div>
-                    
-                    <div class="col-lg-8">
-                        <img src="data/GPSX.jpg" class="img-fluid" alt="Responsive image">
-                    </div>`;
-        }
-	}
-}
-
-// Generate the "About us" section
-// Return : none
-function generateAboutUs(geoData){
-	return function() {
-        if (confirm("Voulez vous vraiment quitter l'éditeur de traces ? Toutes les données non sauvegardées seront perdues.")) {
-            geoData.page = "aboutus";
-            document.getElementById("planDeTravail").innerHTML =
-                `<div class="col-lg-8">
-                        <img src="data/Us.jpg" class="img-fluid" alt="Responsive image">
-                </div>
-                    
-                <div class="col-lg-4">
-                    <h1>Notre histoire</h1>
-                        <p>Etudiants en informatique, nous avons aujourd'hui décidé de nous lier afin de créer ce site pour satisfaire toutes les contraintes données par notre client. "Improve my GPX" est un site totalement développé dans le cadre d'une UE de notre licence d'informatique (LIFPROJET).</p>
-                    <h1>Répartition du travail</h1>
-                        <h2>Anthony SCRIVEN</h2>
-                        <p>Gestion de Git, Programmation HTML/CSS/JS</p>
-                        <h2>Thomas PEYROT</h2>
-                        <p>Design, Programmation CSS/JS, Recherche des librairies</p>
-                        <h2>Jérôme GIL</h2>
-                        <p>Design, Gestion du cahier des charges, Programmation HTML/CSS</p>
-                </div>`;
-        }
-	}
-}*/
-
 // Open the help window
 // Return : none
 function help(){
@@ -523,8 +463,7 @@ function deleteTrace(geoData, id) {
 function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
-	//document.getElementById("descriptionButton").addEventListener("click", generateDescription(geoData), false);
-	//document.getElementById("aboutButton").addEventListener("click", generateAboutUs(geoData), false);
+	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
 
     return geoData;
 }
@@ -573,6 +512,35 @@ function hiddenUpload(geoData) {
 }
 
 // CONVERSIONS //
+
+// Open a window enabling the user to download a .gpx file
+// Return : none
+function giveUserGpx(geoData) {
+	let geoJS = geoData.paths[geoData.focus];
+	let xml = geoJsonToXml(geoJS);
+	
+	let filename = "export.gpx";
+	let element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
+	element.setAttribute('download', filename);
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	element.click();
+	document.body.removeChild(element);
+}
+
+
+// Make a string longer by copying its content nb times
+// Param : text -> the string to copy
+// Param : nb -> the number of times you want to copy >= 1
+// Return : the result string
+function repeatString(text, nb = 2) {
+	let repeated = text;
+	for (let i = 0; i < nb-1; i++) {
+		repeated += text;
+	}
+	return repeated;
+}
 
 // Convert a geoJSON variable into a text corresponding to its .gpx
 // Param : geoJS -> the geoJSON variable
