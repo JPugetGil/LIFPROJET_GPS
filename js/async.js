@@ -488,17 +488,20 @@ function moveMapMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
 }
 function movePointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
 }
 
 function addPointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "addpoint";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
 		var marker = L.marker(e.latlng).addTo(geoData.map);
@@ -506,6 +509,7 @@ function addPointMode(geoData) {
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		console.log(trace.features[0].geometry.coordinates);
 		generatePoints(geoData);
+		generateFilesTab(geoData);
 	});
 }
 
@@ -513,16 +517,19 @@ function deletePointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 }
 function linkMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 }
 function unlinkMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 }
 
 // Upload a file into the page from data/
