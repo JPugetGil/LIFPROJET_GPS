@@ -499,7 +499,10 @@ function addPointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "addpoint";
 	console.log("mode : " + geoData.mode);
-	geoData.map.on("click", onMapClick);
+	geoData.map.on("click", e => {
+		var marker = L.marker(e.latlng).addTo(geoData.map);
+		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat + "<br>Longitude : " + e.latlng.lng).openPopup();
+	});
 }
 
 function deletePointMode(geoData) {
@@ -516,10 +519,6 @@ function unlinkMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
-}
-
-function onMapClick(e) {
-    alert("You clicked the map at " + e.latlng);
 }
 
 // Upload a file into the page from data/
