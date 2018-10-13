@@ -25,7 +25,7 @@ function createGeoData() {
 			markers: [],
 			focus: undefined,
             page: undefined,
-            mode: "default" 
+            mode: "movemap" 
 		};
 		resolve(geoData);
 		reject("Error when initializing the global variable");
@@ -466,13 +466,7 @@ function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
-    geoData.map.on("click", function(e) {
-        if (geoData.mode === "addpoint") {
-            console.log("j'ai cliqué sur la map");
-            var Marker = L.marker(e.latlng).addTo(geoData.map);
-        }
-    });
-
+    
     return geoData;
 }
 
@@ -481,42 +475,85 @@ function setListenersUpdate(geoData){
 		let id = event.target.id;
 		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
     }));
-    document.getElementById("addPoint").addEventListener("click", function(geoData) {
-        geoData.mode = "addpoint";
-        console.log(geoData.mode); 
-    });
-
+    document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
+	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
+	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
+	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
+    
 	return geoData;
+}
+function moveMapMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "movemap";
+	console.log("mode : " + geoData.mode);
+}
+function movePointMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "movepoint";
+	console.log("mode : " + geoData.mode);
+}
+
+function addPointMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "addpoint";
+	console.log("mode : " + geoData.mode);
+	geoData.map.on("click", onMapClick);
+}
+
+function deletePointMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "deletepoint";
+	console.log("mode : " + geoData.mode);
+}
+function linkMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "link";
+	console.log("mode : " + geoData.mode);
+}
+function unlinkMode(geoData) {
+	geoData.map.off("click");
+	geoData.mode = "unlink";
+	console.log("mode : " + geoData.mode);
+}
+
+function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
 }
 
 // Upload a file into the page from data/
 // Return : none
 function upload(geoData) {
-	if (geoData.page == "index"){
-        console.log("Nous allons importer le fichier...");
-    }
-    else {
-        generateIndex(geoData);
-        console.log("Maintenant que index est chargé, nous allons importer...");
-    }
-   	document.getElementById('hiddenButton').click();
+	return function () {
+		if (geoData.page == "index"){
+	        console.log("Nous allons importer le fichier...");
+	    }
+	    else {
+	        generateIndex(geoData);
+	        console.log("Maintenant que index est chargé, nous allons importer...");
+	    }
+	   	document.getElementById('hiddenButton').click();
+	}
 }
 
 // Used to upload
 // Return : none
 function hiddenUpload(geoData) {
-    let path = document.getElementById("hiddenButton").value;
-    let length = path.length - 11;
-    let realPath = "data/" + path.substr(12, length);
-    addPath(geoData, realPath)
-		.then(movePOV)
-		.then(geoData => displayPath(geoData, geoData.paths.length-1))
-		.then(generateFilesTab)
-		.then(generateGraph)
-		.then(generatePoints)
-		.then(setListenersUpdate)
-		.then(console.log)
-		.catch(console.error);
+	return function() {
+	    let path = document.getElementById("hiddenButton").value;
+	    let length = path.length - 11;
+	    let realPath = "data/" + path.substr(12, length);
+	    addPath(geoData, realPath)
+			.then(movePOV)
+			.then(geoData => displayPath(geoData, geoData.paths.length-1))
+			.then(generateFilesTab)
+			.then(generateGraph)
+			.then(generatePoints)
+			.then(setListenersUpdate)
+			.then(console.log)
+			.catch(console.error);
+	}
 }
 
 // CONVERSIONS //
