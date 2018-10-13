@@ -1,5 +1,4 @@
 createGeoData()
-//.then(geoData => loadingTimeActivate(geoData, true))
 .then(generateIndex)
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
@@ -10,12 +9,8 @@ createGeoData()
 .then(generatePoints)
 .then(setListeners)
 .then(setListenersUpdate)
-//.then(geoData => loadingTimeActivate(geoData, false))
 .then(console.log)
-.catch(error => {
-	loadingTimeActivate(error, false)
-	console.error(error);
-});
+.catch(console.error);
 
 function createGeoData() {
 	return new Promise((resolve, reject) => {
@@ -484,12 +479,14 @@ function setListenersUpdate(geoData){
     
 	return geoData;
 }
+
 function moveMapMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
 }
+
 function movePointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
@@ -519,12 +516,14 @@ function deletePointMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 }
+
 function linkMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 }
+
 function unlinkMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "unlink";
