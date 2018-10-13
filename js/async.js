@@ -466,6 +466,12 @@ function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
+    document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
+	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
+	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
+	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
     
     return geoData;
 }
@@ -475,12 +481,6 @@ function setListenersUpdate(geoData){
 		let id = event.target.id;
 		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
     }));
-    document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
-	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
-	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
-	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
-	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
-	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
     
 	return geoData;
 }
@@ -500,11 +500,12 @@ function addPointMode(geoData) {
 	geoData.mode = "addpoint";
 	console.log("mode : " + geoData.mode);
 	geoData.map.on("click", e => {
-		var marker = L.marker(e.latlng).addTo(geoData.map);
 		var trace = geoData.paths[geoData.focus];
+		var marker = L.marker(e.latlng).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
-		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0));
+		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		console.log(trace.features[0].geometry.coordinates);
+		generatePoints(geoData);
 	});
 }
 
