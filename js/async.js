@@ -17,7 +17,15 @@ function createGeoData() {
 		let geoData = {
 			map: undefined,
 			paths: [],
-			markers: [],
+			pathsHistory: {
+				paths: [],
+				last: undefined
+			},
+			markers: {
+				markers: [],
+				last: undefined
+			},
+			markersHistory: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap" 
@@ -272,6 +280,7 @@ function displayPath(geoData, index = undefined) {
 				}
 			});
 			geoData.markers[index] = marker;
+			geoData.markers[index] = [];
 			if (current.shown) {
 				geoData.map.addLayer(marker);
 			}
@@ -504,7 +513,6 @@ function addPointMode(geoData) {
 		var marker = L.marker(e.latlng).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		console.log(trace.features[0].geometry.coordinates);
 		generatePoints(geoData);
 		generateFilesTab(geoData);
 	});
@@ -563,6 +571,11 @@ function hiddenUpload(geoData) {
 			.then(console.log)
 			.catch(console.error);
 	}
+}
+
+function createHistory(geoData, index) {
+	geoData.pathsHistory[index].paths.push(geoData.paths[index]);
+	geoData.markersHistory[index].markers.push(geoData.markers[index]);
 }
 
 // CONVERSIONS //
