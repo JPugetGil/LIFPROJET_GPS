@@ -244,23 +244,21 @@ function movePOV(geoData) {
 // Return : nothing
 function reSample(geoData, number){
 	number = Number(number);
-	if(number > 0 && Number.isInteger(number)){
+	if(Number.isInteger(number) && number > 0 && number < (geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2)){
 		
 		let tolerence = 0.00001;
 		let tabDistance = [];
 		let totalDistance = calculateDistance(geoData.paths[geoData.focus]);
 		while(number>0){
 			tabDistance = [];
-			for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-1; i++){
+			for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2; i++){
 				tabDistance.push(DistanceBetween2Points(geoData.paths[geoData.focus].features[0].geometry.coordinates[i],geoData.paths[geoData.focus].features[0].geometry.coordinates[i+1]));
 			}
 			if(tabDistance.min() < totalDistance*tolerence){
-				geoData.paths[geoData.focus].features[0].geometry.coordinates.splice((tabDistance.indexOf(tabDistance.min())+1),1);
-				console.log("j'ai supprimé la donnée n°: " + (tabDistance.indexOf(tabDistance.min())+1));
+				geoData.paths[geoData.focus].features[0].geometry.coordinates.splice(tabDistance.indexOf(tabDistance.min()),1);
 				number--;
 			} else {
-				tolerence += 0.0000001;
-				console.log("j'ai augmenté la tolerence");
+				tolerence += 0.0000002;
 			}
 		}
 		generatePoints(geoData);
@@ -268,7 +266,7 @@ function reSample(geoData, number){
 		displayPath(geoData, geoData.focus);
 		generateGraph(geoData);
 	} else {
-		alert("Veuillez mettre un nombre entier supérieur à 0, SVP !");
+		alert("Veuillez mettre un nombre entier supérieur à 0, et compris entre 1 et " + (geoData.paths[geoData.focus].features[0].geometry.coordinates.length-3) + "! SVP.");
 	}
 }
 
