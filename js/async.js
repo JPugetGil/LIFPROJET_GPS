@@ -243,7 +243,9 @@ function movePOV(geoData) {
 // Param : geoData + number -> quantity of data to delete
 // Return : nothing
 function reSample(geoData, number){
+	number = Number(number);
 	if(number > 0 && Number.isInteger(number)){
+		
 		let tolerence = 0.00001;
 		let tabDistance = [];
 		let totalDistance = calculateDistance(geoData.paths[geoData.focus]);
@@ -495,6 +497,7 @@ function deleteTrace(geoData, id) {
 function setListeners(geoData) {
 
     document.getElementById("importButton").addEventListener("click", upload(geoData));
+    document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
