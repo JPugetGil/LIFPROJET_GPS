@@ -85,25 +85,6 @@ function saveAndGet() {
 
 // CONVERSION FUNCTIONS //
 
-// Resample geoJSON coordinates
-// Param : factor -> corresponding to the reduction's factor of the table data
-// Param : fileNumber -> corresponding index in geoPaths.paths[] of the geoJSON variable
-function reSample(factor, fileNumber){
-	if (Number.isInteger(facteur) && facteur > 2 && facteur < geoPaths.paths[fileNumber].features[0].geometry.coordinates.length){
-		let length = geoPaths.paths[fileNumber].features[0].geometry.coordinates.length-1;
-		for(i=0; i<length/factor;i++){
-			let removedItems1 = geoPaths.paths[fileNumber].features[0].geometry.coordinates.splice(i+1,factor-1);
-			let removedItems2 = geoPaths.paths[fileNumber].features[0].properties.coordTimes.splice(i+1,factor-1);
-			if (geoPaths.paths[fileNumber].features[0].properties.heartRates !== undefined){
-				let removedItems3 = geoPaths.paths[fileNumber].features[0].properties.heartRates.splice(i+1,factor-1);
-			}
-		}
-	} else {
-		alert("Vous devez mettre un entier supérieur ou égal à 2 dans le champs, SVP. ");
-	}
-	
-}
-
 
 // Make a string longer by copying its content nb times
 // Param : text -> the string to copy

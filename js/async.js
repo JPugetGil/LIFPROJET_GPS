@@ -232,6 +232,33 @@ function movePOV(geoData) {
 	return geoData;
 }
 
+// Param : geoData + number -> quantity of data to delete
+// Return : nothing
+function reSample(geoData, number){
+	if(number > 0 && Number.isInteger(number)){
+		let tolerence = 0.00001;
+		let tabDistance = [];
+		let totalDistance = calculateDistance(geoData.paths[geoData.focus]);
+		while(number>0){
+			tabDistance = [];
+			for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-1; i++){
+				tabDistance.push(DistanceBetween2Points(geoData.paths[geoData.focus].features[0].geometry.coordinates[i],geoData.paths[geoData.focus].features[0].geometry.coordinates[i+1]));
+			}
+			if(tabDistance.min() < totalDistance*tolerence){
+				geoData.paths[geoData.focus].features[0].geometry.coordinates.splice((tabDistance.indexOf(tabDistance.min())+1),1);
+				console.log("j'ai supprimé la donnée n°: " + (tabDistance.indexOf(tabDistance.min())+1));
+				number--;
+			} else {
+				tolerence += 0.0000001;
+				console.log("j'ai augmenté la tolerence");
+			}
+		}
+	} else {
+		alert("Veuillez mettre un nombre entier supérieur à 0, SVP !");
+	}
+}
+
+
 // Return the mean of all numbers in an array
 // Param : tab -> an array of numbers
 // Return : number
@@ -595,6 +622,17 @@ function repeatString(text, nb = 2) {
 	}
 	return repeated;
 }
+
+//Protorypes for Array
+
+Array.prototype.max = function() {
+  return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+  return Math.min.apply(null, this);
+};
+
 
 // Convert a geoJSON variable into a text corresponding to its .gpx
 // Param : geoJS -> the geoJSON variable
