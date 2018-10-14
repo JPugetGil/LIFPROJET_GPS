@@ -264,6 +264,9 @@ function reSample(geoData, number){
 			}
 		}
 		generatePoints(geoData);
+		geoData.map.removeLayer(geoData.markers[geoData.focus]);
+		displayPath(geoData, geoData.focus);
+		generateGraph(geoData);
 	} else {
 		alert("Veuillez mettre un nombre entier supérieur à 0, SVP !");
 	}
@@ -297,7 +300,7 @@ function plusGrandModule(tabLatitude, tabLongitude, moyenneLatitude, moyenneLong
 	return module;
 }
 
-function displayPath(geoData, index = undefined) {
+function displayPath(geoData, index) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
 		fillOpacity: 0
