@@ -263,6 +263,7 @@ function reSample(geoData, number){
 				console.log("j'ai augmenté la tolerence");
 			}
 		}
+		generatePoints(geoData);
 	} else {
 		alert("Veuillez mettre un nombre entier supérieur à 0, SVP !");
 	}
