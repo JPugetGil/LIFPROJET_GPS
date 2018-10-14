@@ -21,11 +21,11 @@ function createGeoData() {
 				paths: [],
 				last: undefined
 			},
-			markers: {
+			markers: [],
+			markersHistory: {
 				markers: [],
 				last: undefined
 			},
-			markersHistory: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap" 
@@ -307,7 +307,7 @@ function displayPath(geoData, index = undefined) {
 				}
 			});
 			geoData.markers[index] = marker;
-			geoData.markers[index] = [];
+			geoData.markersHistory[index] = [];
 			if (current.shown) {
 				geoData.map.addLayer(marker);
 			}
@@ -319,6 +319,7 @@ function displayPath(geoData, index = undefined) {
 			}
 		});
 		geoData.markers[index] = marker;
+		geoData.markersHistory[index] = [];
 		if (geoData.paths[index].shown) {
 			geoData.map.addLayer(marker);
 		}
