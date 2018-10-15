@@ -245,39 +245,40 @@ function movePOV(geoData) {
 function reSample(geoData, number){
 	number = Number(number);
 	if(Number.isInteger(number) && number > 0 && number < (geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2)){
-		let w = new Worker("js/resample.js");
-		w.onmessage = event => {
-			geoData.paths[geoData.focus] = event.data;
-			w.terminate();
+		if (typeof(Worker) === undefined) {
+			let tolerence = 0.00001;
+			let tabDistance = [];
+			let totalDistance = calculateDistance(geoData.paths[geoData.focus]);
+			while(number>0){
+				tabDistance = [];
+				for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2; i++){
+					tabDistance.push(DistanceBetween2Points(geoData.paths[geoData.focus].features[0].geometry.coordinates[i],geoData.paths[geoData.focus].features[0].geometry.coordinates[i+1]));
+				}
+				if(tabDistance.min() < totalDistance*tolerence){
+					geoData.paths[geoData.focus].features[0].geometry.coordinates.splice(tabDistance.indexOf(tabDistance.min()),1);
+					number--;
+				} else {
+					tolerence += 0.0000002;
+				}
+			}
 			generatePoints(geoData);
 			geoData.map.removeLayer(geoData.markers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
-		}
-		w.postMessage(number);
-		w.postMessage(geoData.paths[geoData.focus]);
-		
-		/*
-		let tolerence = 0.00001;
-		let tabDistance = [];
-		let totalDistance = calculateDistance(geoData.paths[geoData.focus]);
-		while(number>0){
-			tabDistance = [];
-			for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2; i++){
-				tabDistance.push(DistanceBetween2Points(geoData.paths[geoData.focus].features[0].geometry.coordinates[i],geoData.paths[geoData.focus].features[0].geometry.coordinates[i+1]));
+
+		} else {
+			let w = new Worker("js/resample.js");
+			w.onmessage = event => {
+				geoData.paths[geoData.focus] = event.data;
+				w.terminate();
+				generatePoints(geoData);
+				geoData.map.removeLayer(geoData.markers[geoData.focus]);
+				displayPath(geoData, geoData.focus);
+				generateGraph(geoData);
 			}
-			if(tabDistance.min() < totalDistance*tolerence){
-				geoData.paths[geoData.focus].features[0].geometry.coordinates.splice(tabDistance.indexOf(tabDistance.min()),1);
-				number--;
-			} else {
-				tolerence += 0.0000002;
-			}
+			w.postMessage(number);
+			w.postMessage(geoData.paths[geoData.focus]);
 		}
-		*/
-		/*generatePoints(geoData);
-		geoData.map.removeLayer(geoData.markers[geoData.focus]);
-		displayPath(geoData, geoData.focus);
-		generateGraph(geoData);*/
 	} else {
 		alert("Veuillez mettre un nombre entier supérieur à 0, et compris entre 1 et " + (geoData.paths[geoData.focus].features[0].geometry.coordinates.length-3) + "! SVP.");
 	}
