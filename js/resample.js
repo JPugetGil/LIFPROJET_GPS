@@ -1,3 +1,7 @@
+/*import('./prototypes_modif.js').then(module => {
+    module.arrayModif();
+});*/
+
 let number = undefined;
 
 self.onmessage = event => {
@@ -50,12 +54,10 @@ function calculateDistance(trace) {
 	return distance.toFixed(2);
 }
 
-//Protorypes for Array
-
 Array.prototype.max = function() {
     return Math.max.apply(null, this);
-  };
-  
-  Array.prototype.min = function() {
+};
+
+Array.prototype.min = function() {
     return Math.min.apply(null, this);
-  };
+};
