@@ -658,17 +658,6 @@ function repeatString(text, nb = 2) {
 	return repeated;
 }
 
-//Prototypes for Array
-
-Array.prototype.max = function() {
-  return Math.max.apply(null, this);
-};
-
-Array.prototype.min = function() {
-  return Math.min.apply(null, this);
-};
-
-
 // Convert a geoJSON variable into a text corresponding to its .gpx
 // Param : geoJS -> the geoJSON variable
 // Return : a string corresponding to a .gpx file

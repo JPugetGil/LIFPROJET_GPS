@@ -1,6 +1,4 @@
-/*import('./prototypes_modif.js').then(module => {
-    module.arrayModif();
-});*/
+importScripts("./prototypes_modif.js");
 
 let number = undefined;
 
@@ -53,11 +51,3 @@ function calculateDistance(trace) {
 	}
 	return distance.toFixed(2);
 }
-
-Array.prototype.max = function() {
-    return Math.max.apply(null, this);
-};
-
-Array.prototype.min = function() {
-    return Math.min.apply(null, this);
-};
