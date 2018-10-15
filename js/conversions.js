@@ -1,22 +1,5 @@
 // CONVERSIONS //
 
-// Open a window enabling the user to download a .gpx file
-// Return : none
-function giveUserGpx(geoData) {
-	let geoJS = geoData.paths[geoData.focus];
-	let xml = geoJsonToXml(geoJS);
-	
-	let filename = "export.gpx";
-	let element = document.createElement('a');
-	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
-	element.setAttribute('download', filename);
-	element.style.display = 'none';
-	document.body.appendChild(element);
-	element.click();
-	document.body.removeChild(element);
-}
-
-
 // Make a string longer by copying its content nb times
 // Param : text -> the string to copy
 // Param : nb -> the number of times you want to copy >= 1
