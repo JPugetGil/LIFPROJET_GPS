@@ -267,7 +267,7 @@ function reSample(geoData, number){
 			generateGraph(geoData);
 
 		} else {
-			let w = new Worker("js/resample.js");
+			let w = new Worker("js/resample.js", {type:'module'});
 			w.onmessage = event => {
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
@@ -658,7 +658,7 @@ function repeatString(text, nb = 2) {
 	return repeated;
 }
 
-//Protorypes for Array
+//Prototypes for Array
 
 Array.prototype.max = function() {
   return Math.max.apply(null, this);
