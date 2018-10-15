@@ -1,3 +1,5 @@
+// Mathematical Functions //
+
 // Calculate the global distance of the trace
 // Param : a trace
 // Return : the global distance
