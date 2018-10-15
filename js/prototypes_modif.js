@@ -1,13 +1,10 @@
 //Prototypes for Array
 
-export function arrayModif() {
-    Array.prototype.max = function() {
-        return Math.max.apply(null, this);
-    };
-    
-    Array.prototype.min = function() {
-        return Math.min.apply(null, this);
-    };
-
+Array.prototype.max = function() {
     console.log("Array modified");
-}
+    return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+    return Math.min.apply(null, this);
+};
