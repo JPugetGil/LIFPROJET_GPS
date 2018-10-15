@@ -170,8 +170,8 @@ function generateIndex(geoData) {
 					<thead>
 						<tr>
 							<th scope="col">#</th>
-							<th scope="col">Latitude</th>
 							<th scope="col">Longitude</th>
+							<th scope="col">Latitude</th>
 							<th scope="col">Altitude</th>
 						</tr>
 					</thead>
@@ -518,7 +518,7 @@ function setListeners(geoData) {
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
-	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	//document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
@@ -543,12 +543,12 @@ function moveMapMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
 }
 
-function movePointMode(geoData) {
+/*function movePointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-}
+}*/
 
 function addPointMode(geoData) {
 	geoData.map.off("click");
@@ -557,13 +557,24 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng).addTo(geoData.map);
+		var marker = L.marker(e.latlng, {draggable: true}).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
+		var indexNewPoint = (trace.features[0].geometry.coordinates.length) - 1;
 		generatePoints(geoData);
 		generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.markers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
+		marker.on("dragend", f => {
+			newLat = f.target.getLatLng().lat.toFixed(6);
+			newLng = f.target.getLatLng().lng.toFixed(6);
+			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng).openPopup();
+			trace.features[0].geometry.coordinates[indexNewPoint] = Array(newLng, newLat, 0);
+			generatePoints(geoData);
+			generateFilesTab(geoData);
+			geoData.map.removeLayer(geoData.markers[geoData.focus]);
+			displayPath(geoData, geoData.focus);
+		});
 	});
 }
 
@@ -572,6 +583,10 @@ function deletePointMode(geoData) {
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
+	geoData.map.on("click", e => {
+		var marker = L.marker(e.latlng);
+		geoData.map.removeLayer(marker);
+	});
 }
 
 function linkMode(geoData) {
