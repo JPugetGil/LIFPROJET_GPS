@@ -410,7 +410,7 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng, {draggable: true}).addTo(geoData.map);
+		var marker = L.marker(e.latlng, {draggable : true}).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		var indexNewPoint = (trace.features[0].geometry.coordinates.length) - 1;
@@ -418,6 +418,7 @@ function addPointMode(geoData) {
 		generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.markers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
+		
 		marker.on("dragend", f => {
 			newLat = f.target.getLatLng().lat.toFixed(6);
 			newLng = f.target.getLatLng().lng.toFixed(6);
@@ -428,7 +429,17 @@ function addPointMode(geoData) {
 			geoData.map.removeLayer(geoData.markers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 		});
-		//AddEventListener sur marqueur qui teste le mode pour la suppression.
+		
+		marker.on("click", () => {
+			if (geoData.mode === "deletepoint"){
+				geoData.map.removeLayer(marker);
+				trace.features[0].geometry.coordinates.splice(indexNewPoint,1);
+				generatePoints(geoData);
+				generateFilesTab(geoData);
+				geoData.map.removeLayer(geoData.markers[geoData.focus]);
+				displayPath(geoData, geoData.focus);
+			}
+		});
 	});
 }
 
