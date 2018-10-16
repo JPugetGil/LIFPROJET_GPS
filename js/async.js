@@ -369,7 +369,7 @@ function setListeners(geoData) {
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
-	//document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
@@ -394,13 +394,15 @@ function moveMapMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
 }
 
-/*function movePointMode(geoData) {
+function movePointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-}*/
-
+	if (geoData.mode === "movepoint"){
+		console.log("mode : " + geoData.mode);
+		document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
+	}
+}
+	
 function addPointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "addpoint";
@@ -426,6 +428,7 @@ function addPointMode(geoData) {
 			geoData.map.removeLayer(geoData.markers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 		});
+		//AddEventListener sur marqueur qui teste le mode pour la suppression.
 	});
 }
 
@@ -434,10 +437,10 @@ function deletePointMode(geoData) {
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
-	geoData.map.on("click", e => {
+	/*geoData.map.on("click", e => {
 		var marker = L.marker(e.latlng);
 		geoData.map.removeLayer(marker);
-	});
+	});*/
 }
 
 function linkMode(geoData) {
