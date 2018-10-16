@@ -44,9 +44,8 @@ function generateIndex(geoData) {
 			<div class="row">
 				<div class="col-lg-11 bg-light">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
-					<div id="graphe" class="row col-auto bg-light">
-						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;">
-						</div>
+					<div id="graph" class="row col-auto bg-light">
+						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
 				</div>
 				<div class="col-lg-1 bg-light">
@@ -272,6 +271,40 @@ function generateFilesTab(geoData) {
 }
 
 function generateGraph(geoData) {
+	/*let data = [];
+	geoData.paths.forEach(path => {
+		if (path.shown) {
+			let curr = {};
+			curr.type = "splineArea";
+			curr.showInLegend = true;
+			curr.name = path.file;
+			let points = [];
+			path.features[0].geometry.coordinates.forEach((point, index) => {
+				let one = {
+					x: index +1,
+					y: point[2]
+				}
+				points.push(one);
+			});
+			curr.dataPoints = points;
+			data.push(curr);
+		}
+	});
+
+	let chart = new CanvasJS.Chart("graph", {
+		animationEnabled: true,
+		title: {
+			text: "Hauteur de vos traces"
+		},
+		axisX: {
+			includeZero: false,
+			suffix: " m."
+		},
+		data: data
+	});
+
+	chart.render();*/
+	
 	let xs = {};
 	let cols = [];
 	geoData.paths.forEach(current => {
