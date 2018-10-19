@@ -38,21 +38,3 @@ footer {
 .focus {
 	color: red;
 }
-
-@media screen and (min-width: 975px) {
-	#fonctionsHorizontal {
-		display: none;
-	}
-	#fonctionsVertical {
-		display: block;
-	}
-}
-
-@media screen and (max-width: 974px){
-	#fonctionsVertical {
-		display: none;
-	}
-	#fonctionsHorizontal {
-		display: block;
-	}
-}
