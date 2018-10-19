@@ -138,6 +138,7 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
+	geoData.map.dragging.disable();
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -146,7 +147,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
-
+	
 	return geoData;
 }
 
@@ -445,6 +446,7 @@ function setListenersUpdate(geoData){
 }
 
 function moveMapMode(geoData) {
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
@@ -452,6 +454,7 @@ function moveMapMode(geoData) {
 }
 
 function movePointMode(geoData) {
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
 	if (geoData.mode === "movepoint"){
@@ -461,13 +464,14 @@ function movePointMode(geoData) {
 }
 
 function addPointMode(geoData) {
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "addpoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng, {draggable : true}).addTo(geoData.map);
+		var marker = L.marker(e.latlng).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		var indexNewPoint = (trace.features[0].geometry.coordinates.length) - 1;
@@ -501,6 +505,7 @@ function addPointMode(geoData) {
 }
 
 function deletePointMode(geoData) {
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
@@ -512,6 +517,7 @@ function deletePointMode(geoData) {
 }
 
 function linkMode(geoData) {
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
@@ -519,6 +525,7 @@ function linkMode(geoData) {
 }
 
 function unlinkMode(geoData) {
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
