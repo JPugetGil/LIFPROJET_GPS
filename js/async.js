@@ -42,13 +42,13 @@ function generateIndex(geoData) {
 	document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8 bg-light">
 			<div class="row">
-				<div class="col-11">
+				<div class="col-lg-11">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
 				</div>
-				<div class="col-1">
+				<div class="col-lg-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
@@ -59,14 +59,15 @@ function generateIndex(geoData) {
 					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
 
 					<div class="form-group">
-							<input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
-							<button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
+					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
+					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
 					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-file-download"></i></button>
 				</div>
 			</div>
+
 		</div>
 		<div class="col-lg-4">
 			<div id="tableauFichiers" style="margin-bottom:15px">
@@ -110,7 +111,6 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
-	geoData.map.dragging.disable();
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -131,6 +131,7 @@ function addPath(geoData, file) {
 		geoData.paths[index] = toGeoJSON.gpx(gpx);
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
+		geoData.paths[index].markersAdded = [];
 		geoData.focus = index;
         return geoData;
 	})
@@ -389,16 +390,16 @@ function moveMapMode(geoData) {
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function movePointMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.mode = "movepoint";
-	if (geoData.mode === "movepoint"){
-		console.log("mode : " + geoData.mode);
-		document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-	}
+	console.log("mode : " + geoData.mode);
+	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.enable());
 }
 
 function addPointMode(geoData) {
@@ -410,9 +411,11 @@ function addPointMode(geoData) {
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
 		var marker = L.marker(e.latlng).addTo(geoData.map);
+		trace.markersAdded.push(marker);
+		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
+		console.log(marker.index);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		var indexNewPoint = (trace.features[0].geometry.coordinates.length) - 1;
 		generatePoints(geoData);
 		generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.markers[geoData.focus]);
@@ -422,7 +425,7 @@ function addPointMode(geoData) {
 			newLat = f.target.getLatLng().lat.toFixed(6);
 			newLng = f.target.getLatLng().lng.toFixed(6);
 			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng).openPopup();
-			trace.features[0].geometry.coordinates[indexNewPoint] = Array(newLng, newLat, 0);
+			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
 			generatePoints(geoData);
 			generateFilesTab(geoData);
 			geoData.map.removeLayer(geoData.markers[geoData.focus]);
@@ -430,9 +433,15 @@ function addPointMode(geoData) {
 		});
 
 		marker.on("click", () => {
-			if (geoData.mode === "deletepoint"){
+			if(geoData.mode === "deletepoint"){
 				geoData.map.removeLayer(marker);
-				trace.features[0].geometry.coordinates.splice(indexNewPoint,1);
+				console.log("Je prends " + (trace.features[0].geometry.coordinates.length-marker.index-1));
+				let nb = trace.features[0].geometry.coordinates.length-marker.index-1;
+				trace.features[0].geometry.coordinates.splice(marker.index,1);
+				trace.markersAdded.splice((marker.index-trace.features[0].geometry.coordinates.length-2), 1);
+				for(let i = 0; i < nb ; i++) {
+					trace.markersAdded[i].index--;
+				}
 				generatePoints(geoData);
 				generateFilesTab(geoData);
 				geoData.map.removeLayer(geoData.markers[geoData.focus]);
@@ -440,6 +449,7 @@ function addPointMode(geoData) {
 			}
 		});
 	});
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function deletePointMode(geoData) {
@@ -448,10 +458,7 @@ function deletePointMode(geoData) {
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
-	/*geoData.map.on("click", e => {
-		var marker = L.marker(e.latlng);
-		geoData.map.removeLayer(marker);
-	});*/
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function linkMode(geoData) {
@@ -460,6 +467,7 @@ function linkMode(geoData) {
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function unlinkMode(geoData) {
@@ -468,6 +476,7 @@ function unlinkMode(geoData) {
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
+	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function createHistory(geoData, index) {
