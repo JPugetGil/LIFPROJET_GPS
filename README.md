@@ -30,13 +30,12 @@ Responsive design
 - [ ] Safari
 - [ ] Tor
 
-## Documentation
-
+## Documentation 
 * Cahier des charges -> doc/Cahier des Charges.pdf 
 
 ## Origine
-
-La formation de Licence Informatique de l'Université Lyon 1 contient l'UE LIFProjet. 
+![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png)
+La formation de Licence Informatique de l'Université Claude Bernard Lyon 1 contient l'UE LIFProjet. 
 Cette UE consiste en la réalisation d'un projet parmi une liste proposée par les enseignants. 
 Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur le web. 
 
