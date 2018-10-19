@@ -1,5 +1,5 @@
 # Improve my GPX :registered:
-Ce site web vous permet de visualiser et d'éditer vos traces GPS. :underage:
+Ce site web vous permet de visualiser et d'éditer vos traces GPS. 
 
 ## Importer ses traces
 Accèder au site en ouvrant le fichier index.html dans votre navigateur web préféré. <br/>
