@@ -111,7 +111,6 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
-	geoData.map.dragging.disable();
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
