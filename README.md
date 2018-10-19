@@ -2,9 +2,9 @@
 Ce site web vous permet de visualiser et d'éditer vos traces GPS.
 
 ## Importer ses traces
-Accèder au site en ouvrant le fichier index.html dans votre navigateur préféré. 
-Récupérer vos données de randonnées sous le format de fichier **.gpx**. 
-Mettez votre fichier dans le dossier data. 
+Accèder au site en ouvrant le fichier index.html dans votre navigateur préféré. <br/>
+Récupérer vos données de randonnées sous le format de fichier **.gpx**. <br/>
+Mettez votre fichier dans le dossier data. <br/>
 Dans l'interface vous pouvez importer vos fichiers. 
 
 ## Description des fonctionnalités
@@ -35,8 +35,8 @@ Responsive design
 
 ## Origine
 ![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png) <br/>
-La formation de Licence Informatique de l'Université Claude Bernard Lyon 1 contient l'UE LIFProjet. 
-Cette UE consiste en la réalisation d'un projet parmi une liste proposée par les enseignants. 
+La formation de Licence Informatique de l'Université Claude Bernard Lyon 1 contient l'UE LIFProjet. <br/>
+Cette UE consiste en la réalisation d'un projet parmi une liste proposée par les enseignants. <br/>
 Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur le web. 
 
 ## Participants
