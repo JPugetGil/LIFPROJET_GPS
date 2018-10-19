@@ -6,51 +6,10 @@
 	color: white;
 }
 
-/* Load Time */
-
-#loadImage {
-	z-index: 1;
-	position: absolute;
-	background-color: #AAAAFF;
-	opacity: 0.5;
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-}
-
-#loadImage > div {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-#loadImage > div > div {
-	margin: 2px;
-	padding: 2px 10px;
-}
-
-#loadImage > div > div:not(.loadHidden) {
-	background-color: #FF0000;
-	transition: color 1s;
-}
-
-#loadImage > div > div.loadEffect {
-	background-color: #AAAAFF;
-}
-
-/* END Load Time */
-
 #planDeTravail {
 	margin-left:1%;
 	width: 99%;
 	margin-bottom: 40px;
-	z-index: 2;
-}
-
-#mapid {
-	opacity: 0.99;
 }
 
 #tableauFichiers {
@@ -59,7 +18,7 @@
 }
 
 #fileTable > tr:hover {
-	cursor: pointer; 
+	cursor: pointer;
 }
 
 #tableauPoints {
@@ -80,3 +39,20 @@ footer {
 	color: red;
 }
 
+@media screen and (min-width: 975px) {
+	#fonctionsHorizontal {
+		display: none;
+	}
+	#fonctionsVertical {
+		display: block;
+	}
+}
+
+@media screen and (max-width: 974px){
+	#fonctionsVertical {
+		display: none;
+	}
+	#fonctionsHorizontal {
+		display: block;
+	}
+}
