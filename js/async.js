@@ -47,35 +47,8 @@ function generateIndex(geoData) {
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
-					<div id="fonctionsHorizontal">
-							<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary"><i class="fas fa-arrows-alt"></i></button>
-							<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary"><i class="fas fa-hand-pointer"></i></button>
-
-							<div class="btn-group">
-								<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary"><i class="fas fa-undo"></i></button>
-								<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary"><i class="fas fa-redo"></i></button>
-							</div>
-							<div class="btn-group">
-								<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary"><i class="fas fa-plus"></i></button>
-								<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary"><i class="fas fa-minus"></i></button>
-							</div>
-							<div class="btn-group">
-								<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-secondary"><i class="fas fa-link"></i></button>
-								<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary"><i class="fas fa-unlink"></i></button>
-							</div>
-							<div style="width:200px">
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-outline-secondary"><i class="fas fa-divide"></i></button>
-									</div>
-									<input type="text" class="form-control" id="samplingFactor" placeholder="Insérez" aria-describedby="reSample">
-								</div>
-							</div>
-							<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary"><i class="fas fa-print"></i></button>
-							<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary"><i class="fas fa-file-download"></i></button>
-					</div>
 				</div>
-				<div class="col-lg-1" id="fonctionsVertical">
+				<div class="col-lg-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
