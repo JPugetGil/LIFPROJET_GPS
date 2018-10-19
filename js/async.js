@@ -42,13 +42,13 @@ function generateIndex(geoData) {
 	document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8 bg-light">
 			<div class="row">
-				<div class="col-lg-11">
+				<div class="col-11">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
 				</div>
-				<div class="col-lg-1">
+				<div class="col-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
@@ -59,15 +59,14 @@ function generateIndex(geoData) {
 					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
 
 					<div class="form-group">
-					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
-					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
+							<input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
+							<button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
 					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-file-download"></i></button>
 				</div>
 			</div>
-
 		</div>
 		<div class="col-lg-4">
 			<div id="tableauFichiers" style="margin-bottom:15px">
@@ -111,6 +110,7 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
+	geoData.map.dragging.disable();
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
@@ -119,7 +119,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
-	
+
 	return geoData;
 }
 
@@ -268,40 +268,6 @@ function generateFilesTab(geoData) {
 }
 
 function generateGraph(geoData) {
-	/*let data = [];
-	geoData.paths.forEach(path => {
-		if (path.shown) {
-			let curr = {};
-			curr.type = "splineArea";
-			curr.showInLegend = true;
-			curr.name = path.file;
-			let points = [];
-			path.features[0].geometry.coordinates.forEach((point, index) => {
-				let one = {
-					x: index +1,
-					y: point[2]
-				}
-				points.push(one);
-			});
-			curr.dataPoints = points;
-			data.push(curr);
-		}
-	});
-
-	let chart = new CanvasJS.Chart("graph", {
-		animationEnabled: true,
-		title: {
-			text: "Hauteur de vos traces"
-		},
-		axisX: {
-			includeZero: false,
-			suffix: " m."
-		},
-		data: data
-	});
-
-	chart.render();*/
-
 	let xs = {};
 	let cols = [];
 	geoData.paths.forEach(current => {
