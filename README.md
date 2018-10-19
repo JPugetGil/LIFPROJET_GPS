@@ -1,26 +1,26 @@
-# Improve my GPX
-Ce site web vous permet de visualiser et d'éditer vos traces GPS.
+# Improve my GPX :registered:
+Ce site web vous permet de visualiser et d'éditer vos traces GPS. :underage:
 
 ## Importer ses traces
-Accèder au site en ouvrant le fichier index.html dans votre navigateur préféré. <br/>
+Accèder au site en ouvrant le fichier index.html dans votre navigateur web préféré. <br/>
 Récupérer vos données de randonnées sous le format de fichier **.gpx**. <br/>
-Mettez votre fichier dans le dossier data. <br/>
+Mettez votre fichier dans le dossier data. :open_file_folder: <br/> 
 Dans l'interface vous pouvez importer vos fichiers. 
 
 ## Description des fonctionnalités
 * Visualisation de traces GPS
-* Ajout/Suppression de points
-* Déplacement de points
-* Rééchantillonage des points, c'est-à-dire réduction du nombre de points
-* Annulation/Désannulation d'une action
-* Export de la trace modifiée
-* Impression du visuel
+* Ajout/Suppression de points :heavy_plus_sign: / :heavy_minus_sign:
+* Déplacement de points :airplane:
+* Rééchantillonage des points, c'est-à-dire réduction du nombre de points :heavy_division_sign:
+* Annulation/Désannulation d'une action :arrows_clockwise:
+* Téléchargement de la trace modifiée :floppy_disk:
+* Impression du visuel :fax:
 
 ## Compatibilité
-Responsive design
+Responsive design :computer: :on: :iphone:
 
 ### Navigateurs
-- [x] Firefox
+- [x] Firefox :heavy_check_mark:
 - [ ] Brave
 - [ ] Chrome
 - [ ] Chromium
@@ -42,9 +42,9 @@ Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur l
 ## Participants
 
 ### Développeurs
-* Jérôme GIL 11608911
-* Thomas PEYROT 11608040
-* Anthony SCRIVEN 11607550
+* Jérôme **G**IL 11608911
+* Thomas **P**EYROT 11608040
+* Anthony **S**CRIVEN 11607550
 
 ### Responsables
 * Rémy CAZABET
