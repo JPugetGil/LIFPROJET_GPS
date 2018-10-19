@@ -28,7 +28,7 @@ function createGeoData() {
 			},
 			focus: undefined,
             page: undefined,
-            mode: "movemap" 
+            mode: "movemap"
 		};
 		resolve(geoData);
 		reject("Error when initializing the global variable");
@@ -135,7 +135,7 @@ function addPath(geoData, file) {
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
 		geoData.focus = index;
-        return geoData; 
+        return geoData;
 	})
 }
 
@@ -266,7 +266,7 @@ function generateFilesTab(geoData) {
 	if (geoData.focus !== undefined) {
 		document.getElementById("row" + geoData.focus).classList.add("focus");
 	}
-	
+
 	return geoData;
 }
 
@@ -304,7 +304,7 @@ function generateGraph(geoData) {
 	});
 
 	chart.render();*/
-	
+
 	let xs = {};
 	let cols = [];
 	geoData.paths.forEach(current => {
@@ -407,16 +407,16 @@ function setListeners(geoData) {
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
-    
+
     return geoData;
 }
 
 function setListenersUpdate(geoData){
-	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => { 
+	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
 		let id = event.target.id;
 		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
     }));
-    
+
 	return geoData;
 }
 
@@ -435,7 +435,7 @@ function movePointMode(geoData) {
 		document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
 	}
 }
-	
+
 function addPointMode(geoData) {
 	geoData.map.off("click");
 	geoData.mode = "addpoint";
@@ -451,7 +451,7 @@ function addPointMode(geoData) {
 		generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.markers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
-		
+
 		marker.on("dragend", f => {
 			newLat = f.target.getLatLng().lat.toFixed(6);
 			newLng = f.target.getLatLng().lng.toFixed(6);
@@ -462,7 +462,7 @@ function addPointMode(geoData) {
 			geoData.map.removeLayer(geoData.markers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 		});
-		
+
 		marker.on("click", () => {
 			if (geoData.mode === "deletepoint"){
 				geoData.map.removeLayer(marker);

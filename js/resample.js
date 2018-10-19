@@ -19,8 +19,10 @@ self.onmessage = event => {
             if(tabDistance.min() < totalDistance*tolerence){
                 path.features[0].geometry.coordinates.splice(tabDistance.indexOf(tabDistance.min()),1);
                 number--;
+            } else if (tolerence > 0.01) {
+              number = 0;
             } else {
-                tolerence += 0.0000002;
+              tolerence += 0.0000002;
             }
         }
         self.postMessage(path);
