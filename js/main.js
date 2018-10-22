@@ -459,6 +459,12 @@ function deletePointMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
+
+	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
+		console.log(e.latlng);
+		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng[0], e.latlng[1]);
+		console.log(indexes);
+	}));
 }
 
 function linkMode(geoData) {

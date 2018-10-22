@@ -71,3 +71,13 @@ function secondsToHours(sec) {
 
 	return hrs + ":" + min + ":" + sec;
 }
+
+function indexesOfPoint(tab, latitude, longitude) {
+	return tab.reduce( (acc, coord, index) => {
+		if (coord[0] === longitude && coord[1] === latitude) {
+			return acc.push(index);
+		} else {
+			return acc;
+		}
+	}, []);
+}
