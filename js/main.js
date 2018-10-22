@@ -257,7 +257,7 @@ function generateFilesTab(geoData) {
 				<td>${current.file}</td>
 				<td>${calculateDistance(current)}</td>
 				<td>${time}</td>
-				<td><button id="suppr${index}" class="btn btn-danger" type="button" onclick="deleteTrace(${geoData},${index});">X</button></td>
+				<td><button id="suppr${index}" class="btn btn-danger" type="button">X</button></td>
 			</tr>`;
 	});
 
