@@ -26,6 +26,7 @@ function createGeoData() {
 				markers: [],
 				last: undefined
 			},
+			markersColor: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap"
@@ -132,6 +133,7 @@ function addPath(geoData, file) {
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
 		geoData.paths[index].markersAdded = [];
+		geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
         return geoData;
 	})
@@ -402,7 +404,8 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng, {icon : blackMarker}).addTo(geoData.map);
+		var color = geoData.markersColor[geoData.focus % 6];
+		var marker = L.marker(e.latlng, {icon : color}).addTo(geoData.map);
 		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		//marker.setOpacity(0);
 		trace.markersAdded.push(marker);
