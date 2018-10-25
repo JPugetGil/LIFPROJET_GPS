@@ -404,7 +404,7 @@ function movePointMode(geoData) {
 			m.setOpacity(1);
 			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 			console.log("Cù Chulainn");
-		});
+		});*/
 	});
 }
 
