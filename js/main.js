@@ -356,6 +356,7 @@ function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+    document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
@@ -487,6 +488,10 @@ function unlinkMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
+}
+
+function changeFocus(geoData, e) {
+	console.log(e);
 }
 
 function createHistory(geoData, index) {
