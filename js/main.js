@@ -42,13 +42,13 @@ function generateIndex(geoData) {
 	document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8 bg-light">
 			<div class="row">
-				<div class="col-lg-11">
+				<div class="col-11">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
 				</div>
-				<div class="col-lg-1">
+				<div class="col-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
@@ -384,7 +384,14 @@ function movePointMode(geoData) {
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.enable());
+	geoData.paths[geoData.focus].markersAdded.forEach(m => {
+		m.dragging.enable();
+		/*m.on("onmouseover", d => {
+			m.setOpacity(1);
+			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
+			console.log("Cù Chulainn");
+		});*/
+	});
 }
 
 function addPointMode(geoData) {
@@ -395,11 +402,13 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng).addTo(geoData.map);
+		var marker = L.marker(e.latlng, {icon : blackMarker}).addTo(geoData.map);
+		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
+		//marker.setOpacity(0);
 		trace.markersAdded.push(marker);
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
-		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
+		
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		generatePoints(geoData);
 		generateFilesTab(geoData);
