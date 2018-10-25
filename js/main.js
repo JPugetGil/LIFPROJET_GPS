@@ -406,12 +406,11 @@ function addPointMode(geoData) {
 		var trace = geoData.paths[geoData.focus];
 		var color = geoData.markersColor[geoData.focus % 6];
 		var marker = L.marker(e.latlng, {icon : color}).addTo(geoData.map);
-		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
+		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6));
 		//marker.setOpacity(0);
 		trace.markersAdded.push(marker);
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
-		
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		generatePoints(geoData);
 		generateFilesTab(geoData);
@@ -421,7 +420,7 @@ function addPointMode(geoData) {
 		marker.on("dragend", f => {
 			newLat = f.target.getLatLng().lat.toFixed(6);
 			newLng = f.target.getLatLng().lng.toFixed(6);
-			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng).openPopup();
+			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
 			generatePoints(geoData);
 			generateFilesTab(geoData);
