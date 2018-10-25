@@ -207,6 +207,12 @@ function reSample(geoData, number){
 	}
 }
 
+function keySample(geoData, keyCode) {
+	if (keyCode === 13) {
+		reSample(geoData, document.getElementById("samplingFactor").value);
+	}
+}
+
 function displayPath(geoData, index) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
@@ -347,9 +353,10 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
-
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+    document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+    document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
@@ -461,12 +468,12 @@ function deletePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
-	/*geoData.markers.forEach( (curr, index) => curr.on('click', e => {
+	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
 		console.log(e);
 		//console.log(e.layer.options.pointToLayer());
-		//let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
-		//console.log(indexes);
-	}));*/
+		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
+		console.log(indexes);
+	}));
 }
 
 function linkMode(geoData) {
@@ -485,6 +492,10 @@ function unlinkMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
+}
+
+function changeFocus(geoData, e) {
+	console.log(e);
 }
 
 function createHistory(geoData, index) {
