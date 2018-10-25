@@ -42,13 +42,13 @@ function generateIndex(geoData) {
 	document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8 bg-light">
 			<div class="row">
-				<div class="col-lg-11">
+				<div class="col-11">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
 					</div>
 				</div>
-				<div class="col-lg-1">
+				<div class="col-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
