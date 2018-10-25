@@ -207,6 +207,12 @@ function reSample(geoData, number){
 	}
 }
 
+function keySample(geoData, keyCode) {
+	if (keyCode === 13) {
+		reSample(geoData, document.getElementById("samplingFactor").value);
+	}
+}
+
 function displayPath(geoData, index) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
@@ -347,9 +353,9 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
-
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+    document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
