@@ -454,12 +454,12 @@ function deletePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
-	/*geoData.markers.forEach( (curr, index) => curr.on('click', e => {
+	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
 		console.log(e);
 		//console.log(e.layer.options.pointToLayer());
-		//let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
-		//console.log(indexes);
-	}));*/
+		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
+		console.log(indexes);
+	}));
 }
 
 function linkMode(geoData) {

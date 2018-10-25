@@ -73,8 +73,20 @@ function secondsToHours(sec) {
 }
 
 function indexesOfPoint(tab, latitude, longitude) {
+	let lat = [0, 0, 0];
+	let long = [0, 0, 0];
+	lat[0] = Number(latitude.toFixed(3));
+	lat[1] = Number(latitude.toFixed(6));
+	lat[2] = Number(latitude.toFixed(3)) + 0.001;
+	long[0] = Number(longitude.toFixed(3));
+	long[1] = Number(longitude.toFixed(6));
+	long[2] = Number(longitude.toFixed(3)) + 0.001;
+	console.log(lat);
+	console.log(long);
 	return tab.reduce( (acc, coord, index) => {
-		if (coord[0] === longitude && coord[1] === latitude) {
+		console.log(coord);
+		let inside = lat[0] <= coord[0] && lat[1] >= coord[0] && long[0] <= coord[1] && long[1] >= coord[1];
+		if (inside) {
 			return acc.push(index);
 		} else {
 			return acc;
