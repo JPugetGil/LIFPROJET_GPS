@@ -3,7 +3,7 @@ createGeoData()
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(movePOV)
-.then(displayPath)
+.then(geoData => displayPath(geoData,0))
 .then(generateFilesTab)
 .then(generateGraph)
 .then(generatePoints)
@@ -211,30 +211,15 @@ function displayPath(geoData, index) {
 		opacity: 0,
 		fillOpacity: 0
 	};
-	if (index === undefined) {
-		geoData.paths.forEach( (current, index) => {
-			let marker = L.geoJSON(current, {
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, geojsonMarkerOptions);
-				}
-			});
-			geoData.markers[index] = marker;
-			geoData.markersHistory[index] = [];
-			if (current.shown) {
-				geoData.map.addLayer(marker);
-			}
-		});
-	} else {
-		let marker = L.geoJSON(geoData.paths[index], {
-			pointToLayer: function (feature, latlng) {
-				return L.circleMarker(latlng, geojsonMarkerOptions);
-			}
-		});
-		geoData.markers[index] = marker;
-		geoData.markersHistory[index] = [];
-		if (geoData.paths[index].shown) {
-			geoData.map.addLayer(marker);
+	let marker = L.geoJSON(geoData.paths[index], {
+		pointToLayer: function (feature, lsatlng) {
+			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
+	});
+	geoData.markers[index] = marker;
+	geoData.markersHistory[index] = [];
+	if (geoData.paths[index].shown) {
+		geoData.map.addLayer(marker);
 	}
 	return geoData;
 }
@@ -471,11 +456,12 @@ function deletePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
-	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
-		console.log(e.latlng);
-		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng[0], e.latlng[1]);
-		console.log(indexes);
-	}));
+	/*geoData.markers.forEach( (curr, index) => curr.on('click', e => {
+		console.log(e);
+		//console.log(e.layer.options.pointToLayer());
+		//let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
+		//console.log(indexes);
+	}));*/
 }
 
 function linkMode(geoData) {
