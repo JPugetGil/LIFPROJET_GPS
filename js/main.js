@@ -386,13 +386,18 @@ function movePointMode(geoData) {
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
+	//var color = geoData.markersColor[geoData.focus % 6];
+	/*geoData.paths[geoData.focus].features[0].geometry.coordinates.forEach(p => {
+		L.marker([p[0], p[1]]).addTo(geoData.map).bindPopup("Coucou, je suis un ancien point !");
+		console.log(42);
+	});*/
 	geoData.paths[geoData.focus].markersAdded.forEach(m => {
 		m.dragging.enable();
 		/*m.on("onmouseover", d => {
 			m.setOpacity(1);
 			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 			console.log("Cù Chulainn");
-		});*/
+		});
 	});
 }
 
