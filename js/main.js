@@ -3,7 +3,7 @@ createGeoData()
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(movePOV)
-.then(displayPath)
+.then(geoData => displayPath(geoData,0))
 .then(generateFilesTab)
 .then(generateGraph)
 .then(generatePoints)
@@ -26,6 +26,7 @@ function createGeoData() {
 				markers: [],
 				last: undefined
 			},
+			markersColor: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap"
@@ -132,6 +133,7 @@ function addPath(geoData, file) {
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
 		geoData.paths[index].markersAdded = [];
+		geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
         return geoData;
 	})
@@ -205,35 +207,26 @@ function reSample(geoData, number){
 	}
 }
 
+function keySample(geoData, keyCode) {
+	if (keyCode === 13) {
+		reSample(geoData, document.getElementById("samplingFactor").value);
+	}
+}
+
 function displayPath(geoData, index) {
 	let geojsonMarkerOptions = {
 		opacity: 0,
 		fillOpacity: 0
 	};
-	if (index === undefined) {
-		geoData.paths.forEach( (current, index) => {
-			let marker = L.geoJSON(current, {
-				pointToLayer: function (feature, latlng) {
-					return L.circleMarker(latlng, geojsonMarkerOptions);
-				}
-			});
-			geoData.markers[index] = marker;
-			geoData.markersHistory[index] = [];
-			if (current.shown) {
-				geoData.map.addLayer(marker);
-			}
-		});
-	} else {
-		let marker = L.geoJSON(geoData.paths[index], {
-			pointToLayer: function (feature, latlng) {
-				return L.circleMarker(latlng, geojsonMarkerOptions);
-			}
-		});
-		geoData.markers[index] = marker;
-		geoData.markersHistory[index] = [];
-		if (geoData.paths[index].shown) {
-			geoData.map.addLayer(marker);
+	let marker = L.geoJSON(geoData.paths[index], {
+		pointToLayer: function (feature, lsatlng) {
+			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
+	});
+	geoData.markers[index] = marker;
+	geoData.markersHistory[index] = [];
+	if (geoData.paths[index].shown) {
+		geoData.map.addLayer(marker);
 	}
 	return geoData;
 }
@@ -360,9 +353,10 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
-
     document.getElementById("importButton").addEventListener("click", upload(geoData));
     document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+    document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+    document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
     document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
@@ -399,7 +393,19 @@ function movePointMode(geoData) {
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.enable());
+	//var color = geoData.markersColor[geoData.focus % 6];
+	/*geoData.paths[geoData.focus].features[0].geometry.coordinates.forEach(p => {
+		L.marker([p[0], p[1]]).addTo(geoData.map).bindPopup("Coucou, je suis un ancien point !");
+		console.log(42);
+	});*/
+	geoData.paths[geoData.focus].markersAdded.forEach(m => {
+		m.dragging.enable();
+		/*m.on("onmouseover", d => {
+			m.setOpacity(1);
+			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
+			console.log("Cù Chulainn");
+		});*/
+	});
 }
 
 function addPointMode(geoData) {
@@ -410,11 +416,13 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		var marker = L.marker(e.latlng).addTo(geoData.map);
+		var color = geoData.markersColor[geoData.focus % 6];
+		var marker = L.marker(e.latlng, {icon : color}).addTo(geoData.map);
+		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6));
+		//marker.setOpacity(0);
 		trace.markersAdded.push(marker);
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
-		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		generatePoints(geoData);
 		generateFilesTab(geoData);
@@ -424,7 +432,7 @@ function addPointMode(geoData) {
 		marker.on("dragend", f => {
 			newLat = f.target.getLatLng().lat.toFixed(6);
 			newLng = f.target.getLatLng().lng.toFixed(6);
-			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng).openPopup();
+			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
 			generatePoints(geoData);
 			generateFilesTab(geoData);
@@ -461,8 +469,9 @@ function deletePointMode(geoData) {
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
 	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
-		console.log(e.latlng);
-		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng[0], e.latlng[1]);
+		console.log(e);
+		//console.log(e.layer.options.pointToLayer());
+		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
 		console.log(indexes);
 	}));
 }
@@ -483,6 +492,29 @@ function unlinkMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
+}
+
+// Change the focus to the file we clicked on
+// Param : geoData 
+// Param : e -> click event
+function changeFocus(geoData, e) {
+	let self = e.target.parentElement;
+	let siblings = self.parentElement.children;
+	let new_index = undefined; // Index of the new focus
+	let old_index = undefined; // Index of the old focus
+	let i = 0;
+	while ((new_index === undefined || old_index === undefined) && i < siblings.length) {
+		if (siblings[i].id === self.id) {
+			new_index = i;
+		}
+		if (siblings[i].classList.contains("focus")) {
+			old_index = i;
+		}
+		i++;
+	}
+	siblings[old_index].classList.remove("focus");
+	self.classList.add("focus");
+	geoData.focus = new_index;
 }
 
 function createHistory(geoData, index) {
