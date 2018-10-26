@@ -1,6 +1,6 @@
 importScripts("./prototypes_modif.js");
 importScripts("./maths.js");
-
+//VERSION 2
 let number = undefined;
 
 self.onmessage = event => {
@@ -9,21 +9,27 @@ self.onmessage = event => {
     } else {
         let path = event.data;
         let tolerence = 0.00001;
-        let tabDistance = [];
+        let tabDistanceApres = [];
+        let tabDistanceAvant = [];
+        let tabEcart = [];
+        let indexMin = 0;
         let totalDistance = calculateDistance(path);
+        for (let i=1; i<path.features[0].geometry.coordinates.length-2; i++){
+            tabDistanceApres.push(DistanceBetween2Points(path.features[0].geometry.coordinates[i-1],path.features[0].geometry.coordinates[i+1]));
+        }
+        for (let i=1; i<path.features[0].geometry.coordinates.length-2; i++){
+            tabDistanceAvant.push(DistanceBetween2Points(path.features[0].geometry.coordinates[i-1],path.features[0].geometry.coordinates[i])+DistanceBetween2Points(path.features[0].geometry.coordinates[i],path.features[0].geometry.coordinates[i+1]));
+        }
+        for (let i=0; i<tabDistanceApres.length; i++){
+            tabEcart[i]=tabDistanceAvant[i]-tabDistanceApres[i];
+        }
         while(number>0){
-            tabDistance = [];
-            for (let i=0; i<path.features[0].geometry.coordinates.length-2; i++){
-                tabDistance.push(DistanceBetween2Points(path.features[0].geometry.coordinates[i],path.features[0].geometry.coordinates[i+1]));
-            }
-            if(tabDistance.min() < totalDistance*tolerence){
-                path.features[0].geometry.coordinates.splice(tabDistance.indexOf(tabDistance.min()),1);
-                number--;
-            } else if (tolerence > 0.01) {
-              number = 0;
-            } else {
-              tolerence += 0.0000002;
-            }
+            path.features[0].geometry.coordinates.splice(tabEcart.indexOf(tabEcart.min())+1,1);
+            indexMin = tabEcart.indexOf(tabEcart.min());
+            console.log(tabEcart.indexOf(tabEcart.min()));
+            tabEcart.splice(tabEcart.indexOf(tabEcart.min()),1);
+            tabEcart[indexMin-1]=((DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin],path.features[0].geometry.coordinates[indexMin+1])+DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin+1],path.features[0].geometry.coordinates[indexMin+2]))-DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin],path.features[0].geometry.coordinates[indexMin+2]));
+            number--;
         }
         self.postMessage(path);
     }
