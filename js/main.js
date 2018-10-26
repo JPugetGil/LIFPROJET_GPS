@@ -494,8 +494,27 @@ function unlinkMode(geoData) {
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
+// Change the focus to the file we clicked on
+// Param : geoData 
+// Param : e -> click event
 function changeFocus(geoData, e) {
-	console.log(e);
+	let self = e.target.parentElement;
+	let siblings = self.parentElement.children;
+	let new_index = undefined; // Index of the new focus
+	let old_index = undefined; // Index of the old focus
+	let i = 0;
+	while ((new_index === undefined || old_index === undefined) && i < siblings.length) {
+		if (siblings[i].id === self.id) {
+			new_index = i;
+		}
+		if (siblings[i].classList.contains("focus")) {
+			old_index = i;
+		}
+		i++;
+	}
+	siblings[old_index].classList.remove("focus");
+	self.classList.add("focus");
+	geoData.focus = new_index;
 }
 
 function createHistory(geoData, index) {
