@@ -12,6 +12,28 @@ function repeatString(text, nb = 2) {
 	return repeated;
 }
 
+// Convert a geoJSON feature of type 'LineString' to a geoJSON 'FeatureCollection' of 'Point'-typed features
+// Param : a geoJSON feature of type 'LineString'
+// Return a geoJSON 'FeatureCollection' of 'Point'-typed features
+function convertLineStringToPoint(feature) {
+    let points = {
+        type: "FeatureCollection",
+        features: []
+    };
+    feature.geometry.coordinates.forEach(latlng => {
+        let point = {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: latlng
+            },
+            options: feature.options
+        };
+        points.features.push(point);
+    });
+    return points;
+}
+
 // Convert a geoJSON variable into a text corresponding to its .gpx
 // Param : geoJS -> the geoJSON variable
 // Return : a string corresponding to a .gpx file
@@ -19,21 +41,21 @@ function geoJsonToXml(geoJS) {
 	let feed = "\n";
 	let tab = "\t";
 	let xml = `<?xml version='1.0' encoding='UTF-8' standalone='yes'?>${feed}<gpx version='1.1'>`;
-	
+
 	if (geoJS.hasOwnProperty("features")) {
 		geoJS = geoJS.features[0];
 	}
 	let hasProperties = geoJS.hasOwnProperty("properties");
-	
+
 	xml += `${feed}${tab}<trk>`;
 	if (hasProperties) {
 		if (geoJS.properties.hasOwnProperty("name")) {
 			xml += `${feed}${repeatString(tab,2)}<name>${geoJS.properties.name}</name>`;
 		}
 	}
-	
+
 	xml += `${feed}${repeatString(tab,2)}<trkseg>`;
-	
+
 	let hasElevation = geoJS.geometry.coordinates[0].length > 2;
 	let hasTime = false;
 	let hasHeart = false;
@@ -41,7 +63,7 @@ function geoJsonToXml(geoJS) {
 		hasTime = geoJS.properties.hasOwnProperty("coordTimes");
 		hasHeart = geoJS.properties.hasOwnProperty("heartRates");
 	}
-	
+
 	geoJS.geometry.coordinates.forEach( (current, index) => {
 		xml += `${feed}${repeatString(tab,3)}<trkpt lat='${current[1]}' lon='${current[0]}'>`;
 		if (hasElevation) {
@@ -61,10 +83,10 @@ function geoJsonToXml(geoJS) {
 		}
 		xml += `${feed}${repeatString(tab,3)}</trkpt>`;
 	});
-	
+
 	xml += `${feed}${repeatString(tab,2)}</trkseg>`;
 	xml += `${feed}${tab}</trk>${feed}</gpx>`;
-	
+
 	return xml;
 }
 
