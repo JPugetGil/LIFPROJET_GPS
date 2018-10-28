@@ -26,9 +26,11 @@ function convertLineStringToPoint(feature) {
             geometry: {
                 type: "Point",
                 coordinates: latlng
-            },
-            options: feature.options
+            }
         };
+		if (feature.hasOwnProperty("options")) {
+            point.options = feature.options;
+		}
         points.features.push(point);
     });
     return points;
