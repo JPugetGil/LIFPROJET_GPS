@@ -6,7 +6,6 @@ createGeoData()
 .then(geoData => displayPath(geoData,0))
 .then(generateFilesTab)
 .then(generateGraph)
-.then(generatePoints)
 .then(setListeners)
 .then(setListenersUpdate)
 .then(console.log)
@@ -84,20 +83,6 @@ function generateIndex(geoData) {
 						</tr>
 					</thead>
 					<tbody id="fileTable">
-					</tbody>
-				</table>
-			</div>
-			<div id="tableauPoints">
-				<table id="tableData" class="table table-striped table-hover table-bordered">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Longitude</th>
-							<th scope="col">Latitude</th>
-							<th scope="col">Altitude</th>
-						</tr>
-					</thead>
-					<tbody>
 					</tbody>
 				</table>
 			</div>
@@ -185,7 +170,6 @@ function reSample(geoData, number){
 					tolerence += 0.0000002;
 				}
 			}
-			generatePoints(geoData);
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
@@ -195,7 +179,6 @@ function reSample(geoData, number){
 			w.onmessage = event => {
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
-				generatePoints(geoData);
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
 				generateGraph(geoData);
@@ -295,37 +278,6 @@ function generateGraph(geoData) {
 	return geoData;
 }
 
-function generatePoints(geoData) {
-	let tableContent = "";
-	let lastIndex = geoData.focus;
-	if (lastIndex === undefined) {
-		lastIndex = geoData.paths.length -1;
-		while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
-			lastIndex--;
-		}
-	}
-	if (lastIndex >= 0) {
-		let trace = geoData.paths[lastIndex];
-		for (let i=0; i < trace.features[0].geometry.coordinates.length; i++) {
-			tableContent += `<tr>
-								<th scope="row"> ${i+1}</th>
-									<td>
-										${trace.features[0].geometry.coordinates[i][0]}
-									</td>
-								<td>
-									${trace.features[0].geometry.coordinates[i][1]}
-								</td>
-								<td>
-									${trace.features[0].geometry.coordinates[i][2]}
-								</td>
-							  </tr>`;
-		}
-	}
-	document.querySelector("#tableData > tbody").innerHTML = tableContent;
-
-	return geoData;
-}
-
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
 // Return : none
@@ -343,7 +295,6 @@ function deleteTrace(geoData, id) {
    			if (geoData.focus < 0) {
    				geoData.focus = undefined;
    			}
-   			generatePoints(geoData);
 	   		movePOV(geoData);
 	   	} else {
 	   		if (geoData.focus > id) {
@@ -449,7 +400,6 @@ function dragHandler(e, polyline) {
 // Return : None
 function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generatePoints(geoData);
 	generateFilesTab(geoData);
 	generateGraph(geoData);
 }
@@ -472,7 +422,6 @@ function addPointMode(geoData) {
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		generatePoints(geoData);
 		generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
@@ -482,7 +431,6 @@ function addPointMode(geoData) {
 			newLng = f.target.getLatLng().lng.toFixed(6);
 			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
-			generatePoints(geoData);
 			generateFilesTab(geoData);
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
@@ -498,7 +446,6 @@ function addPointMode(geoData) {
 				for(let i = 0; i < nb ; i++) {
 					trace.markersAdded[i].index--;
 				}
-				generatePoints(geoData);
 				generateFilesTab(geoData);
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
@@ -541,7 +488,6 @@ function removePoint(geoData, markerIndex, index) {
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generatePoints(geoData);
 	generateFilesTab(geoData);
 	generateGraph(geoData);
 }
