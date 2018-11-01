@@ -214,20 +214,13 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index) {
-	let geojsonMarkerOptions = {
-		opacity: 0,
-		fillOpacity: 0
-	};
-	let marker = L.geoJSON(geoData.paths[index], {
-		pointToLayer: function (feature, lsatlng) {
-			return L.circleMarker(latlng, geojsonMarkerOptions);
-		}
-	});
-	geoData.layers[index] = marker;
+	let layer = L.geoJSON(geoData.paths[index]);
+	geoData.layers[index] = layer;
 	geoData.layersHistory[index] = [];
 	if (geoData.paths[index].shown) {
-		geoData.map.addLayer(marker);
+		geoData.map.addLayer(layer);
 	}
+	
 	return geoData;
 }
 
