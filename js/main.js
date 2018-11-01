@@ -4,10 +4,10 @@ createGeoData()
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(movePOV)
 .then(geoData => displayPath(geoData,0))
-.then(generateFilesTab)
-.then(generateGraph)
-.then(setListeners)
-.then(setListenersUpdate)
+//.then(generateFilesTab)
+//.then(generateGraph)
+//.then(setListeners)
+//.then(setListenersUpdate)
 .then(console.log)
 .catch(console.error);
 
@@ -40,14 +40,14 @@ function createGeoData() {
 // Return : none
 function generateIndex(geoData) {
     geoData.page = "index";
-	document.getElementById("planDeTravail").innerHTML =
+	/*document.getElementById("planDeTravail").innerHTML =
 		`<div class="col-lg-8 bg-light">
 			<div class="row">
 				<div class="col-11">
 					<div id="mapid" style="width: 100%; height: 500px"></div>
 					<div id="graph" class="row col-auto bg-light">
 						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
-					</div>
+					</div>-->
 				</div>
 				<div class="col-1">
 					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
@@ -86,7 +86,7 @@ function generateIndex(geoData) {
 					</tbody>
 				</table>
 			</div>
-		</div>`;
+		</div>`;*/
 	return geoData;
 }
 
@@ -248,7 +248,7 @@ function generateFilesTab(geoData) {
 	return geoData;
 }
 
-function generateGraph(geoData) {
+/*function generateGraph(geoData) {
 	let xs = {};
 	let cols = [];
 	geoData.paths.forEach(current => {
@@ -276,7 +276,7 @@ function generateGraph(geoData) {
 	});
 
 	return geoData;
-}
+}*/
 
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
@@ -288,7 +288,7 @@ function deleteTrace(geoData, id) {
    		geoData.paths.splice(id, 1);
    		geoData.layers.splice(id, 1);
    		if (wasShown) {
-   			generateGraph(geoData);
+   			//generateGraph(geoData);
    		}
    		if (geoData.focus === id) {
    			geoData.focus = geoData.paths.length -1;
@@ -401,7 +401,7 @@ function dragHandler(e, polyline) {
 function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	generateFilesTab(geoData);
-	generateGraph(geoData);
+	//generateGraph(geoData);
 }
 
 function addPointMode(geoData) {
@@ -489,7 +489,7 @@ function removePoint(geoData, markerIndex, index) {
     geoData.layers[geoData.focus].setLatLngs(latlngs);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	generateFilesTab(geoData);
-	generateGraph(geoData);
+	//generateGraph(geoData);
 }
 
 function linkMode(geoData) {
