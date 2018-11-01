@@ -6,33 +6,10 @@
 	color: white;
 }
 
-#planDeTravail {
-	margin-left:1%;
-	width: 99%;
-	margin-bottom: 40px;
-}
-
-#tableauFichiers {
-	height: 150px;
-	overflow-y: auto;
-}
-
-#fileTable > tr:hover {
-	cursor: pointer;
-}
-
-#tableauPoints {
-	height: 400px;
-	overflow-y: auto;
-}
-
 footer {
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-	height: 40px;
-	line-height: 40px;
-	background-color: #f6f6f6;
 }
 
 .focus {

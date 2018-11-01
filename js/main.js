@@ -36,57 +36,9 @@ function createGeoData() {
 	});
 }
 
-// Generate the main section (with the map)
-// Return : none
 function generateIndex(geoData) {
-    geoData.page = "index";
-	/*document.getElementById("planDeTravail").innerHTML =
-		`<div class="col-lg-8 bg-light">
-			<div class="row">
-				<div class="col-11">
-					<div id="mapid" style="width: 100%; height: 500px"></div>
-					<div id="graph" class="row col-auto bg-light">
-						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
-					</div>-->
-				</div>
-				<div class="col-1">
-					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
-					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
-					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-redo"></i></button>
-					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-plus"></i></button>
-					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-link"></i></button>
-					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
+	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 
-					<div class="form-group">
-					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
-					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
-					</div>
-
-					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
-					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-file-download"></i></button>
-				</div>
-			</div>
-
-		</div>
-		<div class="col-lg-4">
-			<div id="tableauFichiers" style="margin-bottom:15px">
-				<table class="table table-striped table-hover table-bordered">
-				   <thead>
-					  	<tr>
-						<th scope="col">#</th>
-						<th scope="col">Nom du fichier</th>
-						<th scope="col">Distance <br />(en km)</th>
-						<th scope="col">Durée <br />(en h)</th>
-						<th scope="col"><i class="fas fa-trash"></i></th>
-						</tr>
-					</thead>
-					<tbody id="fileTable">
-					</tbody>
-				</table>
-			</div>
-		</div>`;*/
 	return geoData;
 }
 
@@ -172,7 +124,7 @@ function reSample(geoData, number){
 			}
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
-			generateGraph(geoData);
+			//generateGraph(geoData);
 
 		} else {
 			let w = new Worker("js/resample.js", {type:'module'});
@@ -181,7 +133,7 @@ function reSample(geoData, number){
 				w.terminate();
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
-				generateGraph(geoData);
+				//generateGraph(geoData);
 			}
 			w.postMessage(number);
 			w.postMessage(geoData.paths[geoData.focus]);
@@ -301,7 +253,7 @@ function deleteTrace(geoData, id) {
 	   			geoData.focus--;
 	   		}
 	   	}
-	   	generateFilesTab(geoData);
+	   	//generateFilesTab(geoData);
    		setListenersUpdate(geoData);
 	}
 }
@@ -400,7 +352,7 @@ function dragHandler(e, polyline) {
 // Return : None
 function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generateFilesTab(geoData);
+	//generateFilesTab(geoData);
 	//generateGraph(geoData);
 }
 
@@ -422,7 +374,7 @@ function addPointMode(geoData) {
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		generateFilesTab(geoData);
+		//generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
 
@@ -431,7 +383,7 @@ function addPointMode(geoData) {
 			newLng = f.target.getLatLng().lng.toFixed(6);
 			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
-			generateFilesTab(geoData);
+			//generateFilesTab(geoData);
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 		});
@@ -446,7 +398,7 @@ function addPointMode(geoData) {
 				for(let i = 0; i < nb ; i++) {
 					trace.markersAdded[i].index--;
 				}
-				generateFilesTab(geoData);
+				//generateFilesTab(geoData);
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
 			}
@@ -488,7 +440,7 @@ function removePoint(geoData, markerIndex, index) {
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generateFilesTab(geoData);
+	//generateFilesTab(geoData);
 	//generateGraph(geoData);
 }
 
