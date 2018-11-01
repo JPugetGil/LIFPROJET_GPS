@@ -72,15 +72,31 @@ function secondsToHours(sec) {
 	return hrs + ":" + min + ":" + sec;
 }
 
+// Ex : if number == 3.14, return 2
+// Ex : if number == 3.14159, return 5
+// Param : number
+// Return : positive int
 function getLengthAfterDot(number) {
 	let stringified = number.toString();
 	return stringified.slice(stringified.indexOf('.') +1, stringified.length).length;
 }
 
+// Have we min <= x <= max
+// Param : x => number
+// Param : min => number
+// Param : max => number
+// Return : boolean
 function isBetween(x, min, max) {
 	return x >= min && x <= max;
 }
 
+// Return coordinates and index from coordinates,
+// of points in latitude +- interval && longitude +- interval
+// Param : coordinates => an [] of ['length == 2|3']
+// Param : latitude => number
+// Param : longitude => number
+// Param : interval => number
+// Return : an [] of {coordinates: ['length == 2|3'], index: 'number'}
 function pointsInInterval(coordinates, latitude, longitude, interval) {
 	let points = [];
 	let precision = getLengthAfterDot(interval);

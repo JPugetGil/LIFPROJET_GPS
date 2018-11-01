@@ -382,6 +382,9 @@ function setListenersUpdate(geoData){
 	return geoData;
 }
 
+// Suppress temporary markers created by modes
+// Param: geoData
+// Return : None
 function deleteOldMarkers(geoData) {
 	geoData.moveMarkers.forEach(marker => {
 		geoData.map.removeLayer(marker);
@@ -400,6 +403,9 @@ function moveMapMode(geoData) {
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
+// Mode where points can ba moved
+// Param : geoData
+// Return : None
 function movePointMode(geoData) {
 	geoData.map.dragging.enable();
 	geoData.map.off("click");
@@ -411,7 +417,7 @@ function movePointMode(geoData) {
 
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
-		let interval = 0.001;
+		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
 		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
 		points.forEach(point => {
@@ -420,13 +426,17 @@ function movePointMode(geoData) {
 				index: point.index
 			})
 			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
-			.on('dragend', e => dragEndHandler(e, geoData));
+			.on('dragend', e => dragEndHandler(geoData));
 			geoData.moveMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
 }
 
+// Called during a point drag,
+// Make polyline correspond with the point we are dragging
+// Param : e => event triggered with dragging
+// Return : polyline => a L.polyline object
 function dragHandler(e, polyline) {
     let latlngs = polyline.getLatLngs();
     let	latlng = e.target.getLatLng();
@@ -434,8 +444,10 @@ function dragHandler(e, polyline) {
     polyline.setLatLngs(latlngs);
 }
 
-function dragEndHandler(e, geoData) {
-	console.log("end");
+// Update geoData with map layers
+// Param : geoData
+// Return : None
+function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 }
 
