@@ -437,6 +437,8 @@ function dragHandler(e, polyline) {
 function dragEndHandler(e, geoData) {
 	console.log("end");
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
+	generatePoints(geoData);
+	generateFilesTab(geoData);
 }
 
 function addPointMode(geoData) {
