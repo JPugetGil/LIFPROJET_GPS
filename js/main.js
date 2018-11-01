@@ -400,6 +400,7 @@ function movePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
 
 	geoData.map.on("contextmenu", e => {
+		deleteOldMarkers(geoData);
 		let interval = 0.001;
 		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
