@@ -451,6 +451,7 @@ function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	generatePoints(geoData);
 	generateFilesTab(geoData);
+	generateGraph(geoData);
 }
 
 function addPointMode(geoData) {
@@ -542,6 +543,7 @@ function removePoint(geoData, markerIndex, index) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	generatePoints(geoData);
 	generateFilesTab(geoData);
+	generateGraph(geoData);
 }
 
 function linkMode(geoData) {
