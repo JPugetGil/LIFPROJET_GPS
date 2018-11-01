@@ -508,7 +508,7 @@ function addPointMode(geoData) {
 }
 
 function deletePointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -517,12 +517,31 @@ function deletePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
-	geoData.layers.forEach( (curr, index) => curr.on('click', e => {
-		console.log(e);
-		//console.log(e.layer.options.pointToLayer());
-		//let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
-		//console.log(indexes);
-	}));
+	geoData.map.on("contextmenu", e => {
+		deleteOldMarkers(geoData);
+		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
+		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+		points.forEach(point => {
+			let markerIndex = geoData.moveMarkers.length;
+			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				index: point.index
+			})
+			.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
+			geoData.moveMarkers.push(marker);
+			marker.addTo(geoData.map);
+		});
+	});
+}
+
+function removePoint(geoData, markerIndex, index) {
+	geoData.map.removeLayer(geoData.moveMarkers[markerIndex]);
+    let latlngs = geoData.layers[geoData.focus].getLatLngs();
+    latlngs.splice(index, 1);
+    geoData.layers[geoData.focus].setLatLngs(latlngs);
+	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
+	generatePoints(geoData);
+	generateFilesTab(geoData);
 }
 
 function linkMode(geoData) {
