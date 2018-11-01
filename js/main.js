@@ -407,8 +407,9 @@ function movePointMode(geoData) {
 		console.log(points);
 		points.forEach(point => {
 			console.log(point);
-			let marker = L.marker(L.latLng(point[1], point[0]), {
-				draggable: true
+			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				draggable: true,
+				index: point.index
 			});
 			geoData.moveMarkers.push(marker);
 			marker.addTo(geoData.map);

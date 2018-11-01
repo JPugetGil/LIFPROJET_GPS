@@ -93,33 +93,14 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 		Number( (longitude - interval).toFixed(precision) ),
 		Number( (longitude + interval).toFixed(precision) )
 	];
-	coordinates.forEach(coord => {
+	coordinates.forEach( (coord, index) => {
 		if (isBetween(coord[1], lats[0], lats[1]) && isBetween(coord[0], lngs[0], lngs[1])) {
-			points.push(coord);
+			let point = {
+				coordinates: coord,
+				index: index
+			};
+			points.push(point);
 		}
 	});
 	return points;
 }
-
-/*
-function indexesOfPoint(tab, latitude, longitude) {
-	let lat = [0, 0, 0];
-	let long = [0, 0, 0];
-	lat[0] = Number(latitude.toFixed(3));
-	lat[1] = Number(latitude.toFixed(6));
-	lat[2] = Number(latitude.toFixed(3)) + 0.001;
-	long[0] = Number(longitude.toFixed(3));
-	long[1] = Number(longitude.toFixed(6));
-	long[2] = Number(longitude.toFixed(3)) + 0.001;
-	console.log(lat);
-	console.log(long);
-	return tab.reduce( (acc, coord, index) => {
-		console.log(coord);
-		let inside = lat[0] <= coord[0] && lat[1] >= coord[0] && long[0] <= coord[1] && long[1] >= coord[1];
-		if (inside) {
-			return acc.push(index);
-		} else {
-			return acc;
-		}
-	}, []);
-}*/
