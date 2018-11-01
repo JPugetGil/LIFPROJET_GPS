@@ -21,9 +21,9 @@ function createGeoData() {
 				paths: [],
 				last: undefined
 			},
-			markers: [],
-			markersHistory: {
-				markers: [],
+			layers: [],
+			layersHistory: {
+				layers: [],
 				last: undefined
 			},
 			markersColor: [],
@@ -185,7 +185,7 @@ function reSample(geoData, number){
 				}
 			}
 			generatePoints(geoData);
-			geoData.map.removeLayer(geoData.markers[geoData.focus]);
+			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
 
@@ -195,7 +195,7 @@ function reSample(geoData, number){
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
 				generatePoints(geoData);
-				geoData.map.removeLayer(geoData.markers[geoData.focus]);
+				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
 				generateGraph(geoData);
 			}
@@ -223,8 +223,8 @@ function displayPath(geoData, index) {
 			return L.circleMarker(latlng, geojsonMarkerOptions);
 		}
 	});
-	geoData.markers[index] = marker;
-	geoData.markersHistory[index] = [];
+	geoData.layers[index] = marker;
+	geoData.layersHistory[index] = [];
 	if (geoData.paths[index].shown) {
 		geoData.map.addLayer(marker);
 	}
@@ -328,9 +328,9 @@ function generatePoints(geoData) {
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
 		let wasShown = geoData.paths[id].shown;
-   		geoData.map.removeLayer(geoData.markers[id]);
+   		geoData.map.removeLayer(geoData.layers[id]);
    		geoData.paths.splice(id, 1);
-   		geoData.markers.splice(id, 1);
+   		geoData.layers.splice(id, 1);
    		if (wasShown) {
    			generateGraph(geoData);
    		}
@@ -426,7 +426,7 @@ function addPointMode(geoData) {
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		generatePoints(geoData);
 		generateFilesTab(geoData);
-		geoData.map.removeLayer(geoData.markers[geoData.focus]);
+		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		displayPath(geoData, geoData.focus);
 
 		marker.on("dragend", f => {
@@ -436,7 +436,7 @@ function addPointMode(geoData) {
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
 			generatePoints(geoData);
 			generateFilesTab(geoData);
-			geoData.map.removeLayer(geoData.markers[geoData.focus]);
+			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 		});
 
@@ -452,7 +452,7 @@ function addPointMode(geoData) {
 				}
 				generatePoints(geoData);
 				generateFilesTab(geoData);
-				geoData.map.removeLayer(geoData.markers[geoData.focus]);
+				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
 			}
 		});
@@ -468,7 +468,7 @@ function deletePointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
-	geoData.markers.forEach( (curr, index) => curr.on('click', e => {
+	geoData.layers.forEach( (curr, index) => curr.on('click', e => {
 		console.log(e);
 		//console.log(e.layer.options.pointToLayer());
 		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
@@ -495,7 +495,7 @@ function unlinkMode(geoData) {
 }
 
 // Change the focus to the file we clicked on
-// Param : geoData 
+// Param : geoData
 // Param : e -> click event
 function changeFocus(geoData, e) {
 	let self = e.target.parentElement;
@@ -519,5 +519,5 @@ function changeFocus(geoData, e) {
 
 function createHistory(geoData, index) {
 	geoData.pathsHistory[index].paths.push(geoData.paths[index]);
-	geoData.markersHistory[index].markers.push(geoData.markers[index]);
+	geoData.layersHistory[index].layers.push(geoData.layers[index]);
 }
