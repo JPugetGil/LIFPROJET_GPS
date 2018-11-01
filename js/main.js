@@ -215,11 +215,21 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index) {
-	let layer = L.geoJSON(geoData.paths[index]);
-	geoData.layers[index] = layer;
+	/*let layer = L.geoJSON(geoData.paths[index]);*/
+	let latlngs = [];
+	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
+		let point = [
+			coord[1],
+			coord[0],
+			coord[2]
+		];
+		latlngs.push(point);
+	});
+	let polyline = L.polyline(latlngs);
+	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
 	if (geoData.paths[index].shown) {
-		geoData.map.addLayer(layer);
+		geoData.map.addLayer(polyline);
 	}
 
 	return geoData;
@@ -391,7 +401,7 @@ function moveMapMode(geoData) {
 }
 
 function movePointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -404,30 +414,29 @@ function movePointMode(geoData) {
 		let interval = 0.001;
 		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		console.log(points);
 		points.forEach(point => {
-			console.log(point);
 			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
 				draggable: true,
 				index: point.index
-			});
+			})
+			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
+			.on('dragend', e => dragEndHandler(e, geoData));
 			geoData.moveMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
-	//var color = geoData.markersColor[geoData.focus % 6];
-	/*geoData.paths[geoData.focus].features[0].geometry.coordinates.forEach(p => {
-		L.marker([p[0], p[1]]).addTo(geoData.map).bindPopup("Coucou, je suis un ancien point !");
-		console.log(42);
-	});*/
-	/*geoData.paths[geoData.focus].markersAdded.forEach(m => {
-		m.dragging.enable();
-		m.on("onmouseover", d => {
-			m.setOpacity(1);
-			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
-			console.log("Cù Chulainn");
-		});
-	});*/
+}
+
+function dragHandler(e, polyline) {
+    let latlngs = polyline.getLatLngs();
+    let	latlng = e.target.getLatLng();
+    latlngs.splice(e.target.options.index, 1, latlng);
+    polyline.setLatLngs(latlngs);
+}
+
+function dragEndHandler(e, geoData) {
+	console.log("end");
+	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 }
 
 function addPointMode(geoData) {
