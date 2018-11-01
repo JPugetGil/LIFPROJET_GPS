@@ -27,7 +27,7 @@ function createGeoData() {
 				last: undefined
 			},
 			markersColor: [],
-			moveMarkers: [],
+			tempsMarkers: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap"
@@ -386,7 +386,7 @@ function setListenersUpdate(geoData){
 // Param: geoData
 // Return : None
 function deleteOldMarkers(geoData) {
-	geoData.moveMarkers.forEach(marker => {
+	geoData.tempsMarkers.forEach(marker => {
 		geoData.map.removeLayer(marker);
 	});
 	geoData.moveMarker = [];
@@ -427,7 +427,7 @@ function movePointMode(geoData) {
 			})
 			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
 			.on('dragend', e => dragEndHandler(geoData));
-			geoData.moveMarkers.push(marker);
+			geoData.tempsMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
@@ -523,19 +523,19 @@ function deletePointMode(geoData) {
 		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
 		points.forEach(point => {
-			let markerIndex = geoData.moveMarkers.length;
+			let markerIndex = geoData.tempsMarkers.length;
 			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
 				index: point.index
 			})
 			.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
-			geoData.moveMarkers.push(marker);
+			geoData.tempsMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
 }
 
 function removePoint(geoData, markerIndex, index) {
-	geoData.map.removeLayer(geoData.moveMarkers[markerIndex]);
+	geoData.map.removeLayer(geoData.tempsMarkers[markerIndex]);
     let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
