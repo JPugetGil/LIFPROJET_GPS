@@ -27,6 +27,7 @@ function createGeoData() {
 				last: undefined
 			},
 			markersColor: [],
+			moveMarkers: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap"
@@ -220,7 +221,7 @@ function displayPath(geoData, index) {
 	if (geoData.paths[index].shown) {
 		geoData.map.addLayer(layer);
 	}
-	
+
 	return geoData;
 }
 
@@ -371,9 +372,18 @@ function setListenersUpdate(geoData){
 	return geoData;
 }
 
+function deleteOldMarkers(geoData) {
+	geoData.moveMarkers.forEach(marker => {
+		geoData.map.removeLayer(marker);
+	});
+	geoData.moveMarker = [];
+}
+
 function moveMapMode(geoData) {
 	geoData.map.dragging.enable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
@@ -383,27 +393,46 @@ function moveMapMode(geoData) {
 function movePointMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "movepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
+
+	geoData.map.on("contextmenu", e => {
+		let interval = 0.001;
+		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+		console.log(points);
+		points.forEach(point => {
+			console.log(point);
+			let marker = L.marker(L.latLng(point[1], point[0]), {
+				draggable: true
+			});
+			geoData.moveMarkers.push(marker);
+			marker.addTo(geoData.map);
+		});
+	});
 	//var color = geoData.markersColor[geoData.focus % 6];
 	/*geoData.paths[geoData.focus].features[0].geometry.coordinates.forEach(p => {
 		L.marker([p[0], p[1]]).addTo(geoData.map).bindPopup("Coucou, je suis un ancien point !");
 		console.log(42);
 	});*/
-	geoData.paths[geoData.focus].markersAdded.forEach(m => {
+	/*geoData.paths[geoData.focus].markersAdded.forEach(m => {
 		m.dragging.enable();
-		/*m.on("onmouseover", d => {
+		m.on("onmouseover", d => {
 			m.setOpacity(1);
 			m.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6)).openPopup();
 			console.log("Cù Chulainn");
-		});*/
-	});
+		});
+	});*/
 }
 
 function addPointMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "addpoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
@@ -456,6 +485,8 @@ function addPointMode(geoData) {
 function deletePointMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
@@ -464,14 +495,16 @@ function deletePointMode(geoData) {
 	geoData.layers.forEach( (curr, index) => curr.on('click', e => {
 		console.log(e);
 		//console.log(e.layer.options.pointToLayer());
-		let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
-		console.log(indexes);
+		//let indexes = indexesOfPoint(geoData.paths[index].features[0].geometry.coordinates, e.latlng.lat, e.latlng.lng);
+		//console.log(indexes);
 	}));
 }
 
 function linkMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
@@ -481,6 +514,8 @@ function linkMode(geoData) {
 function unlinkMode(geoData) {
 	geoData.map.dragging.disable();
 	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
