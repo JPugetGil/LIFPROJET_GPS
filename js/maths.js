@@ -72,6 +72,36 @@ function secondsToHours(sec) {
 	return hrs + ":" + min + ":" + sec;
 }
 
+function getLengthAfterDot(number) {
+	let stringified = number.toString();
+	return stringified.slice(stringified.indexOf('.') +1, stringified.length).length;
+}
+
+function isBetween(x, min, max) {
+	return x >= min && x <= max;
+}
+
+function pointsInInterval(coordinates, latitude, longitude, interval) {
+	let points = [];
+	let precision = getLengthAfterDot(interval);
+	let lats = [
+		Number( (latitude - interval).toFixed(precision) ),
+		Number( (latitude + interval).toFixed(precision) )
+
+	];
+	let lngs = [
+		Number( (longitude - interval).toFixed(precision) ),
+		Number( (longitude + interval).toFixed(precision) )
+	];
+	coordinates.forEach(coord => {
+		if (isBetween(coord[1], lats[0], lats[1]) && isBetween(coord[0], lngs[0], lngs[1])) {
+			points.push(coord);
+		}
+	});
+	return points;
+}
+
+/*
 function indexesOfPoint(tab, latitude, longitude) {
 	let lat = [0, 0, 0];
 	let long = [0, 0, 0];
@@ -92,4 +122,4 @@ function indexesOfPoint(tab, latitude, longitude) {
 			return acc;
 		}
 	}, []);
-}
+}*/
