@@ -76,7 +76,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
-	geoData.layersControl = L.control.layers(null, null).addTo(geoData.map);
+	geoData.layersControl = L.control.layers(null, null);
 	L.control.scale({imperial: false}).addTo(geoData.map);
 
 	return geoData;
@@ -170,6 +170,7 @@ function displayPath(geoData, index) {
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
 	geoData.layersControl.addBaseLayer(polyline, geoData.paths[index].file);
+	geoData.layersControl.addTo(geoData.map);
 	geoData.map.addLayer(polyline);
 
 	return geoData;
@@ -256,6 +257,9 @@ function deleteTrace(geoData, id) {
 	   		}
 	   	}
 		setListenersUpdate(geoData);
+		if (geoData.paths.length === 0) {
+			geoData.layersControl.remove();
+		}
 	}
 }
 
@@ -291,10 +295,6 @@ function setListenersUpdate(geoData) {
 			e.preventDefault();
 		});
 	}
-	/*Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
-		let id = event.target.id;
-		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
-    }));*/
 
 	return geoData;
 }
