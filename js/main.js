@@ -2,12 +2,12 @@ createGeoData()
 .then(generateIndex)
 .then(generateMap)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
-.then(movePOV)
 .then(geoData => displayPath(geoData,0))
+.then(movePOV)
 //.then(generateFilesTab)
 //.then(generateGraph)
 .then(setListeners)
-//.then(setListenersUpdate)
+.then(setListenersUpdate)
 .then(console.log)
 .catch(console.error);
 
@@ -81,12 +81,26 @@ function addPath(geoData, file) {
 // MAP FUNCTIONS //
 
 function movePOV(geoData) {
-	let lastIndex = geoData.paths.length -1;
+	/*let lastIndex = geoData.paths.length -1;
 	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
 		lastIndex--;
 	}
 	if (lastIndex >= 0) {
 		let path = geoData.paths[lastIndex];
+		let tabLatitude = [];
+		let tabLongitude = [];
+		for (let i = 0; i < path.features[0].geometry.coordinates.length ; i++) {
+			tabLatitude.push(path.features[0].geometry.coordinates[i][1]);
+			tabLongitude.push(path.features[0].geometry.coordinates[i][0]);
+		}
+		let centreTraceLatitude = moyenneDunTableau(tabLatitude);
+		let centreTraceLongitude = moyenneDunTableau(tabLongitude);
+		let elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
+		geoData.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
+	}*/
+	if (geoData.focus !== undefined) {
+		//geoData.map.fitBounds(geoData.layers[geoData.focus].getBounds());
+		let path = geoData.paths[geoData.focus];
 		let tabLatitude = [];
 		let tabLongitude = [];
 		for (let i = 0; i < path.features[0].geometry.coordinates.length ; i++) {
@@ -260,8 +274,10 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
+	// Files import
     document.getElementById("importButton").addEventListener("click", upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+
     /*document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
     document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
@@ -276,11 +292,18 @@ function setListeners(geoData) {
     return geoData;
 }
 
-function setListenersUpdate(geoData){
-	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
+function setListenersUpdate(geoData) {
+	// Files display
+	for (let i = 0; i < geoData.paths.length; i++) {
+		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
+			changeFocus(geoData, e);
+			movePOV(geoData);
+		});
+	}
+	/*Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
 		let id = event.target.id;
 		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
-    }));
+    }));*/
 
 	return geoData;
 }
@@ -468,25 +491,14 @@ function unlinkMode(geoData) {
 
 // Change the focus to the file we clicked on
 // Param : geoData
-// Param : e -> click event
+// Param : e -> onchange event
 function changeFocus(geoData, e) {
-	let self = e.target.parentElement;
-	let siblings = self.parentElement.children;
-	let new_index = undefined; // Index of the new focus
-	let old_index = undefined; // Index of the old focus
-	let i = 0;
-	while ((new_index === undefined || old_index === undefined) && i < siblings.length) {
-		if (siblings[i].id === self.id) {
-			new_index = i;
+	for (let i = 0; i < geoData.paths.length; i++) {
+		if (geoData.layersControl.getContainer().children[1][i].checked) {
+			geoData.focus = i;
+			break;
 		}
-		if (siblings[i].classList.contains("focus")) {
-			old_index = i;
-		}
-		i++;
 	}
-	siblings[old_index].classList.remove("focus");
-	self.classList.add("focus");
-	geoData.focus = new_index;
 }
 
 function createHistory(geoData, index) {

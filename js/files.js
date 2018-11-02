@@ -23,14 +23,12 @@ function hiddenUpload(geoData) {
 	    let length = path.length - 11;
 	    let realPath = "data/" + path.substr(12, length);
 	    addPath(geoData, realPath)
-			.then(movePOV)
 			.then(geoData => displayPath(geoData, geoData.paths.length-1))
+			.then(movePOV)
 			/*.then(generateFilesTab)
 			.then(generateGraph)
-			.then(generatePoints)
-			.then(setListenersUpdate)*/
-			.then(console.log)
-			.catch(console.error);
+			.then(generatePoints)*/
+			.then(setListenersUpdate)
 	}
 }
 
