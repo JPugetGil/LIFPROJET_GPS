@@ -78,6 +78,7 @@ function generateMap(geoData) {
 	}).addTo(geoData.map);
 	geoData.layersControl = L.control.layers(null, null);
 	L.control.scale({imperial: false}).addTo(geoData.map);
+	L.control.mode({position: "topleft"}).addTo(geoData.map);
 
 	return geoData;
 }
