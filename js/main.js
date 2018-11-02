@@ -79,6 +79,7 @@ function generateMap(geoData) {
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
 	geoData.layersControl = L.control.layers(null, null).addTo(geoData.map);
+	L.control.scale().addTo(geoData.map);
 
 	return geoData;
 }
