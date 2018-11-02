@@ -16,9 +16,13 @@ footer {
 	color: red;
 }
 
-
 #features {
 	position: absolute;
-	top: 15%;
+	top: 25%;
 	right: 0.5%;
+}
+
+.form-group {
+	margin-top: 50%;
+	margin-bottom: 50%;
 }
