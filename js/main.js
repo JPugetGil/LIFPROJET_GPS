@@ -240,14 +240,11 @@ function generateFilesTab(geoData) {
 // Return : none
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
-		let wasShown = geoData.paths[id].shown;
-   		geoData.map.removeLayer(geoData.layers[id]);
-   		geoData.paths.splice(id, 1);
-   		geoData.layers.splice(id, 1);
-   		if (wasShown) {
-   			//generateGraph(geoData);
-   		}
-   		if (geoData.focus === id) {
+		geoData.layersControl.removeLayer(geoData.layers[id]);
+		geoData.map.removeLayer(geoData.layers[id]);
+		geoData.layers.splice(id, 1);
+		geoData.paths.splice(id, 1);
+		if (geoData.focus === id) {
    			geoData.focus = geoData.paths.length -1;
    			if (geoData.focus < 0) {
    				geoData.focus = undefined;
@@ -258,8 +255,7 @@ function deleteTrace(geoData, id) {
 	   			geoData.focus--;
 	   		}
 	   	}
-	   	//generateFilesTab(geoData);
-   		setListenersUpdate(geoData);
+		setListenersUpdate(geoData);
 	}
 }
 
@@ -285,14 +281,14 @@ function setListeners(geoData) {
 
 function setListenersUpdate(geoData) {
 	// Files display
-	console.log(geoData.layersControl.getContainer());
 	for (let i = 0; i < geoData.paths.length; i++) {
 		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
 			changeFocus(geoData);
 			movePOV(geoData);
 		});
-		geoData.layersControl.getContainer().children[1][i].addEventListener("contextmenu0", e => {
-			console.log("Madness");
+		geoData.layersControl.getContainer().children[1][i].nextElementSibling.addEventListener("contextmenu", e => {
+			deleteTrace(geoData, getIndexFile(e.target));
+			e.preventDefault();
 		});
 	}
 	/*Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
@@ -301,6 +297,19 @@ function setListenersUpdate(geoData) {
     }));*/
 
 	return geoData;
+}
+
+function getIndexFile(element) {
+	let index = undefined;
+	let parent = element.parentElement.parentElement.parentElement;
+	let i = 0;
+	while (index === undefined && i < parent.children.length) {
+		if (parent.children[i].children[0].children[1]._leaflet_id === element._leaflet_id) {
+			index = i;
+		}
+		i++;
+	}
+	return index;
 }
 
 // Suppress temporary markers created by modes
@@ -487,11 +496,15 @@ function unlinkMode(geoData) {
 // Change the focus to the file we clicked on
 // Param : geoData
 function changeFocus(geoData) {
-	for (let i = 0; i < geoData.paths.length; i++) {
+	let i = 0;
+	for (i; i < geoData.paths.length; i++) {
 		if (geoData.layersControl.getContainer().children[1][i].checked) {
 			geoData.focus = i;
 			break;
 		}
+	}
+	if (i === geoData.paths.length) {
+		geoData.focus = undefined;
 	}
 }
 
