@@ -25,10 +25,10 @@ function hiddenUpload(geoData) {
 	    addPath(geoData, realPath)
 			.then(movePOV)
 			.then(geoData => displayPath(geoData, geoData.paths.length-1))
-			.then(generateFilesTab)
+			/*.then(generateFilesTab)
 			.then(generateGraph)
 			.then(generatePoints)
-			.then(setListenersUpdate)
+			.then(setListenersUpdate)*/
 			.then(console.log)
 			.catch(console.error);
 	}
@@ -41,7 +41,7 @@ function hiddenUpload(geoData) {
 function giveUserGpx(geoData) {
 	let geoJS = geoData.paths[geoData.focus];
 	let xml = geoJsonToXml(geoJS);
-	
+
 	let filename = "export.gpx";
 	let element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));

@@ -6,7 +6,7 @@ createGeoData()
 .then(geoData => displayPath(geoData,0))
 //.then(generateFilesTab)
 //.then(generateGraph)
-//.then(setListeners)
+.then(setListeners)
 //.then(setListenersUpdate)
 .then(console.log)
 .catch(console.error);
@@ -58,6 +58,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
+	geoData.layersControl = L.control.layers(null, null).addTo(geoData.map);
 
 	return geoData;
 }
@@ -74,7 +75,7 @@ function addPath(geoData, file) {
 		geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
         return geoData;
-	})
+	});
 }
 
 // MAP FUNCTIONS //
@@ -150,7 +151,6 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index) {
-	/*let layer = L.geoJSON(geoData.paths[index]);*/
 	let latlngs = [];
 	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
 		let point = [
@@ -161,11 +161,11 @@ function displayPath(geoData, index) {
 		latlngs.push(point);
 	});
 	let polyline = L.polyline(latlngs);
+
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
-	if (geoData.paths[index].shown) {
-		geoData.map.addLayer(polyline);
-	}
+	geoData.layersControl.addBaseLayer(polyline, geoData.paths[index].file);
+	geoData.map.addLayer(polyline);
 
 	return geoData;
 }
@@ -261,17 +261,17 @@ function deleteTrace(geoData, id) {
 
 function setListeners(geoData) {
     document.getElementById("importButton").addEventListener("click", upload(geoData));
-    document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+	document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+    /*document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
     document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-    document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
     document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
     document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
 	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
-	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));*/
 
     return geoData;
 }
@@ -376,7 +376,7 @@ function addPointMode(geoData) {
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		//generateFilesTab(geoData);
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
-		displayPath(geoData, geoData.focus);
+		//displayPath(geoData, geoData.focus);
 
 		marker.on("dragend", f => {
 			newLat = f.target.getLatLng().lat.toFixed(6);
@@ -385,7 +385,7 @@ function addPointMode(geoData) {
 			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
 			//generateFilesTab(geoData);
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
-			displayPath(geoData, geoData.focus);
+			//displayPath(geoData, geoData.focus);
 		});
 
 		marker.on("click", () => {
@@ -400,7 +400,7 @@ function addPointMode(geoData) {
 				}
 				//generateFilesTab(geoData);
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
-				displayPath(geoData, geoData.focus);
+				//displayPath(geoData, geoData.focus);
 			}
 		});
 	});
