@@ -275,8 +275,8 @@ function deleteTrace(geoData, id) {
 
 function setListeners(geoData) {
 	// Files import
-    document.getElementById("importButton").addEventListener("click", upload(geoData));
-	document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+    document.getElementById("importButton").addEventListener("click", () => upload(geoData));
+	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
 
     /*document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
