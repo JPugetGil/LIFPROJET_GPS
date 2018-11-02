@@ -266,10 +266,14 @@ function setListeners(geoData) {
 
 function setListenersUpdate(geoData) {
 	// Files display
+	console.log(geoData.layersControl.getContainer());
 	for (let i = 0; i < geoData.paths.length; i++) {
 		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
-			changeFocus(geoData, e);
+			changeFocus(geoData);
 			movePOV(geoData);
+		});
+		geoData.layersControl.getContainer().children[1][i].addEventListener("contextmenu0", e => {
+			console.log("Madness");
 		});
 	}
 	/*Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
@@ -463,8 +467,7 @@ function unlinkMode(geoData) {
 
 // Change the focus to the file we clicked on
 // Param : geoData
-// Param : e -> onchange event
-function changeFocus(geoData, e) {
+function changeFocus(geoData) {
 	for (let i = 0; i < geoData.paths.length; i++) {
 		if (geoData.layersControl.getContainer().children[1][i].checked) {
 			geoData.focus = i;
