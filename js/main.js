@@ -538,6 +538,9 @@ function deletePointMode(geoData) {
 
 function removePoint(geoData, markerIndex, index) {
 	geoData.map.removeLayer(geoData.tempMarkers[markerIndex]);
+	for (let i = markerIndex+1; i < geoData.tempMarkers.length; i++) {
+		geoData.tempMarkers[i].options.index--;
+	}
     let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
