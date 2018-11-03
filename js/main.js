@@ -26,7 +26,7 @@ function createGeoData() {
 				last: undefined
 			},
 			markersColor: [],
-			tempsMarkers: [],
+			tempMarkers: [],
 			focus: undefined,
             page: undefined,
             mode: "movemap"
@@ -78,7 +78,8 @@ function generateMap(geoData) {
 	}).addTo(geoData.map);
 	geoData.layersControl = L.control.layers(null, null);
 	L.control.scale({imperial: false}).addTo(geoData.map);
-	L.control.mode({position: "topleft"}).addTo(geoData.map);
+	L.control.mode(geoData, {position: "topleft"}).addTo(geoData.map);
+	L.control.movepointmode(geoData, {position: "topleft"}).addTo(geoData.map);
 
 	return geoData;
 }
@@ -317,10 +318,10 @@ function getIndexFile(element) {
 // Param: geoData
 // Return : None
 function deleteOldMarkers(geoData) {
-	geoData.tempsMarkers.forEach(marker => {
+	geoData.tempMarkers.forEach(marker => {
 		geoData.map.removeLayer(marker);
 	});
-	geoData.moveMarker = [];
+	geoData.tempMarkers = [];
 }
 
 function moveMapMode(geoData) {
@@ -358,7 +359,7 @@ function movePointMode(geoData) {
 			})
 			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
 			.on('dragend', e => dragEndHandler(geoData));
-			geoData.tempsMarkers.push(marker);
+			geoData.tempMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
@@ -451,19 +452,19 @@ function deletePointMode(geoData) {
 		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
 		points.forEach(point => {
-			let markerIndex = geoData.tempsMarkers.length;
+			let markerIndex = geoData.tempMarkers.length;
 			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
 				index: point.index
 			})
 			.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
-			geoData.tempsMarkers.push(marker);
+			geoData.tempMarkers.push(marker);
 			marker.addTo(geoData.map);
 		});
 	});
 }
 
 function removePoint(geoData, markerIndex, index) {
-	geoData.map.removeLayer(geoData.tempsMarkers[markerIndex]);
+	geoData.map.removeLayer(geoData.tempMarkers[markerIndex]);
     let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
