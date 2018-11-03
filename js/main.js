@@ -349,10 +349,10 @@ function setListeners(geoData) {
 	document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
 	document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
 	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
+	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 
 	/*
     document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
@@ -479,7 +479,7 @@ function addPointMode(geoData) {
 		console.log(marker.index);
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		//generateFilesTab(geoData);
-		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		//geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		//displayPath(geoData, geoData.focus);
 
 		marker.on("dragend", f => {
@@ -503,7 +503,7 @@ function addPointMode(geoData) {
 					trace.markersAdded[i].index--;
 				}
 				//generateFilesTab(geoData);
-				geoData.map.removeLayer(geoData.layers[geoData.focus]);
+				//geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				//displayPath(geoData, geoData.focus);
 			}
 		});
