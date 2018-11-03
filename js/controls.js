@@ -1,4 +1,29 @@
 L.Control.Mode = L.Control.extend({
+	initialize: function(id, style, title, alt, options) {
+        L.setOptions(this, options);
+        this._id = id;
+        this._style = style;
+        this._title = title;
+        this._alt = alt;
+	},
+    onAdd: function(map) {
+        let button = L.DomUtil.create("button", "btn btn-dark btn-sm btn-block");
+        button.type = "button";
+        button.id = this._id;
+        button.alt = this._alt;
+        button.title = this._title;
+        button.appendChild(L.DomUtil.create("i", this._style));
+
+        return button;
+    },
+    onRemove: function(map) {
+        //
+    },
+});
+
+L.control.mode = (id, style, title, alt, options) => new L.Control.Mode(id, style, title, alt, options);
+
+/*L.Control.Mode = L.Control.extend({
     _alt: "Bouton : Déplacer Carte",
     _listeners: [],
     _style: "fas fa-arrows-alt",
@@ -40,4 +65,4 @@ L.Control.MovePointMode = L.Control.Mode.extend({
     }
 });
 
-L.control.movepointmode = (geoData, options) => new L.Control.MovePointMode(geoData, options);
+L.control.movepointmode = (geoData, options) => new L.Control.MovePointMode(geoData, options);*/

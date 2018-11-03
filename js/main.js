@@ -78,8 +78,78 @@ function generateMap(geoData) {
 	}).addTo(geoData.map);
 	geoData.layersControl = L.control.layers(null, null);
 	L.control.scale({imperial: false}).addTo(geoData.map);
-	L.control.mode(geoData, {position: "topleft"}).addTo(geoData.map);
-	L.control.movepointmode(geoData, {position: "topleft"}).addTo(geoData.map);
+
+	let modes = [
+		{
+			id: "moveMap",
+			style: "fas fa-arrows-alt",
+			title: "Déplacer Carte",
+			alt: "Bouton : Déplacer Carte"
+		},
+		{
+			id: "movePoint",
+			style: "fas fa-hand-pointer",
+			title: "Déplacer Point",
+			alt: "Bouton : Déplacer Point"
+		},
+		{
+			id: "undo",
+			style: "fas fa-undo",
+			title: "Annuler",
+			alt: "Bouton : Annuler"
+		},
+		{
+			id: "redo",
+			style: "fas fa-redo",
+			title: "Désannuler",
+			alt: "Bouton : Désannuler"
+		},
+		{
+			id: "addPoint",
+			style: "fas fa-plus",
+			title: "Ajouter un point",
+			alt: "Bouton : Ajouter un point"
+		},
+		{
+			id: "deletePoint",
+			style: "fas fa-minus",
+			title: "Supprimer un point",
+			alt: "Bouton : Supprimer un point"
+		},
+		{
+			id: "link",
+			style: "fas fa-link",
+			title: "Lier",
+			alt: "Bouton : Lier"
+		},
+		{
+			id: "unlink",
+			style: "fas fa-unlink",
+			title: "Délier",
+			alt: "Bouton : Délier"
+		},
+		{
+			id: "reSample",
+			style: "fas fa-divide",
+			title: "Rééchantillonner",
+			alt: "Bouton : Rééchantillonner"
+		},
+		{
+			id: "print",
+			style: "fas fa-print",
+			title: "Imprimer",
+			alt: "Bouton : Imprimer"
+		},
+		{
+			id: "saveButton",
+			style: "fas fa-file-download",
+			title: "Télécharger",
+			alt: "Bouton : Télécharger"
+		},
+	];
+	modes.forEach(mode => {
+		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
+	});
 
 	return geoData;
 }
@@ -270,6 +340,8 @@ function setListeners(geoData) {
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
+
+	document.getElementById("print").addEventListener("click", () => window.print());
 
     /*document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
     document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
