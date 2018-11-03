@@ -343,14 +343,15 @@ function setListeners(geoData) {
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
+
 	document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
 	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+	document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
 
 	/*
-    document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
-    document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
     document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-    document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
