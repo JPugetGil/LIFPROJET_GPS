@@ -147,9 +147,12 @@ function generateMap(geoData) {
 			alt: "Bouton : Télécharger"
 		},
 	];
-	modes.forEach(mode => {
+	/*modes.forEach(mode => {
 		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
-	});
+		if (mode.id === "reSample") {
+			L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
+		}
+	});*/
 
 	return geoData;
 }
