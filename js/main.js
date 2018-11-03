@@ -350,10 +350,10 @@ function setListeners(geoData) {
 	document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
 	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
+	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 
 	/*
     document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 	*/
