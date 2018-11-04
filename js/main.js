@@ -244,7 +244,7 @@ function displayPath(geoData, index) {
 
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
-	geoData.layersControl.addBaseLayer(polyline, geoData.paths[index].file);
+	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	geoData.layersControl.addTo(geoData.map);
 	geoData.map.addLayer(polyline);
 
@@ -321,15 +321,10 @@ function deleteTrace(geoData, id) {
 		geoData.layers.splice(id, 1);
 		geoData.paths.splice(id, 1);
 		if (geoData.focus === id) {
-   			geoData.focus = geoData.paths.length -1;
-   			if (geoData.focus < 0) {
-   				geoData.focus = undefined;
-   			}
+			changeFocus(geoData);
 	   		movePOV(geoData);
-	   	} else {
-	   		if (geoData.focus > id) {
-	   			geoData.focus--;
-	   		}
+	   	} else if (geoData.focus > id) {
+	   		geoData.focus--;
 	   	}
 		setListenersUpdate(geoData);
 		if (geoData.paths.length === 0) {
@@ -365,7 +360,11 @@ function setListenersUpdate(geoData) {
 	// Files display
 	for (let i = 0; i < geoData.paths.length; i++) {
 		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
-			changeFocus(geoData);
+			if (e.target.checked) {
+				geoData.focus = getIndexFile(e.target);
+			} else {
+				changeFocus(geoData);
+			}
 			movePOV(geoData);
 		});
 		geoData.layersControl.getContainer().children[1][i].nextElementSibling.addEventListener("contextmenu", e => {
@@ -382,7 +381,7 @@ function getIndexFile(element) {
 	let parent = element.parentElement.parentElement.parentElement;
 	let i = 0;
 	while (index === undefined && i < parent.children.length) {
-		if (parent.children[i].children[0].children[1]._leaflet_id === element._leaflet_id) {
+		if (parent.children[i].children[0].children[0]._leaflet_id === element._leaflet_id) {
 			index = i;
 		}
 		i++;
