@@ -340,6 +340,10 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
+	// General
+	geoData.map.addEventListener("contextmenu", e => e.preventDefault());
+	document.querySelectorAll("#features button").forEach(button => button.addEventListener("contextmenu", e => e.preventDefault()));
+
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
