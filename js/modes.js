@@ -87,6 +87,10 @@ function addPointMode(geoData) {
 		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
 		console.log(marker.index);
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
+		let latlngs = geoData.layers[geoData.focus].getLatLngs();
+		let latlng = Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0);
+		latlngs.push(latlng);
+		geoData.layers[geoData.focus].setLatLngs(latlngs);
 		//generateFilesTab(geoData);
 		//geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		//displayPath(geoData, geoData.focus);
