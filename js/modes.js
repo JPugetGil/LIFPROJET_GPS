@@ -136,6 +136,7 @@ function linkMode(geoData) {
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
+
 }
 
 function unlinkMode(geoData) {

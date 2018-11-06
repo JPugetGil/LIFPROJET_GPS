@@ -76,7 +76,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
-	geoData.layersControl = L.control.layers(null, null);
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
 	L.control.scale({imperial: false}).addTo(geoData.map);
 
 	let modes = [
