@@ -5,7 +5,7 @@ createGeoData()
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 //.then(generateFilesTab)
-//.then(generateGraph)
+.then(generateGraph)
 .then(setListeners)
 .then(setListenersUpdate)
 .then(console.log)
@@ -57,6 +57,9 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
+document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 1/6) +"px");
+document.getElementById("graph").style.width= ($(document).width() * 2/3) +"px";
+document.getElementById("graph").style.zIndex=2;
 	return geoData;
 }
 
@@ -79,7 +82,7 @@ function generateMap(geoData) {
 	geoData.layersControl = L.control.layers(null, null);
 	L.control.scale({imperial: false}).addTo(geoData.map);
 
-	let modes = [
+	/*let modes = [
 		{
 			id: "moveMap",
 			style: "fas fa-arrows-alt",
@@ -147,7 +150,7 @@ function generateMap(geoData) {
 			alt: "Bouton : Télécharger"
 		},
 	];
-	/*modes.forEach(mode => {
+	modes.forEach(mode => {
 		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
 		//if (mode.id === "reSample") {
 		//	L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
@@ -283,7 +286,7 @@ function generateFilesTab(geoData) {
 	return geoData;
 }
 
-/*function generateGraph(geoData) {
+function generateGraph(geoData) {
 	let xs = {};
 	let cols = [];
 	geoData.paths.forEach(current => {
@@ -311,7 +314,7 @@ function generateFilesTab(geoData) {
 	});
 
 	return geoData;
-}*/
+}
 
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
