@@ -39,7 +39,7 @@ function createGeoData() {
 function generateIndex(geoData) {
 	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 	document.getElementById("mapid").style.zIndex=0;
-	document.getElementById("features").style.width= ($(document).width() * 1/25) +"px";
+	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
 	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-hand-pointer"></i></button>
 					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
