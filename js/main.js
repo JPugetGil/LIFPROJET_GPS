@@ -57,9 +57,11 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 1/6) +"px");
-document.getElementById("graph").style.width= ($(document).width() * 2/3) +"px";
-document.getElementById("graph").style.zIndex=2;
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
+	document.getElementById("graph").style.width= ($(document).width() * 2/3) +"px";
+	document.getElementById("graph").style.zIndex=2;
+	document.getElementById("chart").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
+	document.getElementById("chart").style.width= ($(document).width() * 2/3) +"px";
 	return geoData;
 }
 
@@ -207,7 +209,7 @@ function reSample(geoData, number){
 			}
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
-			//generateGraph(geoData);
+			generateGraph(geoData);
 
 		} else {
 			let w = new Worker("js/resample.js", {type:'module'});
@@ -216,7 +218,8 @@ function reSample(geoData, number){
 				w.terminate();
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
-				//generateGraph(geoData);
+
+				generateGraph(geoData);
 			}
 			w.postMessage(number);
 			w.postMessage(geoData.paths[geoData.focus]);

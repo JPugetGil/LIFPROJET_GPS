@@ -27,6 +27,13 @@ footer {
 	margin-bottom: 25%;
 }
 
+.form-group input {
+	padding  : .25rem .4rem;
+	font-size  : .875rem;
+	line-height  : .25;
+	border-radius : 1rem;
+}
+
 .btn-group-xs > .btn, .btn-xs {
     padding  : .25rem .4rem;
     font-size  : .875rem;
@@ -35,7 +42,7 @@ footer {
 }
 
 #graph {
-	background-color: rgba(255, 0, 0, 0.5);
+	background-color: rgba(114, 127, 140, 0.6);
 	position: absolute;
 	bottom: 5%;
 	left: 16.66%
@@ -53,11 +60,4 @@ button.btn.btncol:before
     content:'v';
     display:block;
     width:15px;
-}
-
-.form-group input {
-	padding  : .25rem .4rem;
-	font-size  : .875rem;
-	line-height  : .25;
-	border-radius : 1rem;
 }
