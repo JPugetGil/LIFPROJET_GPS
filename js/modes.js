@@ -164,9 +164,7 @@ function unlinkMode(geoData) {
 }
 
 function cutIn2(geoData, index) {
-	/*let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-	let secondPath = [];
-
+	let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 	let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, (coordinates.length - index));
     geoData.layers[geoData.focus].setLatLngs(latlngs);
@@ -177,22 +175,8 @@ function cutIn2(geoData, index) {
 	for (let i = index; i < coordinates.length ; i++) {
 		geoData.paths[indexNewPath].features[0].geometry.coordinates.push(coordinates[i]);
 	}
-	//geoData.paths[newFocus].features[0].geometry.coordinates = secondPath;
 	displayPath(geoData, indexNewPath, false);
 	deleteOldMarkers(geoData);
-	//geoData.focus = geoData.paths.length;
-	//console.log(geoData.focus);
-	//geoData.paths[geoData.focus] = geoData.paths[geoData.focus -1];
-	//console.log(secondPath);
-	//let polyline = L.polyline(secondPath);
-	//console.log(polyline);
-	//geoData.layers[geoData.focus] = polyline;
-	//geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	//let filename = geoData.paths[geoData.focus].file + "(2)";
-	//geoData.layersHistory[geoData.focus] = [];
-	//geoData.layersControl.addOverlay(polyline, filename);
-	//geoData.layersControl.addTo(geoData.map);
-	//geoData.map.addLayer(polyline);*/
 }
 
 function copyPath(geoData, oldPath) {
