@@ -18,7 +18,7 @@ footer {
 
 #features {
 	position: absolute;
-	top: 25%;
+	top: 10%;
 	right: 0.5%;
 }
 
@@ -30,7 +30,7 @@ footer {
 .btn-group-xs > .btn, .btn-xs {
     padding  : .25rem .4rem;
     font-size  : .875rem;
-    line-height  : .5;
+    line-height  : .75;
     border-radius : 1rem;
 }
 
@@ -53,4 +53,11 @@ button.btn.btncol:before
     content:'v';
     display:block;
     width:15px;
+}
+
+.form-group input {
+	padding  : .25rem .4rem;
+	font-size  : .875rem;
+	line-height  : .25;
+	border-radius : 1rem;
 }
