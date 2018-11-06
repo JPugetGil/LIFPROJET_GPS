@@ -136,6 +136,7 @@ function linkMode(geoData) {
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
+
 }
 
 function unlinkMode(geoData) {
@@ -146,4 +147,54 @@ function unlinkMode(geoData) {
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
+	geoData.map.on("contextmenu", e => {
+		deleteOldMarkers(geoData);
+		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
+		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+		points.forEach(point => {
+			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				index: point.index
+			})
+			.on('click', e => cutIn2(geoData, e.target.options.index));
+			geoData.tempMarkers.push(marker);
+			marker.addTo(geoData.map);
+		});
+	});
+}
+
+function cutIn2(geoData, index) {
+	let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+	let latlngs = geoData.layers[geoData.focus].getLatLngs();
+    latlngs.splice(index, (coordinates.length - index));
+    geoData.layers[geoData.focus].setLatLngs(latlngs);
+	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
+	let indexNewPath = geoData.paths.length;
+	geoData.paths[indexNewPath] = copyPath(geoData, geoData.paths[geoData.focus]);
+
+	for (let i = index; i < coordinates.length ; i++) {
+		geoData.paths[indexNewPath].features[0].geometry.coordinates.push(coordinates[i]);
+	}
+	displayPath(geoData, indexNewPath, false);
+	deleteOldMarkers(geoData);
+}
+
+function copyPath(geoData, oldPath) {
+	let newPath = {};
+	newPath.features = [];
+	newPath.features[0] = {};
+	newPath.features[0].type = oldPath.features[0].type;
+	newPath.features[0].geometry = {};
+	newPath.features[0].geometry.type = oldPath.features[0].geometry.type;
+	newPath.features[0].geometry.coordinates = [];
+	newPath.features[0].properties = {};
+	newPath.features[0].properties.time = oldPath.features[0].properties.time;
+	newPath.features[0].properties.coordTimes = [];
+	newPath.features[0].properties.heartRates = [];
+	newPath.features[0].properties.name = oldPath.features[0].properties.name
+	newPath.shown = oldPath.shown;
+	newPath.file = oldPath.file + "(" + geoData.paths.length + ")";
+	newPath.type = oldPath.type;
+
+	return newPath;
 }

@@ -79,7 +79,7 @@ function generateMap(geoData) {
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
 	}).addTo(geoData.map);
-	geoData.layersControl = L.control.layers(null, null);
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
 	L.control.scale({imperial: false}).addTo(geoData.map);
 
 	/*let modes = [
@@ -232,7 +232,7 @@ function keySample(geoData, keyCode) {
 	}
 }
 
-function displayPath(geoData, index) {
+function displayPath(geoData, index, display = true) {
 	let latlngs = [];
 	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
 		let point = [
@@ -248,10 +248,11 @@ function displayPath(geoData, index) {
 	geoData.layersHistory[index] = [];
 	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	geoData.layersControl.addTo(geoData.map);
-	geoData.map.addLayer(polyline);
-
-	removeFocusClass(geoData);
-	geoData.layersControl.getContainer().children[1][index].parentElement.classList.add("focus");
+	if(display){
+		geoData.map.addLayer(polyline);
+		removeFocusClass(geoData);
+		geoData.layersControl.getContainer().children[1][index].parentElement.classList.add("focus");
+	}
 
 	return geoData;
 }
@@ -356,7 +357,6 @@ function setListeners(geoData) {
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
-	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 
     return geoData;
 }
@@ -379,6 +379,8 @@ function setListenersUpdate(geoData) {
 			e.preventDefault();
 		});
 	}
+
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 
 	return geoData;
 }
