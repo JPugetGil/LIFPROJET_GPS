@@ -401,17 +401,14 @@ function getIndexFile(element) {
 // Change the focus to the file we clicked on
 // Param : geoData
 function changeFocus(geoData) {
-	let i = 0;
+	geoData.focus = undefined;
 	let form = geoData.layersControl.getContainer().children[1];
-	for (i; i < geoData.paths.length; i++) {
+	for (let i; i < geoData.paths.length; i++) {
 		form[i].parentElement.classList.remove("focus");
 		if (form[i].checked) {
 			geoData.focus = i;
 			form[i].parentElement.classList.add("focus");
 		}
-	}
-	if (i === geoData.paths.length) {
-		geoData.focus = undefined;
 	}
 }
 
