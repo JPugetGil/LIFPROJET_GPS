@@ -313,7 +313,6 @@ function generateGraph(geoData) {
 	        columns: cols
 	    }
 	});
-
 	return geoData;
 }
 
