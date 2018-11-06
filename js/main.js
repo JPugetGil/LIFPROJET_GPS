@@ -40,21 +40,21 @@ function generateIndex(geoData) {
 	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 	document.getElementById("mapid").style.zIndex=0;
 	document.getElementById("features").style.width= ($(document).width() * 1/25) +"px";
-	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
-					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-sm btn-block"><i class="fas fa-undo"></i></button>
-					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-sm btn-block"><i class="fas fa-redo"></i></button>
-					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-sm btn-block"><i class="fas fa-plus"></i></button>
-					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-sm btn-block"><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-sm btn-block"><i class="fas fa-link"></i></button>
-					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-sm btn-block"><i class="fas fa-unlink"></i></button>
+	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
+					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-hand-pointer"></i></button>
+					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
+					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
+					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
+					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-link"></i></button>
+					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
-					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-sm btn-block"><i class="fas fa-divide"></i></button>
+					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
-					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-sm btn-block"><i class="fas fa-print"></i></button>
-					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-sm btn-block"><i class="fas fa-file-download"></i></button>
+					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block"><i class="fas fa-print"></i></button>
+					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
 	return geoData;
@@ -149,9 +149,9 @@ function generateMap(geoData) {
 	];
 	/*modes.forEach(mode => {
 		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
-		if (mode.id === "reSample") {
-			L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
-		}
+		//if (mode.id === "reSample") {
+		//	L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
+		//}
 	});*/
 
 	return geoData;
