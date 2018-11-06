@@ -165,8 +165,7 @@ function addPath(geoData, file) {
 		geoData.paths[index] = toGeoJSON.gpx(gpx);
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
-		geoData.paths[index].markersAdded = [];
-		geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
+		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
         return geoData;
 	});

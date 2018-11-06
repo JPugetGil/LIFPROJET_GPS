@@ -16,7 +16,6 @@ function moveMapMode(geoData) {
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
-	//geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 // Mode where points can ba moved
@@ -79,13 +78,6 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		var trace = geoData.paths[geoData.focus];
-		/*var color = geoData.markersColor[geoData.focus % 6];
-		var marker = L.marker(e.latlng, {icon : color}).addTo(geoData.map);
-		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6));
-		//marker.setOpacity(0);
-		trace.markersAdded.push(marker);
-		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
-		console.log(marker.index);*/
 		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 		let latlngs = geoData.layers[geoData.focus].getLatLngs();
 		let latlng = Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0);
@@ -94,34 +86,7 @@ function addPointMode(geoData) {
 		//generateFilesTab(geoData);
 		//geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		//displayPath(geoData, geoData.focus);
-
-		/*marker.on("dragend", f => {
-			newLat = f.target.getLatLng().lat.toFixed(6);
-			newLng = f.target.getLatLng().lng.toFixed(6);
-			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
-			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
-			//generateFilesTab(geoData);
-			geoData.map.removeLayer(geoData.layers[geoData.focus]);
-			//displayPath(geoData, geoData.focus);
-		});
-
-		marker.on("click", () => {
-			if(geoData.mode === "deletepoint"){
-				geoData.map.removeLayer(marker);
-				console.log("Je prends " + (trace.features[0].geometry.coordinates.length-marker.index-1));
-				let nb = trace.features[0].geometry.coordinates.length-marker.index-1;
-				trace.features[0].geometry.coordinates.splice(marker.index,1);
-				trace.markersAdded.splice((marker.index-trace.features[0].geometry.coordinates.length-2), 1);
-				for(let i = 0; i < nb ; i++) {
-					trace.markersAdded[i].index--;
-				}
-				//generateFilesTab(geoData);
-				//geoData.map.removeLayer(geoData.layers[geoData.focus]);
-				//displayPath(geoData, geoData.focus);
-			}
-		});*/
 	});
-	//geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function deletePointMode(geoData) {
@@ -132,7 +97,6 @@ function deletePointMode(geoData) {
 	geoData.mode = "deletepoint";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
-	//geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
@@ -172,7 +136,6 @@ function linkMode(geoData) {
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-	//geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
 
 function unlinkMode(geoData) {
@@ -183,5 +146,4 @@ function unlinkMode(geoData) {
 	geoData.mode = "unlink";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-	//geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
 }
