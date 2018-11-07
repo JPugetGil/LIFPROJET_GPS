@@ -301,8 +301,8 @@ function generateGraph(geoData) {
 				xs: event.data[0],
 				columns: event.data[1]
 			},
-			zoom: {
-        enabled: true
+			subchart: {
+        show: true
     	}
 		});
 	}
