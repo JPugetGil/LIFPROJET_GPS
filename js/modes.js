@@ -177,6 +177,7 @@ function cutIn2(geoData, index) {
 	removeFocusClass(geoData);
 	geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
 	deleteOldMarkers(geoData);
+	setListenersUpdate(geoData);
 }
 
 function copyPath(geoData, oldPath) {

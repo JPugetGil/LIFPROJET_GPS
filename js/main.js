@@ -410,12 +410,16 @@ function getIndexFile(element) {
 function changeFocus(geoData) {
 	geoData.focus = undefined;
 	let form = geoData.layersControl.getContainer().children[1];
-	for (let i; i < geoData.paths.length; i++) {
+	for (let i = 0; i < geoData.paths.length; i++) {
 		form[i].parentElement.classList.remove("focus");
 		if (form[i].checked) {
 			geoData.focus = i;
 			form[i].parentElement.classList.add("focus");
 		}
+	}
+	removeFocusClass(geoData);
+	if (geoData.focus !=== undefined) {
+		geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
 	}
 }
 
