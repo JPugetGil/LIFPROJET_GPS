@@ -302,22 +302,22 @@ function generateGraph(geoData) {
 				columns: event.data[1]
 			},
 			subchart: {
-        show: true
-    	},
+	        	show: true
+	    	},
 			axis: {
-        x: {
-            label: {
-                text: 'Point n°',
-                position: 'outer-center'
-            }
-        },
-        y: {
-            label: {
-                text: 'Altitude',
-                position: 'outer-middle'
-            }
-        }
-    }
+		        x: {
+		            label: {
+		                text: 'Point n°',
+		                position: 'outer-center'
+		            }
+		        },
+		        y: {
+		            label: {
+		                text: 'Altitude',
+		                position: 'outer-middle'
+		            }
+		        }
+			}
 		});
 	}
 	w2.postMessage(geoData.paths);
