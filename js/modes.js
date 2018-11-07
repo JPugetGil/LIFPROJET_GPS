@@ -69,7 +69,7 @@ function dragEndHandler(geoData) {
 }
 
 function addPointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -129,7 +129,7 @@ function removePoint(geoData, markerIndex, index) {
 }
 
 function linkMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -140,7 +140,7 @@ function linkMode(geoData) {
 }
 
 function unlinkMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);

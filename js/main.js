@@ -418,7 +418,7 @@ function changeFocus(geoData) {
 		}
 	}
 	removeFocusClass(geoData);
-	if (geoData.focus !=== undefined) {
+	if (geoData.focus !== undefined) {
 		geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
 	}
 }
