@@ -174,6 +174,8 @@ function cutIn2(geoData, index) {
 	geoData.paths[indexNewPath].features[0].geometry.coordinates = coordinates.slice(index);
 
 	displayPath(geoData, indexNewPath, false);
+	removeFocusClass(geoData);
+	geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
 	deleteOldMarkers(geoData);
 }
 
