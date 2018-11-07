@@ -67,6 +67,7 @@ function generateIndex(geoData) {
 
 					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-file-download"></i></button>
+					<button type="button" id="speed" alt="Vitesse Calcul" title="Calculer les vitesse" class="btn btn-secondary btn-sm btn-block">VITESSE</button>
 				</div>
 			</div>
 
@@ -357,18 +358,19 @@ function deleteTrace(geoData, id) {
 
 
 function setListeners(geoData) {
-    document.getElementById("importButton").addEventListener("click", upload(geoData));
-    document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
-    document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
-    document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-    document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
-    document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
-    document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
+  document.getElementById("importButton").addEventListener("click", upload(geoData));
+  document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+  document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+  document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
+  document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
+  document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
+  document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
 	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
+	document.getElementById("speed").addEventListener("click", () => getSpeedTab(geoData));
 
     return geoData;
 }
@@ -594,4 +596,13 @@ function changeFocus(geoData, e) {
 function createHistory(geoData, index) {
 	geoData.pathsHistory[index].paths.push(geoData.paths[index]);
 	geoData.layersHistory[index].layers.push(geoData.layers[index]);
+}
+
+function getSpeedTab(geoData) {
+	let shortcut = geoData.paths[geoData.focus].features[0];
+	let speedTab = [];
+	for (let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length-1; i++){
+		speedTab.push(DistanceBetween2Points(shortcut.geometry.coordinates[i],shortcut.geometry.coordinates[i+1])/(shortcut.properties.coordTimes[i+1]-shortcut.properties.coordTimes[i]));
+	}
+	console.log(speedTab);
 }
