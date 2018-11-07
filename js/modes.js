@@ -171,10 +171,8 @@ function cutIn2(geoData, index) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	let indexNewPath = geoData.paths.length;
 	geoData.paths[indexNewPath] = copyPath(geoData, geoData.paths[geoData.focus]);
+	geoData.paths[indexNewPath].features[0].geometry.coordinates = coordinates.slice(index);
 
-	for (let i = index; i < coordinates.length ; i++) {
-		geoData.paths[indexNewPath].features[0].geometry.coordinates.push(coordinates[i]);
-	}
 	displayPath(geoData, indexNewPath, false);
 	deleteOldMarkers(geoData);
 }
