@@ -42,10 +42,10 @@ footer {
 }
 
 #graph {
-	background-color: rgba(114, 127, 140, 0.6);
+	background-color: rgba(192, 192, 192, 0.8);
 	position: absolute;
 	bottom: 5%;
-	left: 16.66%;
+	border: solid 1px;
 }
 
 button.btn.btncol.collapsed:before

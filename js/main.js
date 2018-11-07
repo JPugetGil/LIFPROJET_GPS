@@ -58,10 +58,10 @@ function generateIndex(geoData) {
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
 	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
-	document.getElementById("graph").style.width= ($(document).width() * 2/3) +"px";
+	document.getElementById("graph").style.width= "100%";
 	document.getElementById("graph").style.zIndex=2;
 	document.getElementById("chart").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
-	document.getElementById("chart").style.width= ($(document).width() * 2/3) +"px";
+	document.getElementById("chart").style.width= "100%";
 	return geoData;
 }
 
