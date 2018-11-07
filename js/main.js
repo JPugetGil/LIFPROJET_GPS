@@ -303,7 +303,21 @@ function generateGraph(geoData) {
 			},
 			subchart: {
         show: true
-    	}
+    	},
+			axis: {
+        x: {
+            label: {
+                text: 'Point n°',
+                position: 'outer-center'
+            }
+        },
+        y: {
+            label: {
+                text: 'Altitude',
+                position: 'outer-middle'
+            }
+        }
+    }
 		});
 	}
 	w2.postMessage(geoData.paths);
