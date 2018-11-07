@@ -216,6 +216,7 @@ function reSample(geoData, number){
 			w.onmessage = event => {
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
+				w = undefined;
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
 
@@ -291,31 +292,21 @@ function generateFilesTab(geoData) {
 }
 
 function generateGraph(geoData) {
-	let xs = {};
-	let cols = [];
-	geoData.paths.forEach(current => {
-		if (current.shown) {
-			let file = current.file;
-			let x = "x" + file;
-			xs[file] = x;
-
-			let abscisse = [x];
-			let ordonnee = [file];
-			for (let i = 0; i < current.features[0].geometry.coordinates.length ; i++) {
-				abscisse.push(i+1);
-				ordonnee.push(current.features[0].geometry.coordinates[i][2]);
-			}
-
-			cols.push(abscisse);
-			cols.push(ordonnee);
-		}
-	});
-	c3.generate({
-	    data: {
-	        xs: xs,
-	        columns: cols
-	    }
-	});
+	let w2 = new Worker("js/chart.js", {type:'module'});
+	w2.onmessage = event => {
+		w2.terminate();
+		w2 = undefined;
+		c3.generate({
+			data: {
+				xs: event.data[0],
+				columns: event.data[1]
+			},
+			zoom: {
+        enabled: true
+    	}
+		});
+	}
+	w2.postMessage(geoData.paths);
 	return geoData;
 }
 
