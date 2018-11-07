@@ -120,3 +120,13 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 	});
 	return points;
 }
+
+function differenceBetween2coordTimes(coordT1, coordT2){
+	coordT1 = coordT1.substring(0, coordT1.length-1);
+	coordT2 = coordT2.substring(0, coordT2.length-1);
+	console.log(coordT1);
+	console.log(coordT2);
+	let resT1= new Date(coordT1);
+	let resT2= new Date(coordT2);
+	console.log(resT2-resT1);
+}
