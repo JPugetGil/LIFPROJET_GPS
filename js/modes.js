@@ -32,19 +32,23 @@ function movePointMode(geoData) {
 
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
-		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
-		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		points.forEach(point => {
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
-				draggable: true,
-				index: point.index
-			})
-			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
-			.on('dragend', e => dragEndHandler(geoData));
-			geoData.tempMarkers.push(marker);
-			marker.addTo(geoData.map);
-		});
+		if (geoData.focus !== undefined) {
+			let interval = 0.001; // Coordinates interval, to decide the range of points we handle
+			let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+			let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+			points.forEach(point => {
+				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+					draggable: true,
+					index: point.index
+				})
+				.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
+				.on('dragend', e => dragEndHandler(geoData));
+				geoData.tempMarkers.push(marker);
+				marker.addTo(geoData.map);
+			});
+		} else {
+			alert("Vous devez avoir une trace sélectionnée pour pouvoir déplacer ses points.");
+		}
 	});
 }
 
@@ -77,15 +81,19 @@ function addPointMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
-		var trace = geoData.paths[geoData.focus];
-		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		let latlngs = geoData.layers[geoData.focus].getLatLngs();
-		let latlng = Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0);
-		latlngs.push(latlng);
-		geoData.layers[geoData.focus].setLatLngs(latlngs);
-		//generateFilesTab(geoData);
-		//geoData.map.removeLayer(geoData.layers[geoData.focus]);
-		//displayPath(geoData, geoData.focus);
+		if (geoData.focus !== undefined) {
+			var trace = geoData.paths[geoData.focus];
+			trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
+			let latlngs = geoData.layers[geoData.focus].getLatLngs();
+			let latlng = Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0);
+			latlngs.push(latlng);
+			geoData.layers[geoData.focus].setLatLngs(latlngs);
+			//generateFilesTab(geoData);
+			//geoData.map.removeLayer(geoData.layers[geoData.focus]);
+			//displayPath(geoData, geoData.focus);
+		} else {
+			alert("Vous devez avoir une trace sélectionnée pour pouvoir y ajouter des points.");
+		}
 	});
 }
 
@@ -100,18 +108,22 @@ function deletePointMode(geoData) {
 
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
-		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
-		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		points.forEach(point => {
-			let markerIndex = geoData.tempMarkers.length;
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
-				index: point.index
-			})
-			.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
-			geoData.tempMarkers.push(marker);
-			marker.addTo(geoData.map);
-		});
+		if (geoData.focus !== undefined) {
+			let interval = 0.001; // Coordinates interval, to decide the range of points we handle
+			let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+			let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+			points.forEach(point => {
+				let markerIndex = geoData.tempMarkers.length;
+				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+					index: point.index
+				})
+				.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
+				geoData.tempMarkers.push(marker);
+				marker.addTo(geoData.map);
+			});
+		} else {
+			alert("Vous devez avoir une trace sélectionnée pour pouvoir supprimer des points.");
+		}
 	});
 }
 
@@ -159,17 +171,21 @@ function unlinkMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
-		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
-		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		points.forEach(point => {
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
-				index: point.index
-			})
-			.on('click', e => cutIn2(geoData, e.target.options.index));
-			geoData.tempMarkers.push(marker);
-			marker.addTo(geoData.map);
-		});
+		if (geoData.focus !== undefined) {
+			let interval = 0.001; // Coordinates interval, to decide the range of points we handle
+			let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
+			let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
+			points.forEach(point => {
+				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+					index: point.index
+				})
+				.on('click', e => cutIn2(geoData, e.target.options.index));
+				geoData.tempMarkers.push(marker);
+				marker.addTo(geoData.map);
+			});
+		} else {
+			alert("Vous devez avoir une trace sélectionnée pour pouvoir la couper.");
+		}
 	});
 }
 
