@@ -182,6 +182,8 @@ function cutIn2(geoData, index) {
 	let indexNewPath = geoData.paths.length;
 	geoData.paths[indexNewPath] = copyAttrPath(geoData, geoData.paths[geoData.focus]);
 	geoData.paths[indexNewPath].features[0].geometry.coordinates = coordinates.slice(index);
+	geoData.paths[indexNewPath].features[0].properties.coordTimes = geoData.paths[geoData.focus].features[0].properties.coordTimes.slice(index);
+	geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
 
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
