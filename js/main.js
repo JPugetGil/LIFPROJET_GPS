@@ -283,9 +283,9 @@ function generateFilesTab(geoData) {
 			</tr>`;
 	});
 
-	if (geoData.focus !== undefined) {
+	/*if (geoData.focus !== undefined) {
 		document.getElementById("row" + geoData.focus).classList.add("focus");
-	}
+	}*/
 
 	return geoData;
 }
@@ -333,7 +333,8 @@ function deleteTrace(geoData, id) {
 		geoData.layers.splice(id, 1);
 		geoData.paths.splice(id, 1);
 		if (geoData.focus === id) {
-			changeFocus(geoData);
+			resetFocus(geoData);
+			setFocusClass(geoData);
 	   		movePOV(geoData);
 	   	} else if (geoData.focus > id) {
 	   		geoData.focus--;
@@ -373,10 +374,10 @@ function setListenersUpdate(geoData) {
 		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
 			if (e.target.checked) {
 				geoData.focus = getIndexFile(e.target);
-				setFocusClass(geoData);
 			} else {
-				changeFocus(geoData);
+				resetFocus(geoData);
 			}
+			setFocusClass(geoData);
 			movePOV(geoData);
 		});
 		geoData.layersControl.getContainer().children[1][i].nextElementSibling.addEventListener("contextmenu", e => {
@@ -403,19 +404,18 @@ function getIndexFile(element) {
 	return index;
 }
 
-// Change the focus to the file we clicked on
+// Change geoData.focus to the first checked file
 // Param : geoData
-function changeFocus(geoData) {
+function resetFocus(geoData) {
 	geoData.focus = undefined;
 	let form = geoData.layersControl.getContainer().children[1];
-	for (let i = 0; i < geoData.paths.length; i++) {
-		form[i].parentElement.classList.remove("focus");
+	let i = 0;
+	while(geoData.focus === undefined && i < geoData.paths.length) {
 		if (form[i].checked) {
 			geoData.focus = i;
-			form[i].parentElement.classList.add("focus");
 		}
+		i++;
 	}
-	setFocusClass(geoData);
 }
 
 function setFocusClass(geoData) {
