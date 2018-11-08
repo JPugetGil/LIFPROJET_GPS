@@ -28,7 +28,6 @@ function createGeoData() {
 			markersColor: [],
 			tempMarkers: [],
 			focus: undefined,
-            page: undefined,
             mode: "movemap"
 		};
 		resolve(geoData);
