@@ -4,7 +4,7 @@ self.onmessage = event => {
 	let xs = {};
 	let cols = [];
 	event.data.forEach(current => {
-		if (current.shown) {
+		/*if (current.shown) {
 			let file = current.file;
 			let x = "x" + file;
 			xs[file] = x;
@@ -18,7 +18,7 @@ self.onmessage = event => {
 
 			cols.push(abscisse);
 			cols.push(ordonnee);
-		}
+		}*/
 	});
   self.postMessage([xs,cols]);
 }
