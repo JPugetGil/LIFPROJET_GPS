@@ -141,6 +141,14 @@ function linkMode(geoData) {
 	}
 }
 
+function fusion(geoData, trace1, trace2){
+	let traceBorn = copyAttrPath(geoData, trace1);
+	traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
+	traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
+	traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+	return traceBorn;
+}
+
 function unlinkMode(geoData) {
 	geoData.map.dragging.enable();
 	geoData.map.off("click");
@@ -172,16 +180,17 @@ function cutIn2(geoData, index) {
     geoData.layers[geoData.focus].setLatLngs(latlngs);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	let indexNewPath = geoData.paths.length;
-	geoData.paths[indexNewPath] = copyPath(geoData, geoData.paths[geoData.focus]);
+	geoData.paths[indexNewPath] = copyAttrPath(geoData, geoData.paths[geoData.focus]);
 	geoData.paths[indexNewPath].features[0].geometry.coordinates = coordinates.slice(index);
 
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
+	fusion(geoData, geoData.paths[0], geoData.paths[1]);
 }
 
-function copyPath(geoData, oldPath) {
+function copyAttrPath(geoData, oldPath) {
 	let newPath = {};
 	newPath.features = [];
 	newPath.features[0] = {};
