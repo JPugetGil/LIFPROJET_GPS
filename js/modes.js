@@ -189,7 +189,6 @@ function cutIn2(geoData, index) {
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
-	fusion(geoData, geoData.paths[0], geoData.paths[1]);
 }
 
 function copyAttrPath(geoData, oldPath) {
