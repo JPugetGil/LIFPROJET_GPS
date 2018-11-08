@@ -136,7 +136,9 @@ function linkMode(geoData) {
 	geoData.mode = "link";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-
+	if (geoData.paths.length < 2){
+		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
+	}
 }
 
 function unlinkMode(geoData) {
