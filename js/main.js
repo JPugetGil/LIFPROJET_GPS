@@ -328,6 +328,7 @@ function generateGraph(geoData) {
 // Return : none
 function deleteTrace(geoData, id) {
 	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+		console.log(id);
 		geoData.layersControl.removeLayer(geoData.layers[id]);
 		geoData.map.removeLayer(geoData.layers[id]);
 		geoData.layers.splice(id, 1);
@@ -396,7 +397,7 @@ function getIndexFile(element) {
 	let parent = element.parentElement.parentElement.parentElement;
 	let i = 0;
 	while (index === undefined && i < parent.children.length) {
-		if (parent.children[i].children[0].children[0]._leaflet_id === element._leaflet_id) {
+		if (parent.children[i].children[0].children[1]._leaflet_id === element._leaflet_id) {
 			index = i;
 		}
 		i++;
