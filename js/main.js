@@ -254,8 +254,7 @@ function displayPath(geoData, index, display = true) {
 	geoData.layersControl.addTo(geoData.map);
 	if(display){
 		geoData.map.addLayer(polyline);
-		removeFocusClass(geoData);
-		geoData.layersControl.getContainer().children[1][index].parentElement.classList.add("focus");
+		setFocusClass(geoData);
 	}
 
 	return geoData;
@@ -374,8 +373,7 @@ function setListenersUpdate(geoData) {
 		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
 			if (e.target.checked) {
 				geoData.focus = getIndexFile(e.target);
-				removeFocusClass(geoData);
-				e.target.parentElement.classList.add("focus");
+				setFocusClass(geoData);
 			} else {
 				changeFocus(geoData);
 			}
@@ -417,16 +415,16 @@ function changeFocus(geoData) {
 			form[i].parentElement.classList.add("focus");
 		}
 	}
-	removeFocusClass(geoData);
-	if (geoData.focus !== undefined) {
-		geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
-	}
+	setFocusClass(geoData);
 }
 
-function removeFocusClass(geoData) {
+function setFocusClass(geoData) {
 	let form = geoData.layersControl.getContainer().children[1];
 	for (let i = 0; i < geoData.paths.length; i++) {
 		form[i].parentElement.classList.remove("focus");
+	}
+	if (geoData.focus !== undefined) {
+		form[geoData.focus].parentElement.classList.add("focus");
 	}
 }
 
