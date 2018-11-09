@@ -261,6 +261,7 @@ function deleteTrace(geoData, id) {
 function setListeners(geoData) {
 	// General
 	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
+	document.getElementById("tutorialButton").addEventListener("click", evt => launchTutorial(geoData));
 
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
