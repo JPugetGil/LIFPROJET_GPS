@@ -229,7 +229,10 @@ function generateGraph(geoData) {
             data: event.data[1],
             options: {
 								backgroundGridDashed: true,
-								tooltips: event.data[0],
+								tooltips: function () {
+									console.log("MODIFIER POUR AFFICHER SUR LA CARTE LE POINT SURVOLE");
+									console.log(this);
+								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
                 noyaxis: true,
@@ -244,6 +247,7 @@ function generateGraph(geoData) {
             options: {
                 max: line.max,
                 colors: ['black'],
+								unitsPost: 'm',
                 textAccessible: true
             }
         }).draw();
