@@ -46,7 +46,7 @@ function generateIndex(geoData) {
 					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
 					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
 					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-link"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-toggle="modal" data-target="#modalLink"><i class="fas fa-link"></i></button>
 					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">

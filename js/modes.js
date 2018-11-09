@@ -152,7 +152,46 @@ function linkMode(geoData) {
 		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
 	}
 	else {
-
+		document.getElementById("workPlan").innerHTML += 
+			`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ 				<div class="modal-dialog" role="document">
+    				<div class="modal-content">
+      					<div class="modal-header">
+      						<h4 class="modal-title">Lier</h4>
+        					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      					</div>
+      					<div class="modal-body">
+        					<p>Choississez les deux traces à lier :<p>
+        					<form>
+        						<div class="row">
+	        						<div class="col-6">
+	        							<label for="trace1">Première trace : </label>
+	        							<select name="Trace1" size=1>
+	        							</select>
+	        							<div>
+	        								<input type="radio" id="start1" name="firstTrace" value="d">Début</input>
+	        								<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
+	        							</div>
+	        						</div>
+	        						<div class="col-6">
+	        							<label for="trace2">Deuxième trace : </label>
+	        							<select name="Trace2" size=1>
+	        							</select>
+	        							<div>
+	        								<input type="radio" id="start2" name="secondTrace" value="d" checked>Début</input>
+	        								<input type="radio" id="end2" name="secondTrace" value="f">Fin</input>
+	        							</div>
+	        						</div>
+        						</div>
+        					</form>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        					<button type="button" class="btn btn-primary">Soumettre</button>
+     					</div>
+    				</div>
+  				</div>
+			</div>`;
 	}
 }
 
