@@ -1,6 +1,7 @@
 createGeoData()
 .then(generateIndex)
 .then(generateMap)
+.then(generateTiles)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
@@ -72,91 +73,21 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
+	L.control.scale({imperial: false}).addTo(geoData.map);
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	return geoData;
+}
+
+function generateTiles(geoData) {
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
-	}).addTo(geoData.map);
-	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
-	L.control.scale({imperial: false}).addTo(geoData.map);
-
-	/*let modes = [
-		{
-			id: "moveMap",
-			style: "fas fa-arrows-alt",
-			title: "Déplacer Carte",
-			alt: "Bouton : Déplacer Carte"
-		},
-		{
-			id: "movePoint",
-			style: "fas fa-hand-pointer",
-			title: "Déplacer Point",
-			alt: "Bouton : Déplacer Point"
-		},
-		{
-			id: "undo",
-			style: "fas fa-undo",
-			title: "Annuler",
-			alt: "Bouton : Annuler"
-		},
-		{
-			id: "redo",
-			style: "fas fa-redo",
-			title: "Désannuler",
-			alt: "Bouton : Désannuler"
-		},
-		{
-			id: "addPoint",
-			style: "fas fa-plus",
-			title: "Ajouter un point",
-			alt: "Bouton : Ajouter un point"
-		},
-		{
-			id: "deletePoint",
-			style: "fas fa-minus",
-			title: "Supprimer un point",
-			alt: "Bouton : Supprimer un point"
-		},
-		{
-			id: "link",
-			style: "fas fa-link",
-			title: "Lier",
-			alt: "Bouton : Lier"
-		},
-		{
-			id: "unlink",
-			style: "fas fa-unlink",
-			title: "Délier",
-			alt: "Bouton : Délier"
-		},
-		{
-			id: "reSample",
-			style: "fas fa-divide",
-			title: "Rééchantillonner",
-			alt: "Bouton : Rééchantillonner"
-		},
-		{
-			id: "print",
-			style: "fas fa-print",
-			title: "Imprimer",
-			alt: "Bouton : Imprimer"
-		},
-		{
-			id: "saveButton",
-			style: "fas fa-file-download",
-			title: "Télécharger",
-			alt: "Bouton : Télécharger"
-		},
-	];
-	modes.forEach(mode => {
-		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
-		//if (mode.id === "reSample") {
-		//	L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
-		//}
-	});*/
+	}).addTo(geoData.map), "Epurée");
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}), "Détaillée");
 
 	return geoData;
 }
