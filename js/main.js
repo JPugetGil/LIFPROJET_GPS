@@ -37,9 +37,7 @@ function createGeoData() {
 }
 
 function generateIndex(geoData) {
-	document.getElementById("header").setAttribute("style","height:"+ ($(document).height() * 10/100) +"px");
-	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 84/100) +"px");
-	document.getElementById("footer").setAttribute("style","height:"+ ($(document).height() * 6/100) +"px");
+	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 	document.getElementById("mapid").style.zIndex=0;
 	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
 	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
@@ -48,7 +46,7 @@ function generateIndex(geoData) {
 					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
 					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
 					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-link"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-toggle="modal" data-target="#modalLink"><i class="fas fa-link"></i></button>
 					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
@@ -278,6 +276,7 @@ function deleteTrace(geoData, id) {
 function setListeners(geoData) {
 	// General
 	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
+	document.getElementById("tutorialButton").addEventListener("click", evt => launchTutorial(geoData));
 
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));

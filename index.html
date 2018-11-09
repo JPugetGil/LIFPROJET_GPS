@@ -20,18 +20,18 @@
 	</head>
 
 	<body>
-		<div id="header" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark border-bottom shadow-sm">
+		<div class="row-2 d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark border-bottom shadow-sm">
 		  <h5 class="my-0 mr-md-auto font-weight-normal text-light"><a class="p-2 text-white" href="index.html">Improve my GPX</a></h5>
 		  <nav class="my-2 my-md-0 mr-md-3">
 				<input type="file" id="hiddenButton"/>
 				<input type="button" id="importButton" class="btn btn-outline-success" value="Importer"/>
 	            <a id="descriptionButton" type="button" class="btn btn-outline-warning" href="html/description.html" target="_blank">Description</a>
 				<a type="button" id="aboutButton" class="btn btn-outline-info" href="html/apropos.html" target="_blank">A Propos</a>
-				<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger" onClick="launchTutorial()">Tutoriel</button>
+				<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger">Tutoriel</button>
 				<button type="button" id="helpButton" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onclick="help();">Besoin d'aide ?</button>
 		  </nav>
 	  	</div>
-		<div id="workPlan">
+		<div id="workPlan" class="row-10">
 			<div id="mapid"></div>
 			<div id="features"></div>
 			<div class="collapse show" id="toHide">
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 
-		<footer id="footer" class="footer">
+		<footer class="footer row-1">
 			<div class="d-flex flex-column flex-md-row align-items-center px-md-4 border-bottom shadow-sm bg-secondary">
 				<h5 class="my-0 mr-md-auto font-weight-normal text-light">Visualisation et Edition de traces GPS sur le WEB</h5>
 				<button class="my-1 mr-md-auto btncol btn btn-dark btn-xs" data-toggle="collapse" data-target="#toHide" title="Collapse Graph"></button>

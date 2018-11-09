@@ -151,13 +151,75 @@ function linkMode(geoData) {
 	if (geoData.paths.length < 2){
 		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
 	}
+	else {
+		document.getElementById("workPlan").innerHTML += 
+			`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ 				<div class="modal-dialog" role="document">
+    				<div class="modal-content">
+      					<div class="modal-header">
+      						<h4 class="modal-title">Lier</h4>
+        					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      					</div>
+      					<div class="modal-body">
+        					<p>Choississez les deux traces à lier :<p>
+        					<form>
+        						<div class="row">
+	        						<div class="col-6">
+	        							<label for="trace1">Première trace : </label>
+	        							<select name="Trace1" size=1>
+	        							</select>
+	        							<div>
+	        								<input type="radio" id="start1" name="firstTrace" value="d">Début</input>
+	        								<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
+	        							</div>
+	        						</div>
+	        						<div class="col-6">
+	        							<label for="trace2">Deuxième trace : </label>
+	        							<select name="Trace2" size=1>
+	        							</select>
+	        							<div>
+	        								<input type="radio" id="start2" name="secondTrace" value="d" checked>Début</input>
+	        								<input type="radio" id="end2" name="secondTrace" value="f">Fin</input>
+	        							</div>
+	        						</div>
+        						</div>
+        					</form>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        					<button type="button" class="btn btn-primary">Soumettre</button>
+     					</div>
+    				</div>
+  				</div>
+			</div>`;
+	}
 }
 
-function fusion(geoData, trace1, trace2){
+function fusion(geoData, trace1, trace2, mode){
 	let traceBorn = copyAttrPath(geoData, trace1);
-	traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
-	traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
-	traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+	switch(mode) {
+		case "fd":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+			break;
+		case "ff":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+			break;
+		case "dd":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0));
+			break;
+		case "df":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+			break;
+	}
+	console.log(traceBorn);
 	return traceBorn;
 }
 
