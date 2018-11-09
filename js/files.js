@@ -26,15 +26,19 @@ function hiddenUpload(geoData) {
 // Open a window enabling the user to download a .gpx file
 // Return : none
 function giveUserGpx(geoData) {
-	let geoJS = geoData.paths[geoData.focus];
-	let xml = geoJsonToXml(geoJS);
+	if (geoData.focus !== undefined) {
+		let geoJS = geoData.paths[geoData.focus];
+		let xml = geoJsonToXml(geoJS);
 
-	let filename = "export.gpx";
-	let element = document.createElement('a');
-	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
-	element.setAttribute('download', filename);
-	element.style.display = 'none';
-	document.body.appendChild(element);
-	element.click();
-	document.body.removeChild(element);
+		let filename = "export.gpx";
+		let element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
+		element.setAttribute('download', filename);
+		element.style.display = 'none';
+		document.body.appendChild(element);
+		element.click();
+		document.body.removeChild(element);
+	} else {
+		alert("Vous devez avoir une trace sélectionnée pour pouvoir l'exporter.");
+	}
 }

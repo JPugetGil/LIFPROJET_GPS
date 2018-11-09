@@ -1,6 +1,7 @@
 createGeoData()
 .then(generateIndex)
 .then(generateMap)
+.then(generateTiles)
 .then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
@@ -28,7 +29,6 @@ function createGeoData() {
 			markersColor: [],
 			tempMarkers: [],
 			focus: undefined,
-            page: undefined,
             mode: "movemap"
 		};
 		resolve(geoData);
@@ -73,92 +73,23 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
+	L.control.scale({imperial: false}).addTo(geoData.map);
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	return geoData;
+}
+
+function generateTiles(geoData) {
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
-	}).addTo(geoData.map);
-	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
-	L.control.scale({imperial: false}).addTo(geoData.map);
-
-	/*let modes = [
-		{
-			id: "moveMap",
-			style: "fas fa-arrows-alt",
-			title: "Déplacer Carte",
-			alt: "Bouton : Déplacer Carte"
-		},
-		{
-			id: "movePoint",
-			style: "fas fa-hand-pointer",
-			title: "Déplacer Point",
-			alt: "Bouton : Déplacer Point"
-		},
-		{
-			id: "undo",
-			style: "fas fa-undo",
-			title: "Annuler",
-			alt: "Bouton : Annuler"
-		},
-		{
-			id: "redo",
-			style: "fas fa-redo",
-			title: "Désannuler",
-			alt: "Bouton : Désannuler"
-		},
-		{
-			id: "addPoint",
-			style: "fas fa-plus",
-			title: "Ajouter un point",
-			alt: "Bouton : Ajouter un point"
-		},
-		{
-			id: "deletePoint",
-			style: "fas fa-minus",
-			title: "Supprimer un point",
-			alt: "Bouton : Supprimer un point"
-		},
-		{
-			id: "link",
-			style: "fas fa-link",
-			title: "Lier",
-			alt: "Bouton : Lier"
-		},
-		{
-			id: "unlink",
-			style: "fas fa-unlink",
-			title: "Délier",
-			alt: "Bouton : Délier"
-		},
-		{
-			id: "reSample",
-			style: "fas fa-divide",
-			title: "Rééchantillonner",
-			alt: "Bouton : Rééchantillonner"
-		},
-		{
-			id: "print",
-			style: "fas fa-print",
-			title: "Imprimer",
-			alt: "Bouton : Imprimer"
-		},
-		{
-			id: "saveButton",
-			style: "fas fa-file-download",
-			title: "Télécharger",
-			alt: "Bouton : Télécharger"
-		},
-	];
-	modes.forEach(mode => {
-		L.control.mode(mode.id, mode.style, mode.title, mode.alt, {position: "topleft"}).addTo(geoData.map);
-		//if (mode.id === "reSample") {
-		//	L.control.textinput("samplingFactor", "Insérez", {position: "topleft"}).addTo(geoData.map);
-		//}
-	});*/
-
+	}).addTo(geoData.map), "Epurée");
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}), "Détaillée");
+	geoData.layersControl.addBaseLayer(L.tileLayer(' http://{s}.tile.openstreetmap.fr/openriverboatmap/{z}/{x}/{y}.png'), "OpenRiverboatMap");
+	
 	return geoData;
 }
 
@@ -251,11 +182,9 @@ function displayPath(geoData, index, display = true) {
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
 	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
-	geoData.layersControl.addTo(geoData.map);
 	if(display){
 		geoData.map.addLayer(polyline);
-		removeFocusClass(geoData);
-		geoData.layersControl.getContainer().children[1][index].parentElement.classList.add("focus");
+		setFocusClass(geoData);
 	}
 
 	return geoData;
@@ -283,10 +212,6 @@ function generateFilesTab(geoData) {
 				<td><button id="suppr${index}" class="btn btn-danger" type="button">X</button></td>
 			</tr>`;
 	});
-
-	if (geoData.focus !== undefined) {
-		document.getElementById("row" + geoData.focus).classList.add("focus");
-	}
 
 	return geoData;
 }
@@ -322,15 +247,13 @@ function deleteTrace(geoData, id) {
 		geoData.layers.splice(id, 1);
 		geoData.paths.splice(id, 1);
 		if (geoData.focus === id) {
-			changeFocus(geoData);
+			resetFocus(geoData);
+			setFocusClass(geoData);
 	   		movePOV(geoData);
 	   	} else if (geoData.focus > id) {
 	   		geoData.focus--;
 	   	}
 		setListenersUpdate(geoData);
-		if (geoData.paths.length === 0) {
-			geoData.layersControl.remove();
-		}
 	}
 }
 
@@ -357,23 +280,23 @@ function setListeners(geoData) {
 }
 
 function setListenersUpdate(geoData) {
-	// Files display
-	for (let i = 0; i < geoData.paths.length; i++) {
-		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
-			if (e.target.checked) {
-				geoData.focus = getIndexFile(e.target);
-				removeFocusClass(geoData);
-				e.target.parentElement.classList.add("focus");
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input").forEach(input => {
+		input.addEventListener("change", evt => {
+			if (evt.target.checked) {
+				geoData.focus = getIndexFile(evt.target);
 			} else {
-				changeFocus(geoData);
+				resetFocus(geoData);
 			}
+			setFocusClass(geoData);
 			movePOV(geoData);
 		});
-		geoData.layersControl.getContainer().children[1][i].nextElementSibling.addEventListener("contextmenu", e => {
-			deleteTrace(geoData, getIndexFile(e.target));
-			e.preventDefault();
+	});
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > span").forEach(span => {
+		span.addEventListener("contextmenu", evt => {
+			evt.preventDefault();
+			deleteTrace(geoData, getIndexFile(evt.target));
 		});
-	}
+	});
 
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 
@@ -382,39 +305,39 @@ function setListenersUpdate(geoData) {
 
 function getIndexFile(element) {
 	let index = undefined;
-	let parent = element.parentElement.parentElement.parentElement;
 	let i = 0;
-	while (index === undefined && i < parent.children.length) {
-		if (parent.children[i].children[0].children[0]._leaflet_id === element._leaflet_id) {
-			index = i;
+	let clickables = Array.from(document.querySelectorAll(".leaflet-control-layers-overlays > label > div > *"));
+	while (index === undefined && i < clickables.length) {
+		if (element._leaflet_id === clickables[i]._leaflet_id) {
+			index = i % 2 === 0 ? i / 2 : (i-1) / 2;
 		}
 		i++;
 	}
+
 	return index;
 }
 
-// Change the focus to the file we clicked on
+// Change geoData.focus to the first checked file
 // Param : geoData
-function changeFocus(geoData) {
+function resetFocus(geoData) {
 	geoData.focus = undefined;
-	let form = geoData.layersControl.getContainer().children[1];
-	for (let i = 0; i < geoData.paths.length; i++) {
-		form[i].parentElement.classList.remove("focus");
-		if (form[i].checked) {
+	let i = 0;
+	let inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input");
+	while (geoData.focus === undefined && i < geoData.paths.length) {
+		if (inputs[i].checked) {
 			geoData.focus = i;
-			form[i].parentElement.classList.add("focus");
 		}
-	}
-	removeFocusClass(geoData);
-	if (geoData.focus !== undefined) {
-		geoData.layersControl.getContainer().children[1][geoData.focus].parentElement.classList.add("focus");
+		i++;
 	}
 }
 
-function removeFocusClass(geoData) {
-	let form = geoData.layersControl.getContainer().children[1];
-	for (let i = 0; i < geoData.paths.length; i++) {
-		form[i].parentElement.classList.remove("focus");
+function setFocusClass(geoData) {
+	let lines = document.querySelectorAll(".leaflet-control-layers-overlays > label");
+	lines.forEach(input => {
+		input.classList.remove('focus');
+	});
+	if (geoData.focus !== undefined) {
+		lines[geoData.focus].classList.add("focus");
 	}
 }
 
