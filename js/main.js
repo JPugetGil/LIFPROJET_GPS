@@ -231,7 +231,6 @@ function generateGraph(geoData) {
 								backgroundGridDashed: true,
 								tooltips: function () {
 									console.log("MODIFIER POUR AFFICHER SUR LA CARTE LE POINT SURVOLE");
-									console.log(this);
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
