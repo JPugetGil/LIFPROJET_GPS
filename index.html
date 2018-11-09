@@ -7,7 +7,7 @@
 		<script src="js/RGraph/libraries/RGraph.common.core.js"></script>
 		<script src="js/RGraph/libraries/RGraph.common.dynamic.js"></script>
 		<script src="js/RGraph/libraries/RGraph.common.tooltips.js"></script>
-		<script src="js/RGraph/libraries/RGraph.common.effects.js"></script>
+		<script src="js/RGraph/libraries/RGraph.drawing.yaxis.js"></script>
 		<script src="js/RGraph/libraries/RGraph.line.js"></script>
 
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script> <!-- jQUERY -->
@@ -36,7 +36,10 @@
 			<div id="features"></div>
 			<div class="collapse show" id="toHide">
 				<div id="graph">
-					<canvas id="cvs">[No canvas support]</canvas>
+			    <canvas id="axes" width="41" height="200" style="position: absolute; top: 5px; left: 0; z-index: 3"></canvas>
+			    <div id="box" style="">
+			        <canvas id="cvs" height="200"></canvas>
+			    </div>
 				</div>
 			</div>
 		</div>

@@ -6,6 +6,7 @@ self.onmessage = event => {
 		if (current.shown) {
 			let abscisse = [];
 			let ordonnee = [];
+			let elevation = [];
 			for (let i = 0; i < current.features[0].geometry.coordinates.length ; i++) {
 				abscisse.push(i+1);
 				ordonnee.push(current.features[0].geometry.coordinates[i][2]);

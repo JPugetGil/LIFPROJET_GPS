@@ -59,11 +59,8 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
-	document.getElementById("graph").style.width= "100%";
-	document.getElementById("graph").style.zIndex=2;
-	document.getElementById("cvs").setAttribute("height", ($(document).height() * 2/7));
-	document.getElementById("cvs").setAttribute("width", $(document).width() * 39/40);
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
 	return geoData;
 }
 
@@ -223,13 +220,31 @@ function generateGraph(geoData) {
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
+		if (event.data[1].length < $(document).width()){
+			document.getElementById("cvs").setAttribute("width", $(document).width() * 9/10);
+		}	else {
+			document.getElementById("cvs").setAttribute("width", event.data[1].length);
+		}
+
 		var line = new RGraph.Line({
             id: 'cvs',
             data: event.data[1],
             options: {
 								backgroundGridDashed: true,
-                linewidth: 2,
-                hmargin: 5,
+								tooltips: function () {return "\0";},
+                linewidth: 3,
+                noyaxis: true,
+                ylabels: false,
+                textAccessible: true,
+            }
+        }).draw();
+
+				var yaxis = new RGraph.Drawing.YAxis({
+            id: 'axes',
+            x: 40,
+            options: {
+                max: line.max,
+                colors: ['black'],
                 textAccessible: true
             }
         }).draw();
