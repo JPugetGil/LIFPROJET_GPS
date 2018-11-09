@@ -1,0 +1,275 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
+    
+    <title>RGraph demo: A Line chart with multiple datasets tracing sequentially</title>
+    
+    
+    <meta name="description" content="A Line chart with multiple datasets tracing sequentially" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+    
+
+    <h1>A Line chart with multiple datasets tracing sequentially</h1>
+    
+    <canvas id="cvs" width="700" height="300" style="background-color: black; float: right">[No canvas support]</canvas>
+    
+    <p>
+        This demo shows you how you can create new effects with a little customisation
+        and a smattering of standard JavaScript.
+    </p>
+    
+    <p>
+        There's three Line charts and each one uses the
+        <span class="inline-code-highlight">.trace()</span> effect - however the
+        second chart is delayed by 500 ms. And then the third chart, again using
+        the trace effect, is delayed by 1000ms.
+    </p>
+    
+    <p>
+        Each chart is passed all three datasets, however in each chart two of the
+        datasets are using transparency as their colour - so only one dataset can be
+        seen. In the first chart it's the first dataset, in the second chart it's the
+        second and in the third dataset it's the third dataset.
+    </p>
+    
+    <p>
+        The visible colours are gradients, as you can see. If the chart runs a
+        little too slow for you on your device (on less powerful devices it
+        can slow down a little) you can make the gradients solid colours and you
+        can also make the tracing sequential - so each dataset starts tracing only
+        when the previous has fnished. There's a demo of this in action that you
+        can see here:
+        <a href="https://www.rgraph.net/demos/effects-line-tracecenter.html">
+            https://www.rgraph.net/demos/effects-line-tracecenter.html
+        </a>
+    </p>
+    
+    <p>
+        That demo also uses the <span class="inline-code-highlight">animationTraceCenter</span>
+        option - and this changes the trace effect from tracing from the left hand side to
+        tracing from the center f the chart outwards in both directions.
+    </p>
+    
+    
+
+
+    
+    
+    <script>
+        // Some infomation for the chart
+        data = [
+            [8,6,3,5,12,8,5,4,6,12],
+            [4,8,6,3,5,2,4,8,5,2],
+            [8,6,3,5,9,4,5,8,4,6]
+        ];
+        
+        fillstyle = [
+            'Gradient(rgba(96,0,0,0.5):red:red:red:red)',
+            'Gradient(rgba(0,96,0,0.5):#0f0:#0f0:#0f0)',
+            'Gradient(rgba(0,0,96,0.5):rgba(0,0,96,0.5):blue:blue:blue)'
+        ];
+
+        delay  = 500;
+        frames = 45;
+
+        //
+        // Show the first (red) section
+        //
+        new RGraph.Line({
+            id: 'cvs',
+            data: data,
+            options: {
+                textColor: '#fff',
+                tickmarks: false,
+                shadow: false,
+                linewidth: 0.001,
+                backgroundColor: 'black',
+                backgroundGridVlines: false,
+                backgroundGridColor: '#666',
+                backgroundGridBorder: false,
+                noaxes: true,
+                spline: true,
+                filled: true,
+                fillstyle: [fillstyle[0],'transparent','transparent'],
+                ymax: 35,
+                gutterLeft: 40,
+                textSize: 16
+            }
+        }).trace({frames: frames});
+
+
+        //
+        // Show the second (green) section
+        //
+        setTimeout(function ()
+        {
+            new RGraph.Line({
+                id: 'cvs',
+                data: data,
+                options: {
+                    tickmarks: false,
+                    shadow: false,
+                    linewidth: 0.001,
+                    backgroundGrid: false,
+                    noaxes: true,
+                    fillstyle: ['transparent', fillstyle[1], 'transparent'],
+                    spline: true,
+                    filled: true,
+                    ymax: 35,
+                    gutterLeft: 40
+                }
+            }).trace({frames: frames});
+        }, delay);
+
+        //
+        // Show the third (blue) section
+        //
+        setTimeout(function ()
+        {
+            new RGraph.Line({
+                id: 'cvs',
+                data: data,
+                options: {
+                    tickmarks: false,
+                    shadow: false,
+                    linewidth: 0.001,
+                    backgroundGrid: false,
+                    noaxes: true,
+                    fillstyle: ['transparent', 'transparent', fillstyle[2]],
+                    spline: true,
+                    filled: true,
+                    ymax: 35,
+                    gutterLeft: 40
+                }
+            }).trace({frames: frames});
+        }, delay * 2);
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.line.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="700" height="300"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    <span>// Some infomation for the chart</span>
+    data = [
+        [8,6,3,5,12,8,5,4,6,12],
+        [4,8,6,3,5,2,4,8,5,2],
+        [8,6,3,5,9,4,5,8,4,6]
+    ];
+    
+    fillstyle = [
+        'Gradient(rgba(96,0,0,0.5):red:red:red:red)',
+        'Gradient(rgba(0,96,0,0.5):#0f0:#0f0:#0f0)',
+        'Gradient(rgba(0,0,96,0.5):rgba(0,0,96,0.5):blue:blue:blue)'
+    ];
+
+    delay  = 500;
+    frames = 45;
+
+    <span>// Show the first (red) section</span>
+    new RGraph.Line({
+        id: 'cvs',
+        data: data,
+        options: {
+            textColor: '#fff',
+            tickmarks: false,
+            shadow: false,
+            linewidth: 0.001,
+            backgroundColor: 'black',
+            backgroundGridVlines: false,
+            backgroundGridColor: '#666',
+            backgroundGridBorder: false,
+            noaxes: true,
+            spline: true,
+            filled: true,
+            fillstyle: [fillstyle[0],'transparent','transparent'],
+            ymax: 35,
+            gutterLeft: 40,
+            textSize: 16
+        }
+    }).trace({frames: frames});
+
+
+    <span>// Show the second (green) section</span>
+    setTimeout(function ()
+    {
+        new RGraph.Line({
+            id: 'cvs',
+            data: data,
+            options: {
+                tickmarks: false,
+                shadow: false,
+                linewidth: 0.001,
+                backgroundGrid: false,
+                noaxes: true,
+                fillstyle: ['transparent', fillstyle[1], 'transparent'],
+                spline: true,
+                filled: true,
+                ymax: 35,
+                gutterLeft: 40
+            }
+        }).trace({frames: frames});
+    }, delay);
+
+    <span>// Show the third (blue) section</span>
+    setTimeout(function ()
+    {
+        new RGraph.Line({
+            id: 'cvs',
+            data: data,
+            options: {
+                tickmarks: false,
+                shadow: false,
+                linewidth: 0.001,
+                backgroundGrid: false,
+                noaxes: true,
+                fillstyle: ['transparent', 'transparent', fillstyle[2]],
+                spline: true,
+                filled: true,
+                ymax: 35,
+                gutterLeft: 40
+            }
+        }).trace({frames: frames});
+    }, delay * 2);
+&lt;/script&gt;
+</pre>
+
+
+
+    
+
+
+
+
+</body>
+</html>

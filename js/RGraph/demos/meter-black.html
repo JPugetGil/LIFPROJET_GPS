@@ -1,0 +1,159 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.meter.js" ></script>
+    
+    <title>RGraph demo: An adjustable (black) Meter chart</title>
+    
+    
+    <meta name="description" content="An adjustable (black) Meter chart" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+    
+
+    <h1>An adjustable (black) Meter chart</h1>
+    
+    <canvas id="cvs" width="600" height="500" style="background-color: black; border-radius: 15px; box-shadow:3px 3px 3px gray; float: right">[No canvas support]</canvas>
+    
+    <p>
+        This Meter chart has been aignificantly customised which is why it
+        looks very different to the default Meter. The start
+        and end angles have
+        been adjusted as well as the radius of the black part in the center
+        increased. Before drawing, the canvas is cleared to a black color. And the
+        Meter is adjustable by way of some custom code that utilises the
+        grow effect. This type of adjusting is custom - the default adjusting
+        feature pf RGraph is not animated.
+    </p>
+    
+    <p>
+        Whilst this chart shows you an example of using the
+        <span class="inline-code-highlight">angleStart</span> and
+        <span class="inline-code-highlight">angleEnd</span> property you can use
+        those properties to significantly change the look of the Meter chart and
+        have one that is sideways oriented and not vertically oriented. It depends on the
+        interface and aesthetics that you want on how you orient the Meter.
+    </p>
+    
+    <p>
+        The custom code that facilitates the ajusting just consists of an event
+        listener added to the canvas tag, the
+        <span class="inline-code-highlight">getValue()</span> function to get
+        the new value based on the click andthen the
+        <span class="inline-code-highlight">grow()</span> effect that moves
+        the pointer to the new position.
+    </p>
+
+    
+    <script>
+        var meter = new RGraph.Meter({
+            id: 'cvs',
+            min: 0,
+            max: 100,
+            value: 75,
+            options: {
+                backgroundColor: 'black',
+                anglesStart: RGraph.PI - 0.55,
+                anglesEnd: RGraph.TWOPI + 0.5,
+                centery: 300,
+                textSize: 22,
+                textColor: 'white',
+                textValign: 'bottom',
+                greenColor: '#0a0',
+                segmentRadiusStart: 175,
+                border: 0,
+                tickmarksSmallNum: 0,
+                tickmarksBigNum: 0,
+                needleRadius: 250,
+                needleColor: '#ddd',
+                centerpinStroke: 'black',
+                centerpinFill: '#ddd',
+                textAccessible: false
+            }
+        }).draw()
+
+        meter.canvas.onclick = function (e)
+        {
+            var newvalue = meter.getValue(e);
+            
+            meter.value = newvalue;
+            meter.grow();
+        }
+    </script>
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.dynamic.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.meter.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="600" height="500" style="background-color: black; border-radius: 15px; box-shadow:3px 3px 3px gray"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    var meter = new RGraph.Meter({
+        id: 'cvs',
+        min: 0,
+        max: 100,
+        value: 75,
+        options: {
+            backgroundColor: 'black',
+            anglesStart: RGraph.PI - 0.55,
+            anglesEnd: RGraph.TWOPI + 0.5,
+            centery: 300,
+            textSize: 22,
+            textColor: 'white',
+            textValign: 'bottom',
+            greenColor: '#0a0',
+            segmentRadiusStart: 175,
+            border: 0,
+            tickmarksSmallNum: 0,
+            tickmarksBigNum: 0,
+            needleRadius: 250,
+            needleColor: '#ddd',
+            centerpinStroke: 'black',
+            centerpinFill: '#ddd',
+            textAccessible: false
+        }
+    }).draw()
+
+    meter.canvas.onclick = function (e)
+    {
+        var newvalue = meter.getValue(e);
+        
+        meter.value = newvalue;
+        meter.grow();
+    }
+&lt;/script&gt;
+</pre>
+
+
+
+
+
+</body>
+</html>

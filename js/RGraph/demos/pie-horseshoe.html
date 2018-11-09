@@ -1,0 +1,251 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+
+    <title>RGraph demo: A horseshoe Pie chart</title>
+    
+    
+    <meta name="description" content="A horseshoe Pie chart" />
+     
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    
+
+    <h1>A horseshoe Pie chart</h1>
+
+    <canvas id="cvs" width="300" height="300" style="border: 1px solid #ddd">[No canvas support]</canvas>
+    
+    <script>
+        color           = 'black';
+        backgroundColor = '#ddd';
+        donutWidth      = 5;
+
+        pie = new RGraph.Pie({
+            id: 'cvs',
+            data: [65,35],
+            options: {
+                variant: 'donut',
+                variantDonutWidth: donutWidth,
+                colors: [color, backgroundColor],
+                strokestyle: 'transparent',
+                shadow: false,
+                gutterLeft: 15,
+                gutterRight: 15,
+                gutterTop: 15,
+                gutterBottom: 15,
+            }
+        }).roundRobin().on('draw', function (obj)
+        {
+            // Add the text that sits in the center of the donut
+            RGraph.text2(obj, {
+                text:   parseInt(obj.data[0] * obj.get('effect.roundrobin.multiplier')) + '%',
+                x:      obj.centerx,
+                y:      obj.centery,
+                size:   60,
+                halign: 'center',
+                valign: 'center'
+            });
+        }).on('beforedraw', function (obj)
+        {
+            // These two path commands draw the gray background to the donut
+            RGraph.path2(obj.context,
+                'b a % % % 0 6.29 false',
+                obj.centerx,
+                obj.centery,
+                obj.radius
+            );
+
+            RGraph.path2(obj.context,
+                ' a % % % 0 6.29 true f %',
+                obj.centerx,
+                obj.centery,
+                obj.radius - donutWidth,
+                backgroundColor
+            );
+        }).on('draw', function (obj)
+        {
+            
+            // Get the coordinates to the start point of the donut chart
+            var coords1 = RGraph.getRadiusEndPoint(
+                obj.centerx,
+                obj.centery,
+                RGraph.PI + RGraph.HALFPI,
+                obj.radius - (donutWidth / 2)
+            );
+
+            // Get the coordinates to the end point of the donut chart
+            var coords2 = RGraph.getRadiusEndPoint(
+                obj.centerx,
+                obj.centery,
+                obj.angles[0][1],
+                obj.radius - (donutWidth / 2)
+            );
+
+            // Draw a white semicircle at the START of the donut
+            RGraph.path2(obj.context,
+                'b a % % % 0 6.29 false f white',
+                coords1[0],
+                coords1[1],
+                14
+            );
+
+            // Draw a black circle at the START of the donut
+            RGraph.path2(obj.context,
+                'b a % % % 0 6.29 false f black',
+                coords1[0],
+                coords1[1],
+                8
+            );
+
+            // Draw a white semicircle at the END of the donut
+            RGraph.path2(obj.context,
+                'b a % % % 0 6.29 false f white',
+                coords2[0],
+                coords2[1],
+                14
+            );
+
+            // Draw a black circle at the END of the donut
+            RGraph.path2(obj.context,
+                'b a % % % 0 6.29 false f black',
+                coords2[0],
+                coords2[1],
+                8
+            );
+        });
+    </script>
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="../libraries/RGraph.common.core.js"&gt;&ly;/script&gt;
+&lt;script src="../libraries/RGraph.pie.js"&gt;&lt;/script>&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="300" height="300" style="border: 1px solid #ddd"&gt;[No canvas support]&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    color           = 'black';
+    backgroundColor = '#ddd';
+    donutWidth      = 5;
+
+    pie = new RGraph.Pie({
+        id: 'cvs',
+        data: [65,35],
+        options: {
+            variant: 'donut',
+            variantDonutWidth: donutWidth,
+            colors: [color, backgroundColor],
+            strokestyle: 'transparent',
+            shadow: false,
+            gutterLeft: 15,
+            gutterRight: 15,
+            gutterTop: 15,
+            gutterBottom: 15,
+        }
+    }).roundRobin().on('draw', function (obj)
+    {
+        <span>// Add the text that sits in the center of the donut</span>
+        RGraph.text2(obj, {
+            text:   parseInt(obj.data[0] * obj.get('effect.roundrobin.multiplier')) + '%',
+            x:      obj.centerx,
+            y:      obj.centery,
+            size:   60,
+            halign: 'center',
+            valign: 'center'
+        });
+    }).on('beforedraw', function (obj)
+    {
+        <span>// These two path commands draw the gray background to the donut</span>
+        RGraph.path2(obj.context,
+            'b a % % % 0 6.29 false',
+            obj.centerx,
+            obj.centery,
+            obj.radius
+        );
+
+        RGraph.path2(obj.context,
+            ' a % % % 0 6.29 true f %',
+            obj.centerx,
+            obj.centery,
+            obj.radius - donutWidth,
+            backgroundColor
+        );
+    }).on('draw', function (obj)
+    {
+        
+        <span>// Get the coordinates to the start point of the donut chart</span>
+        var coords1 = RGraph.getRadiusEndPoint(
+            obj.centerx,
+            obj.centery,
+            RGraph.PI + RGraph.HALFPI,
+            obj.radius - (donutWidth / 2)
+        );
+
+        <span>// Get the coordinates to the end point of the donut chart</span>
+        var coords2 = RGraph.getRadiusEndPoint(
+            obj.centerx,
+            obj.centery,
+            obj.angles[0][1],
+            obj.radius - (donutWidth / 2)
+        );
+
+        <span>// Draw a white semicircle at the START of the donut</span>
+        RGraph.path2(obj.context,
+            'b a % % % 0 6.29 false f white',
+            coords1[0],
+            coords1[1],
+            14
+        );
+
+        <span>// Draw a black circle at the START of the donut</span>
+        RGraph.path2(obj.context,
+            'b a % % % 0 6.29 false f black',
+            coords1[0],
+            coords1[1],
+            8
+        );
+
+        <span>// Draw a white circle at the END of the donut</span>
+        RGraph.path2(obj.context,
+            'b a % % % 0 6.29 false f white',
+            coords2[0],
+            coords2[1],
+            14
+        );
+
+        <span>// Draw a black circle at the END of the donut</span>
+        RGraph.path2(obj.context,
+            'b a % % % 0 6.29 false f black',
+            coords2[0],
+            coords2[1],
+            8
+        );
+    });
+&lt;/script&gt;
+</pre>
+
+
+
+
+
+
+</body>
+</html>

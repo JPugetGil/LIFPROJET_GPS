@@ -60,8 +60,8 @@ function generateIndex(geoData) {
 	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
 	document.getElementById("graph").style.width= "100%";
 	document.getElementById("graph").style.zIndex=2;
-	document.getElementById("chart").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px");
-	document.getElementById("chart").style.width= "100%";
+	document.getElementById("cvs").setAttribute("height", ($(document).height() * 2/7));
+	document.getElementById("cvs").setAttribute("width", $(document).width() * 39/40);
 	return geoData;
 }
 
@@ -296,31 +296,19 @@ function generateGraph(geoData) {
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
-		c3.generate({
-			data: {
-				xs: event.data[0],
-				columns: event.data[1]
-			},
-			subchart: {
-	        	show: true
-	    	},
-			axis: {
-		        x: {
-		            label: {
-		                text: 'Point n°',
-		                position: 'outer-center'
-		            }
-		        },
-		        y: {
-		            label: {
-		                text: 'Altitude',
-		                position: 'outer-middle'
-		            }
-		        }
-			}
-		});
+		var line = new RGraph.Line({
+            id: 'cvs',
+            data: event.data[1],
+            options: {
+								backgroundGridDashed: true,
+                linewidth: 2,
+                hmargin: 5,
+                textAccessible: true
+            }
+        }).draw();
 	}
 	w2.postMessage(geoData.paths);
+
 	return geoData;
 }
 

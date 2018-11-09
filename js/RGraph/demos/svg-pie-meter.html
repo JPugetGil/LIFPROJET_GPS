@@ -1,0 +1,383 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.pie.js" ></script>
+    
+    <title>RGraph demo: An SVG Pie chart configured to look like a Meter</title>
+
+    
+    <meta name="description" content="An SVG Pie chart configured to look like a Meter" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+    
+
+</head>
+<body>
+
+
+
+    <h1>An SVG Pie chart configured to look like a Meter</h1>
+
+    <div style="width: 350px; height: 350px; background-color: black; float: right; border-radius: 5px" id="chart-container"></div>
+
+    <p>
+        Here's a set of Pie charts that have been configured so that they appear as
+        circular progress meters.
+    </p>
+    
+    <p>
+        This is done by adding one Pie chart that
+        has the real color and is configured with the real value on top of another
+        which is used as the background and has a single value of 100 so it's a
+        full Pie chart segment.
+    </p>
+
+    <p>
+        The labels are added by utilising the
+        <span class="inline-code-highlight">RGraph.SVG.text()</span> API function.
+        You can use this function to add your own text labels  to your charts. To
+        position the text the <span class="inline-code-highlight">pie.centerx</span>
+        and <span class="inline-code-highlight">pie.centery</span> API variables are
+        used.
+    </p>
+    
+    <p>
+        One more thing that's used is the
+        <span class="inline-code-highlight">RGraph.SVG.GLOBALS</span> variable. All
+        charts get any values that are set on this object first before their own
+        properties. This means that you can set common values as defaults and all
+        subsequentally created charts will use them.
+    </p>
+
+    
+    
+        
+    <script>
+        RGraph.SVG.GLOBALS = {
+            colors: ['#666'],
+            donut: true,
+            donutWidth: 30,
+            gutterLeft: 5,
+            gutterRight: 5,
+            gutterTop: 5,
+            gutterBottom: 5
+        };
+
+
+
+
+
+        pie1a = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [100],
+            options: {
+            }
+        }).draw();
+
+        pi1b = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [65,35],
+            options: {
+                colors: ['#9AC17E','transparent']
+            }
+        }).roundRobin();
+
+
+
+        pie2a = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [100],
+            options: {
+                radius: pie1a.radius - 33
+            }
+        }).draw();
+
+        pie2b = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [23,77],
+            options: {
+                radius: pie2a.radius,
+                colors: ['#FADA31','transparent']
+            }
+        }).roundRobin();
+
+
+
+        pie3a = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [100],
+            options: {
+                radius: pie2a.radius - 33
+            }
+        }).draw();
+
+        pie3b = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [65,35],
+            options: {
+                radius: pie3a.radius,
+                colors: ['#D3696B','transparent']
+            }
+        }).roundRobin();
+        
+        
+
+
+
+        pie4a = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [100],
+            options: {
+                radius: pie3a.radius - 33
+            }
+        }).draw();
+
+        pie4b = new RGraph.SVG.Pie({
+            id: 'chart-container',
+            data: [63,37],
+            options: {
+                radius: pie4a.radius,
+                colors: ['#82C1E0','transparent']
+            }
+        }).roundRobin();
+        
+        
+        
+        
+
+        // Add some custom text
+        RGraph.SVG.text({
+            object: pie1a,
+            text: 'First option',
+            x: pie1a.centerx - 5,
+            y: pie1a.centery - pie1a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+            color: 'white',
+            bold: true,
+            halign: 'right',
+            valign: 'center',
+            background: 'rgba(255,255,255,0.35)',
+            padding: 2
+        });
+
+        RGraph.SVG.text({
+            object: pie1a,
+            text: 'Second option',
+            x: pie2a.centerx - 5,
+            y: pie2a.centery - pie2a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+            color: 'white',
+            bold: true,
+            halign: 'right',
+            valign: 'center',
+            background: 'rgba(255,255,255,0.35)',
+            padding: 2
+        });
+
+        RGraph.SVG.text({
+            object: pie1a,
+            text: 'Third option',
+            x: pie3a.centerx - 5,
+            y: pie3a.centery - pie3a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+            color: 'white',
+            bold: true,
+            halign: 'right',
+            valign: 'center',
+            background: 'rgba(255,255,255,0.35)',
+            padding: 2
+        });
+
+        RGraph.SVG.text({
+            object: pie1a,
+            text: 'Fourth option',
+            x: pie4a.centerx - 5,
+            y: pie4a.centery - pie4a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+            color: 'white',
+            bold: true,
+            halign: 'right',
+            valign: 'center',
+            background: 'rgba(255,255,255,0.35)',
+            padding: 2
+        });
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.pie.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="width: 350px; height: 350px; background-color: black; float: right; border-radius: 5px" id="chart-container"&gt;&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    RGraph.SVG.GLOBALS = {
+        colors: ['#666'],
+        donut: true,
+        donutWidth: 30,
+        gutterLeft: 5,
+        gutterRight: 5,
+        gutterTop: 5,
+        gutterBottom: 5
+    };
+
+
+
+
+
+    pie1a = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [100],
+        options: {
+        }
+    }).draw();
+
+    pi1b = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [65,35],
+        options: {
+            colors: ['#9AC17E','transparent']
+        }
+    }).roundRobin();
+
+
+
+    pie2a = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [100],
+        options: {
+            radius: pie1a.radius - 33
+        }
+    }).draw();
+
+    pie2b = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [23,77],
+        options: {
+            radius: pie2a.radius,
+            colors: ['#FADA31','transparent']
+        }
+    }).roundRobin();
+
+
+
+    pie3a = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [100],
+        options: {
+            radius: pie2a.radius - 33
+        }
+    }).draw();
+
+    pie3b = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [65,35],
+        options: {
+            radius: pie3a.radius,
+            colors: ['#D3696B','transparent']
+        }
+    }).roundRobin();
+    
+    
+
+
+
+    pie4a = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [100],
+        options: {
+            radius: pie3a.radius - 33
+        }
+    }).draw();
+
+    pie4b = new RGraph.SVG.Pie({
+        id: 'chart-container',
+        data: [63,37],
+        options: {
+            radius: pie4a.radius,
+            colors: ['#82C1E0','transparent']
+        }
+    }).roundRobin();
+    
+    
+    
+    
+
+    // Add some custom text
+    RGraph.SVG.text({
+        object: pie1a,
+        text: 'First option',
+        x: pie1a.centerx - 5,
+        y: pie1a.centery - pie1a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+        color: 'white',
+        bold: true,
+        halign: 'right',
+        valign: 'center',
+        background: 'rgba(255,255,255,0.35)',
+        padding: 2
+    });
+
+    RGraph.SVG.text({
+        object: pie1a,
+        text: 'Second option',
+        x: pie2a.centerx - 5,
+        y: pie2a.centery - pie2a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+        color: 'white',
+        bold: true,
+        halign: 'right',
+        valign: 'center',
+        background: 'rgba(255,255,255,0.35)',
+        padding: 2
+    });
+
+    RGraph.SVG.text({
+        object: pie1a,
+        text: 'Third option',
+        x: pie3a.centerx - 5,
+        y: pie3a.centery - pie3a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+        color: 'white',
+        bold: true,
+        halign: 'right',
+        valign: 'center',
+        background: 'rgba(255,255,255,0.35)',
+        padding: 2
+    });
+
+    RGraph.SVG.text({
+        object: pie1a,
+        text: 'Fourth option',
+        x: pie4a.centerx - 5,
+        y: pie4a.centery - pie4a.radius + (RGraph.SVG.GLOBALS.donutWidth / 2),
+        color: 'white',
+        bold: true,
+        halign: 'right',
+        valign: 'center',
+        background: 'rgba(255,255,255,0.35)',
+        padding: 2
+    });
+&lt;/script&gt;
+</pre>
+
+
+
+    
+
+
+
+</body>
+</html>

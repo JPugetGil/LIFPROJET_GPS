@@ -1,0 +1,229 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    <script src="../libraries/RGraph.line.js" ></script>
+    
+    <title>RGraph demo: A combined Bar and Line chart</title>
+    
+    
+    <meta name="description" content="A purple combined Bar and Line chart that illustrates the dynamic nature of RGraph using an option to switch the line from a spline to angular" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+    
+
+    <h1>A combined Bar and Line chart</h1>
+    
+    <div style="float: right; display: inline-block; margin: 25px">
+        <canvas id="cvs" width="750" height="250" style="background-color: #555; border: 5px solid black; border-radius: 7px; box-shadow: 2px 2px 3px gray">[No canvas support]</canvas><br />
+        <button style="border-radius: 5px; font-size: 20px; margin: 10px; padding: 7px" onclick="line.set('spline', !line.get('spline')); RGraph.redraw()">Toggle spline</button>
+    </div>
+    <p>
+        This demo is an example of a combined Bar and Line chart. In this case the
+        Line is a spline but it certainly does have to be. In fact there's a button
+        beneath the chart that you can use to toggle whether its a spline (curvy) or
+        a regular angular Line chart. All thi button does is toggle the
+        <span class="inline-code-highlight">spline</span> setting and then redraw the canvas.
+    </p>
+    
+    <p>
+        In RGraph combining a Bar and Line chart is made easy by the
+        <span class="inline-code-highlight">CombinedChart</span> class. You can see
+        this being used in the code below. It simply takes the Bar and the Line chart
+        objects and sets the correct settings on them and then draws the chart. But
+        normally you would want only one set of labels (ie the Bar chart or the
+        Line chart) drawn, however here the Bar chart labels are on one side
+        and the Line chart labels are on the other. So after the combo class is
+        drawn the Y labels are turned back on on the Line chart object and everything
+        is redrawn. You can see how this is done in the code below.
+    </p>
+    
+    <p>
+        The <span class="inline-code-highlight">CombinedChart</span> class is freely
+        usable by yourself in a very similar way to the other RGraph classes. It's
+        created in the same way and you pass it an array of objects - which usually
+        is a Bar chart and a Line chart. You can give it more chart types if you want. 
+    </p>
+    
+    <p>
+        Apart from this the chart has "larger than the default" text and the Bar chart
+        uses a gradient for the fill color: (<span class="inline-code-highlight">Gradient(#A18AC5:#D1AAF5)</span>
+    </p>
+    
+    <script>
+        var bar = new RGraph.Bar({
+            id: 'cvs',
+            data: [81,90,75,85,90,78,61],
+            options: {
+                ymax: 100,
+                backgroundGridVlines: false,
+                backgroundGridBorder: true,
+                backgroundGridColor: '#999',
+                numyticks: 12,
+                labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+                hmargin: 20,
+                gutterLeft: 55,
+                gutterRight: 55,
+                gutterBottom: 45,
+                colors: ['Gradient(#A18AC5:#D1AAF5)'],
+                textColor: '#ccc',
+                axisColor: '#999',
+                numxticks: 0,
+                numyticks: 0,
+                shadowColor: 'black',
+                shadowOffsetx: 0,
+                shadowOffsety: 0,
+                shadowBlur: 15,
+                scaleZerostart: true,
+                strokestyle: 'rgba(0,0,0,0)',
+                combinedchartEffect: 'wave',
+                combinedchartEffectOptions: '{frames: 30}',
+                textSize: 18
+            }
+        });
+
+
+
+        var line = new RGraph.Line({
+            id: 'cvs',
+            data: [150,255,566,542,588,122,131],
+            options: {
+                ymax: 600,
+                noaxes: true,
+                backgroundGrid: false,
+                linewidth: 7,
+                colors: ['#d00'],
+                yaxispos: 'right',
+                axisColor: '#999',
+                textColor: '#ccc',
+                gutterLeft: 45,
+                gutterRight: 45,
+                tickmarks: null,
+                spline: true,
+                combinedchartEffect: 'trace',
+                textSize: 18
+            }
+        });
+        
+        var combo = new RGraph.CombinedChart([bar, line])
+            .draw();
+        
+        // Because the combo class turns the line chart labels off,
+        // turn them back on
+        line.set({
+            ylabels: true
+        });
+
+        RGraph.redraw();
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.bar.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.line.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="900" height="250" style="background-color: #555; border: 5px solid black; border-radius: 7px; box-shadow: 2px 2px 3px gray"&gt;
+    [No canvas support]
+&lt;/canvas&gt;&lt;br /&gt;
+&lt;button style="border-radius: 5px; font-size: 20px; margin: 10px; padding: 7px" onclick="line.set('spline', !line.get('spline')); RGraph.redraw()"&gt;Toggle spline&lt;/button&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    var bar = new RGraph.Bar({
+        id: 'cvs',
+        data: [81,90,75,85,90,78,61],
+        options: {
+            ymax: 100,
+            backgroundGridVlines: false,
+            backgroundGridBorder: true,
+            backgroundGridColor: '#999',
+            numyticks: 12,
+            labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+            hmargin: 20,
+            gutterLeft: 55,
+            gutterRight: 55,
+            gutterBottom: 45,
+            colors: ['Gradient(#A18AC5:#D1AAF5)'],
+            textColor: '#ccc',
+            axisColor: '#999',
+            numxticks: 0,
+            numyticks: 0,
+            shadowColor: 'black',
+            shadowOffsetx: 0,
+            shadowOffsety: 0,
+            shadowBlur: 15,
+            scaleZerostart: true,
+            strokestyle: 'rgba(0,0,0,0)',
+            combinedchartEffect: 'wave',
+            combinedchartEffectOptions: '{frames: 30}',
+            textSize: 18
+        }
+    });
+
+
+
+    var line = new RGraph.Line({
+        id: 'cvs',
+        data: [150,255,566,542,588,122,131],
+        options: {
+            ymax: 600,
+            noaxes: true,
+            backgroundGrid: false,
+            linewidth: 7,
+            colors: ['#d00'],
+            yaxispos: 'right',
+            axisColor: '#999',
+            textColor: '#ccc',
+            gutterLeft: 45,
+            gutterRight: 45,
+            tickmarks: null,
+            spline: true,
+            combinedchartEffect: 'trace',
+            textSize: 18
+        }
+    });
+    
+    var combo = new RGraph.CombinedChart([bar, line])
+        .draw();
+    
+    <span>// Because the combo class turns the line chart labels off,
+    // turn them back on</span>
+    line.set({
+        ylabels: true
+    });
+
+    RGraph.redraw();
+&lt;/script&gt;
+</pre>
+
+
+
+    
+
+
+
+</body>
+</html>
