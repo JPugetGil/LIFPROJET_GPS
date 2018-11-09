@@ -73,7 +73,7 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
-	geoData.layersControl = L.control.layers(null, null, {position: "topleft"});
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
 	L.control.scale({imperial: false}).addTo(geoData.map);
 
 	return geoData;
@@ -181,7 +181,6 @@ function displayPath(geoData, index, display = true) {
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
 	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
-	geoData.layersControl.addTo(geoData.map);
 	if(display){
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
@@ -212,10 +211,6 @@ function generateFilesTab(geoData) {
 				<td><button id="suppr${index}" class="btn btn-danger" type="button">X</button></td>
 			</tr>`;
 	});
-
-	/*if (geoData.focus !== undefined) {
-		document.getElementById("row" + geoData.focus).classList.add("focus");
-	}*/
 
 	return geoData;
 }
@@ -270,9 +265,6 @@ function deleteTrace(geoData, id) {
 	   		geoData.focus--;
 	   	}
 		setListenersUpdate(geoData);
-		if (geoData.paths.length === 0) {
-			geoData.layersControl.remove();
-		}
 	}
 }
 
@@ -299,22 +291,23 @@ function setListeners(geoData) {
 }
 
 function setListenersUpdate(geoData) {
-	// Files display
-	for (let i = 0; i < geoData.paths.length; i++) {
-		geoData.layersControl.getContainer().children[1][i].addEventListener("change", e => {
-			if (e.target.checked) {
-				geoData.focus = getIndexFile(e.target);
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input").forEach(input => {
+		input.addEventListener("change", evt => {
+			if (evt.target.checked) {
+				geoData.focus = getIndexFile(evt.target);
 			} else {
 				resetFocus(geoData);
 			}
 			setFocusClass(geoData);
 			movePOV(geoData);
 		});
-		geoData.layersControl.getContainer().children[1][i].nextElementSibling.addEventListener("contextmenu", e => {
-			deleteTrace(geoData, getIndexFile(e.target));
-			e.preventDefault();
+	});
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > span").forEach(span => {
+		span.addEventListener("contextmenu", evt => {
+			evt.preventDefault();
+			deleteTrace(geoData, getIndexFile(evt.target));
 		});
-	}
+	});
 
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 
@@ -323,14 +316,15 @@ function setListenersUpdate(geoData) {
 
 function getIndexFile(element) {
 	let index = undefined;
-	let parent = element.parentElement.parentElement.parentElement;
 	let i = 0;
-	while (index === undefined && i < parent.children.length) {
-		if (parent.children[i].children[0].children[0]._leaflet_id === element._leaflet_id || parent.children[i].children[0].children[1]._leaflet_id === element._leaflet_id) {
-			index = i;
+	let clickables = Array.from(document.querySelectorAll(".leaflet-control-layers-overlays > label > div > *"));
+	while (index === undefined && i < clickables.length) {
+		if (element._leaflet_id === clickables[i]._leaflet_id) {
+			index = i % 2 === 0 ? i / 2 : (i-1) / 2;
 		}
 		i++;
 	}
+
 	return index;
 }
 
@@ -338,10 +332,10 @@ function getIndexFile(element) {
 // Param : geoData
 function resetFocus(geoData) {
 	geoData.focus = undefined;
-	let form = geoData.layersControl.getContainer().children[1];
 	let i = 0;
-	while(geoData.focus === undefined && i < geoData.paths.length) {
-		if (form[i].checked) {
+	let inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input");
+	while (geoData.focus === undefined && i < geoData.paths.length) {
+		if (inputs[i].checked) {
 			geoData.focus = i;
 		}
 		i++;
@@ -349,12 +343,12 @@ function resetFocus(geoData) {
 }
 
 function setFocusClass(geoData) {
-	let form = geoData.layersControl.getContainer().children[1];
-	for (let i = 0; i < geoData.paths.length; i++) {
-		form[i].parentElement.classList.remove("focus");
-	}
+	let lines = document.querySelectorAll(".leaflet-control-layers-overlays > label");
+	lines.forEach(input => {
+		input.classList.remove('focus');
+	});
 	if (geoData.focus !== undefined) {
-		form[geoData.focus].parentElement.classList.add("focus");
+		lines[geoData.focus].classList.add("focus");
 	}
 }
 
