@@ -151,13 +151,36 @@ function linkMode(geoData) {
 	if (geoData.paths.length < 2){
 		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
 	}
+	else {
+
+	}
 }
 
-function fusion(geoData, trace1, trace2){
+function fusion(geoData, trace1, trace2, mode){
 	let traceBorn = copyAttrPath(geoData, trace1);
-	traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
-	traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
-	traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+	switch(mode) {
+		case "fd":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+			break;
+		case "ff":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+			break;
+		case "dd":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0));
+			break;
+		case "df":
+			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+			break;
+	}
+	console.log(traceBorn);
 	return traceBorn;
 }
 
