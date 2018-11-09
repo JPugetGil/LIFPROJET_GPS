@@ -12,6 +12,15 @@ function calculateDistance(trace) {
 	return distance.toFixed(2);
 }
 
+function calculateDistance2(trace) {
+	let distance = 0;
+	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
+	for(let i = 0; i<trace.length-1; i++) {
+		distance += DistanceBetween2Points(trace[i],trace[i+1]);
+	}
+	return distance.toFixed(2);
+}
+
 // Convert a number in degrees to radians
 // Param : degrees -> number in degrees
 // Return : a number in radians

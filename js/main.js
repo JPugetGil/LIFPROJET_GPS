@@ -229,8 +229,9 @@ function generateGraph(geoData) {
             data: event.data[1],
             options: {
 								backgroundGridDashed: true,
-								tooltips: function () {return "\0";},
+								tooltips: event.data[0],
                 linewidth: 3,
+							 	numxticks: event.data[0].length/10,
                 noyaxis: true,
                 ylabels: false,
                 textAccessible: true,
