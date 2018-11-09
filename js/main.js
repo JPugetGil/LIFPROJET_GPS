@@ -89,7 +89,7 @@ function generateTiles(geoData) {
 	}).addTo(geoData.map), "Epurée");
 	geoData.layersControl.addBaseLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}), "Détaillée");
 	geoData.layersControl.addBaseLayer(L.tileLayer(' http://{s}.tile.openstreetmap.fr/openriverboatmap/{z}/{x}/{y}.png'), "OpenRiverboatMap");
-	
+
 	return geoData;
 }
 
