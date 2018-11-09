@@ -37,7 +37,9 @@ function createGeoData() {
 }
 
 function generateIndex(geoData) {
-	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
+	document.getElementById("header").setAttribute("style","height:"+ ($(document).height() * 10/100) +"px");
+	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 84/100) +"px");
+	document.getElementById("footer").setAttribute("style","height:"+ ($(document).height() * 6/100) +"px");
 	document.getElementById("mapid").style.zIndex=0;
 	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
 	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>

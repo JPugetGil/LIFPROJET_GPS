@@ -20,7 +20,7 @@
 	</head>
 
 	<body>
-		<div class="row-lg-2 d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark border-bottom shadow-sm">
+		<div id="header" class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark border-bottom shadow-sm">
 		  <h5 class="my-0 mr-md-auto font-weight-normal text-light"><a class="p-2 text-white" href="index.html">Improve my GPX</a></h5>
 		  <nav class="my-2 my-md-0 mr-md-3">
 				<input type="file" id="hiddenButton"/>
@@ -30,8 +30,8 @@
 				<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger" onClick="launchTutorial()">Tutoriel</button>
 				<button type="button" id="helpButton" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onclick="help();">Besoin d'aide ?</button>
 		  </nav>
-	  </div>
-		<div id="workPlan" class="row-lg-12">
+	  	</div>
+		<div id="workPlan">
 			<div id="mapid"></div>
 			<div id="features"></div>
 			<div class="collapse show" id="toHide">
@@ -40,6 +40,14 @@
 				</div>
 			</div>
 		</div>
+
+		<footer id="footer" class="footer">
+			<div class="d-flex flex-column flex-md-row align-items-center px-md-4 border-bottom shadow-sm bg-secondary">
+				<h5 class="my-0 mr-md-auto font-weight-normal text-light">Visualisation et Edition de traces GPS sur le WEB</h5>
+				<button class="my-1 mr-md-auto btncol btn btn-dark btn-xs" data-toggle="collapse" data-target="#toHide" title="Collapse Graph"></button>
+				<a class="p-2 text-light" href="#">GIL Jérôme - PEYROT Thomas - SCRIVEN Anthony</a>
+			</div>
+		</footer>
 
 		<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script> <!-- LEAFLET -->
 		<script src="js/controls.js"></script> <!-- Leaflet extended controls -->
@@ -52,11 +60,4 @@
 		<script src="js/tutorial.js"></script> <!-- Tutorial functions -->
 		<script src="js/miscellaneous.js"></script> <!-- Some tools -->
 </body>
-<footer class="footer row-lg-1">
-	<div class="d-flex flex-column flex-md-row align-items-center px-md-4 border-bottom shadow-sm bg-secondary">
-		<h5 class="my-0 mr-md-auto font-weight-normal text-light">Visualisation et Edition de traces GPS sur le WEB</h5>
-		<button class="my-1 mr-md-auto btncol btn btn-dark btn-xs" data-toggle="collapse" data-target="#toHide" title="Collapse Graph"></button>
-		<a class="p-2 text-light" href="#">GIL Jérôme - PEYROT Thomas - SCRIVEN Anthony</a>
-	</div>
-</footer>
 </html>
