@@ -26,6 +26,7 @@ function createGeoData() {
 				layers: [],
 				last: undefined
 			},
+			layersControl: undefined,
 			markersColor: [],
 			tempMarkers: [],
 			focus: undefined,

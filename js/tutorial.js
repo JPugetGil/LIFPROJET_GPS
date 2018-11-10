@@ -4,33 +4,54 @@ function launchTutorial(geoData) {
     console.log("Début du tutoriel");
     let button = document.getElementById("tutorialButton");
     button.title = "Stop le tutoriel";
+    /*button.children[0].classList.remove("fa-toggle-off");
+    button.children[0].classList.add("fa-toggle-on");*/
+    button.children[0].classList.remove("fa-play");
+    button.children[0].classList.add("fa-stop");
 
-    /*createGeoData()
-    .then(geoData => addPath(geoData, "data/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
-    .then(geoData => displayPath(geoData,0))
+    createGeoData()
+    .then(geoDataT => mapReplacements(geoData, geoDataT))
+    .then(generateTiles)
+    .then(geoDataT => addPath(geoDataT, "data/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
+    .then(geoDataT => displayPath(geoDataT, 0))
     .then(movePOV)
-    .then(console.log)
-    .catch(console.error)*/
+    .then(geoDataT => {
+        clone = button.cloneNode(true);
+        clone.addEventListener("click", evt => stopTutorial(geoData, geoDataT));
+        button.parentNode.replaceChild(clone, button);
 
-    clone = button.cloneNode(true);
-    clone.addEventListener("click", evt => stopTutorial(geoData));
-    button.parentNode.replaceChild(clone, button);
+        return geoDataT;
+    })
+    //.then(geoDataT => createCloneStop(button, geoData, geoDataT))
+    .catch(console.error)
 }
 
-function stopTutorial(geoData) {
+function stopTutorial(geoData, geoDataT) {
     console.log("Fin du tutoriel");
     let button = document.getElementById("tutorialButton");
     button.title = "Lance un tutoriel";
+    /*button.children[0].classList.remove("fa-toggle-on");
+    button.children[0].classList.add("fa-toggle-off");*/
+    button.children[0].classList.remove("fa-stop");
+    button.children[0].classList.add("fa-play");
+
+    mapOriginals(geoData, geoDataT);
+    movePOV(geoData);
 
     clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
     button.parentNode.replaceChild(clone, button);
 }
-/*
-function emptyGeoData(geoData) {
 
-    geoData.focus = undefined;
-    geoData.layers.forEach(layer => {
-        geoData.map.removeLayer(layer);
-    });
-}*/
+function mapReplacements(geoData, geoDataT) {
+    geoDataT.map = geoData.map;
+    geoData.layersControl.remove();
+    geoDataT.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
+
+    return geoDataT;
+}
+
+function mapOriginals(geoData, geoDataT) {
+    geoDataT.layersControl.remove();
+    geoData.layersControl.addTo(geoData.map);
+}
