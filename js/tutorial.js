@@ -12,7 +12,7 @@ function launchTutorial(geoData) {
     createGeoData()
     .then(geoDataT => mapReplacements(geoData, geoDataT))
     .then(generateTiles)
-    .then(geoDataT => addPath(geoDataT, "data/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
+    .then(geoDataT => addPath(geoDataT, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
     .then(geoDataT => displayPath(geoDataT, 0))
     .then(movePOV)
     .then(geoDataT => {
