@@ -67,5 +67,8 @@ function replaceListeners(geoData) {
         createClone(button);
     });
     createClone(document.getElementById("samplingFactor"));
-    return setListeners(geoData);
+    setListeners(geoData);
+    setListenersUpdate(geoData);
+
+    return geoData;
 }
