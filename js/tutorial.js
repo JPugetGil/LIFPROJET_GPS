@@ -46,7 +46,9 @@ function stopTutorial(geoData, geoDataT) {
 }
 
 function mapReplacements(geoData, geoDataT) {
+    deleteOldMarkers(geoData);
     geoDataT.map = geoData.map;
+    geoData.layers.forEach(layer => layer.remove());
     geoData.layersControl.remove();
     geoDataT.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
 
@@ -54,8 +56,13 @@ function mapReplacements(geoData, geoDataT) {
 }
 
 function mapOriginals(geoData, geoDataT) {
+    deleteOldMarkers(geoDataT);
+    geoDataT.layers.forEach(layer => layer.remove());
     geoDataT.layersControl.remove();
     geoData.layersControl.addTo(geoData.map);
+    if (geoData.focus !== undefined) {
+        geoData.layers[geoData.focus].addTo(geoData.map);
+    }
 }
 
 function createClone(element) {
