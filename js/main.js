@@ -7,6 +7,7 @@ createGeoData()
 .then(movePOV)
 //.then(generateFilesTab)
 .then(generateGraph)
+.then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
 .then(console.log)
@@ -60,7 +61,7 @@ function generateIndex(geoData) {
 	document.getElementById("features").style.zIndex=1;
 	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
 	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
-	document.getElementById("workPlan").innerHTML += 
+	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
     			<div class="modal-content">
@@ -317,12 +318,16 @@ function deleteTrace(geoData, id) {
 	}
 }
 
-
-function setListeners(geoData) {
+function setGeneralListeners(geoData) {
 	// General
 	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
 	document.getElementById("tutorialButton").addEventListener("click", evt => launchTutorial(geoData));
 
+	return geoData;
+}
+
+
+function setListeners(geoData) {
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));

@@ -22,7 +22,7 @@ function launchTutorial(geoData) {
 
         return geoDataT;
     })
-    //.then(geoDataT => createCloneStop(button, geoData, geoDataT))
+    .then(replaceListeners)
     .catch(console.error)
 }
 
@@ -36,6 +36,7 @@ function stopTutorial(geoData, geoDataT) {
     button.children[0].classList.add("fa-play");
 
     mapOriginals(geoData, geoDataT);
+    replaceListeners(geoData);
     movePOV(geoData);
     setFocusClass(geoData);
 
@@ -55,4 +56,16 @@ function mapReplacements(geoData, geoDataT) {
 function mapOriginals(geoData, geoDataT) {
     geoDataT.layersControl.remove();
     geoData.layersControl.addTo(geoData.map);
+}
+
+function createClone(element) {
+    element.parentNode.replaceChild(element.cloneNode(true), element);
+}
+
+function replaceListeners(geoData) {
+    Array.from(document.querySelectorAll("#features button")).forEach(button => {
+        createClone(button);
+    });
+    createClone(document.getElementById("samplingFactor"));
+    return setListeners(geoData);
 }
