@@ -37,6 +37,7 @@ function stopTutorial(geoData, geoDataT) {
 
     mapOriginals(geoData, geoDataT);
     movePOV(geoData);
+    setFocusClass(geoData);
 
     clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
