@@ -186,36 +186,60 @@ function linkMode(geoData) {
 
 function fusion(geoData, idTrace1, idTrace2, mode){
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
+	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes");
+	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates");
 	switch(mode) {
 		case 'fd':
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0));
-			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
-			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
+			if(definedCoordTimes){
+				traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
+			}
+			if(definedHeartRates){
+				traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
+			}
 			break;
 		case 'ff':
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0).reverse());
-			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
-			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
+			if(definedCoordTimes){
+				traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
+			}	
+			if(definedHeartRates){
+				traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
+			}
 			break;
 		case 'dd':
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0));
-			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
-			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
+			if(definedCoordTimes){
+				traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
+			}
+			if(definedHeartRates){
+				traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
+			}
 			break;
 		case 'df':
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0).reverse());
-			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
-			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
+			if(definedCoordTimes){
+				traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
+			}
+			if(definedHeartRates){
+				traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
+			}
 			break;
 		default:
 			break;
 	}
-	deleteTrace(geoData, idTrace2, false);
-	deleteTrace(geoData, idTrace1, false);
-	geoData.paths[geoData.paths.length] = traceBorn;
-	displayPath(geoData, geoData.paths.length-1);
-	setListenersUpdate(geoData);
-	
+	if(idTrace1 == idTrace2){
+		document.getElementById("buttonLink").removeAttribute("data-dismiss", "modal");
+		alert("Vous avez sélectionné 2 fois la même trace.");
+	}	
+	else{
+		document.getElementById("buttonLink").setAttribute("data-dismiss", "modal");
+		deleteTrace(geoData, idTrace2, false);
+		deleteTrace(geoData, idTrace1, false);
+		geoData.paths[geoData.paths.length] = traceBorn;
+		displayPath(geoData, geoData.paths.length-1);
+		setListenersUpdate(geoData);
+	}
 }
 
 function linkTrace(geoData){
@@ -274,8 +298,13 @@ function cutIn2(geoData, index) {
 	let indexNewPath = geoData.paths.length;
 	geoData.paths[indexNewPath] = copyAttrPath(geoData, geoData.paths[geoData.focus]);
 	geoData.paths[indexNewPath].features[0].geometry.coordinates = coordinates.slice(index);
-	geoData.paths[indexNewPath].features[0].properties.coordTimes = geoData.paths[geoData.focus].features[0].properties.coordTimes.slice(index);
-	geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
+
+	if(geoData.paths[indexNewPath].features[0].properties.hasOwnProperty("coordTimes")){
+		geoData.paths[indexNewPath].features[0].properties.coordTimes = geoData.paths[geoData.focus].features[0].properties.coordTimes.slice(index);
+	}
+	if(geoData.paths[indexNewPath].features[0].properties.hasOwnProperty("heartRates")){
+		geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
+	}
 
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
@@ -292,10 +321,18 @@ function copyAttrPath(geoData, oldPath) {
 	newPath.features[0].geometry.type = oldPath.features[0].geometry.type;
 	newPath.features[0].geometry.coordinates = [];
 	newPath.features[0].properties = {};
-	newPath.features[0].properties.time = oldPath.features[0].properties.time;
-	newPath.features[0].properties.coordTimes = [];
-	newPath.features[0].properties.heartRates = [];
-	newPath.features[0].properties.name = oldPath.features[0].properties.name
+	if(oldPath.features[0].properties.hasOwnProperty("time")){
+		newPath.features[0].properties.time = oldPath.features[0].properties.time;
+	}
+	if(oldPath.features[0].properties.hasOwnProperty("coordTimes")){
+		newPath.features[0].properties.time = [];
+	}
+	if(oldPath.features[0].properties.hasOwnProperty("heartRates")){
+		newPath.features[0].properties.heartRates = [];
+	}
+	if(oldPath.features[0].properties.hasOwnProperty("name")){
+		newPath.features[0].properties.name = oldPath.features[0].properties.name
+	}
 	newPath.shown = oldPath.shown;
 	newPath.file = oldPath.file + "(" + geoData.paths.length + ")";
 	newPath.type = oldPath.type;

@@ -93,7 +93,7 @@ function generateIndex(geoData) {
         					</div>
         					<div class="modal-footer">
         						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre" data-dismiss="modal"></button>
+        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre"></button>
      						</div>
       				</div>
     			</div>
