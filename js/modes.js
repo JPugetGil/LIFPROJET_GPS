@@ -78,20 +78,18 @@ function movePointMode(geoData) {
 			let center = polyline.getCenter();
 			let marker = L.marker(center, {
 				draggable: true,
-			}).on("dragend", evt => {
+			})
+			.on("dragend", evt => {
 				draggable = false;
 				let newCenter = evt.target._latlng;
 				let offset = substractLatlng(newCenter, center);
-				console.log(offset);
-				let originalsLatlngs = polyline.getLatLngs();
-			    let	newLatlngs = deplaceLatlngs(originalsLatlngs, offset);
-			    //latlngs.splice(e.target.options.index, 1, latlng);
-				console.log(polyline.getLatLngs());
-				console.log(newLatlngs);
-			    polyline.setLatLngs(newLatlngs);
-				console.log(polyline.getLatLngs());
-				polyline.redraw();
-				//geoData.map.removeLayer(polyline);
+				let realLatlngs = geoData.layers[geoData.focus].getLatLngs();
+			    let	newLatlngs = deplaceLatlngs(polyline.getLatLngs(), offset);
+				points.forEach( (point, i) => {
+					realLatlngs.splice(point.index, 1, newLatlngs[i]);
+				});
+			    geoData.layers[geoData.focus].setLatLngs(realLatlngs);
+				geoData.map.removeLayer(polyline);
 			});
 			geoData.tempMarkers.push(marker);
 			marker.addTo(geoData.map);
