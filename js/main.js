@@ -261,6 +261,7 @@ function generateGraph(geoData) {
 		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
 		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
 		document.getElementById("axes").setAttribute("height", $(document).height()/4);
+		var newMarker = new L.marker([-100,-10000]).addTo(geoData.map);
 		var line = new RGraph.Line({
             id: 'cvs',
             data: event.data[1],
@@ -269,12 +270,15 @@ function generateGraph(geoData) {
 								tooltips: function (event) {
 									let x = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][1];
 									let y = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][0];
+									newMarker.setLatLng([x,y]);
 									geoData.map.panTo(new L.LatLng(x,y));
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
                 noyaxis: true,
                 ylabels: false,
+								crosshairs: true,
+								crosshairsSnap: true,
                 textAccessible: true,
             }
         }).draw();
