@@ -59,8 +59,8 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 3/14) +"px; width: 100%; z-Index: 2");
-	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 5%");
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
@@ -71,9 +71,8 @@ function generateIndex(geoData) {
       				</div>
       				<div class="modal-body">
         				<p>Choississez les deux traces à lier :<p>
-        				<form name="submitLink">
-        					<div class="row">
-	        					<div class="col-6">
+        					<div class="row-sm">
+	        					<div class="col-6-sm">
 	        						<label for="trace1">Première trace : </label>
 	        						<select id="t1" name="Trace1" size=1>
 	        						</select>
@@ -82,7 +81,7 @@ function generateIndex(geoData) {
 	        							<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
 	        						</div>
 	        					</div>
-	        					<div class="col-6">
+	        					<div class="col-6-sm">
 	        						<label for="trace2">Deuxième trace : </label>
 	        						<select id="t2" name="Trace2" size=1>
 	        						</select>
@@ -92,12 +91,11 @@ function generateIndex(geoData) {
 	        						</div>
 	        					</div>
         					</div>
-        				</form>
+        					<div class="modal-footer">
+        						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre"></button>
+     						</div>
       				</div>
-      				<div class="modal-footer">
-        				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-        				<input type="button" class="btn btn-primary" name="submit" value="Soumettre"></button>
-     				</div>
     			</div>
   			</div>
 		</div>`;
@@ -260,19 +258,16 @@ function generateGraph(geoData) {
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
-		if (event.data[1].length < $(document).width()){
-			document.getElementById("cvs").setAttribute("width", $(document).width() * 1.5);
-		}	else {
-			document.getElementById("cvs").setAttribute("width", event.data[1].length * 1.5);
-		}
-
+		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
+		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
+		document.getElementById("axes").setAttribute("height", $(document).height()/4);
 		var line = new RGraph.Line({
             id: 'cvs',
             data: event.data[1],
             options: {
 								backgroundGridDashed: true,
-								tooltips: function () {
-									return 'BONJOUR';
+								tooltips: function (event) {
+									return event;
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
@@ -301,8 +296,8 @@ function generateGraph(geoData) {
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
 // Return : none
-function deleteTrace(geoData, id) {
-	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+function deleteTrace(geoData, id, conf = true) {
+	if (!conf || confirm("Voulez vous vraiment supprimer ce fichier ?")) {
 		geoData.layersControl.removeLayer(geoData.layers[id]);
 		geoData.map.removeLayer(geoData.layers[id]);
 		geoData.layers.splice(id, 1);
@@ -341,6 +336,7 @@ function setListeners(geoData) {
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
+	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
 
     return geoData;
 }
@@ -365,7 +361,6 @@ function setListenersUpdate(geoData) {
 	});
 
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
-
 	return geoData;
 }
 
