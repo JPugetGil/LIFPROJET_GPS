@@ -52,25 +52,49 @@ function movePointMode(geoData) {
 	});
 
 	let start;
+	let draggable = false;
 	geoData.map.on("mousedown", evt => {
-		deleteOldMarkers(geoData);
-		if (evt.originalEvent.button === 0) {
-			start = evt.latlng;
+		if (!draggable) {
+			deleteOldMarkers(geoData);
+			if (evt.originalEvent.button === 0) {
+				start = evt.latlng;
+			}
 		}
 	});
 	geoData.map.on("mouseup", evt => {
 		let points = pointsInSquare(geoData.paths[geoData.focus].features[0].geometry.coordinates, start, evt.latlng);
-		console.log(points);
-		points.forEach(point => {
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+		if (points.length > 0) {
+			let latlngs = [];
+			points.forEach(point => {
+				let latlng = [
+					point.coordinates[1],
+					point.coordinates[0],
+					point.coordinates[2]
+				];
+				latlngs.push(latlng);
+			});
+			let polyline = L.polyline(latlngs, {color: "red"});
+			polyline.addTo(geoData.map);
+			let center = polyline.getCenter();
+			let marker = L.marker(center, {
 				draggable: true,
-				index: point.index
-			})
-			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
-			.on('dragend', e => dragEndHandler(geoData));
+			}).on("dragend", evt => {
+				draggable = false;
+				let newCenter = evt.target._latlng;
+				let offset = substractLatlng(center, newCenter);
+				console.log(offset);
+				let originalsLatlngs = polyline.getLatLngs();
+			    let	newLatlngs = deplaceLatlngs(originalsLatlngs, offset);
+			    //latlngs.splice(e.target.options.index, 1, latlng);
+			    polyline.setLatLngs(newLatlngs);
+				console.log(polyline.getLatLngs());
+				polyline.redraw();
+				//geoData.map.removeLayer(polyline);
+			});
 			geoData.tempMarkers.push(marker);
 			marker.addTo(geoData.map);
-		});
+			draggable = true;
+		}
 	});
 }
 

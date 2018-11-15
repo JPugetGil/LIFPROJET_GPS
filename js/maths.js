@@ -151,3 +151,24 @@ function pointsInSquare(coordinates, latlng1, latlng2) {
 function compareNumbers(a, b) {
 	return a - b;
 }
+
+function substractLatlng(latlng1, latlng2) {
+	let latlng = {};
+	latlng.lat = latlng1.lat - latlng2.lat;
+	latlng.lng = latlng1.lng - latlng2.lng;
+	if (latlng1.hasOwnProperty("alt") && latlng2.hasOwnProperty("alt")) {
+		latlng.alt = latlng1.alt - latlng2.alt;
+	}
+	return L.latLng(latlng);
+}
+
+function deplaceLatlngs(latlngs, offset) {
+	return latlngs.map(latlng => {
+		latlng[0] += offset[0];
+		latlng[1] += offset[1];
+		if (offset.length > 2) {
+			latlng[2] += offset[2];
+		}
+		return latlng;
+	});
+}
