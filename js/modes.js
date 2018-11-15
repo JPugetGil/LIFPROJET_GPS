@@ -22,7 +22,7 @@ function moveMapMode(geoData) {
 // Param : geoData
 // Return : None
 function movePointMode(geoData) {
-	geoData.map.dragging.enable();
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -49,6 +49,16 @@ function movePointMode(geoData) {
 		} else {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir déplacer ses points.");
 		}
+	});
+
+	let start;
+	geoData.map.on("mousedown", evt => {
+		if (evt.originalEvent.button === 0) {
+			start = evt.latlng;
+		}
+	});
+	geoData.map.on("mouseup", evt => {
+		pointsInSquare(geoData, start, evt.latlng);
 	});
 }
 

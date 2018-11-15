@@ -129,3 +129,9 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 	});
 	return points;
 }
+
+function pointsInSquare(latlng1, latlng2) {
+	console.log("In pointsInSquare");
+	console.log(latlng1);
+	console.log(latlng2);
+}
