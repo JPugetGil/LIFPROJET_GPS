@@ -184,32 +184,57 @@ function linkMode(geoData) {
 	}
 }
 
-function fusion(geoData, trace1, trace2, mode){
-	let traceBorn = copyAttrPath(geoData, trace1);
+function fusion(geoData, idTrace1, idTrace2, mode){
+	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
 	switch(mode) {
-		case "fd":
-			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0));
-			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0));
-			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0));
+		case 'fd':
+			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
 			break;
-		case "ff":
-			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
-			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
-			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+		case 'ff':
+			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
 			break;
-		case "dd":
-			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0));
-			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0));
-			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0));
+		case 'dd':
+			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0));
+			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0));
+			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0));
 			break;
-		case "df":
-			traceBorn.features[0].geometry.coordinates = trace1.features[0].geometry.coordinates.slice(0).reverse().concat(trace2.features[0].geometry.coordinates.slice(0).reverse());
-			traceBorn.features[0].properties.coordTimes = trace1.features[0].properties.coordTimes.slice(0).reverse().concat(trace2.features[0].properties.coordTimes.slice(0).reverse());
-			traceBorn.features[0].properties.heartRates = trace1.features[0].properties.heartRates.slice(0).reverse().concat(trace2.features[0].properties.heartRates.slice(0).reverse());
+		case 'df':
+			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0).reverse());
+			traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
+			traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).reverse().concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
+			break;
+		default:
 			break;
 	}
-	console.log(traceBorn);
-	return traceBorn;
+	deleteTrace(geoData, idTrace2, false);
+	deleteTrace(geoData, idTrace1, false);
+	geoData.paths[geoData.paths.length] = traceBorn;
+	displayPath(geoData, geoData.paths.length-1);
+	setListenersUpdate(geoData);
+	
+}
+
+function linkTrace(geoData){
+	let idTrace1 = document.getElementById('t1').value;
+	let idTrace2 = document.getElementById('t2').value;
+	let radios1 = document.getElementsByName('firstTrace');
+	let radios2 = document.getElementsByName('secondTrace');
+	let val1 = " ";
+	let val2 = " ";
+	for(let i = 0; i < 2; i++){
+ 		if(radios1[i].checked){
+ 			val1 = radios1[i].value;
+ 		}
+ 		if(radios2[i].checked){
+ 			val2 = radios2[i].value;
+ 		}
+	}
+	let mode = val1 + val2;
+	fusion(geoData, idTrace1, idTrace2, mode);
 }
 
 function unlinkMode(geoData) {

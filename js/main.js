@@ -71,9 +71,8 @@ function generateIndex(geoData) {
       				</div>
       				<div class="modal-body">
         				<p>Choississez les deux traces à lier :<p>
-        				<form name="submitLink">
-        					<div class="row">
-	        					<div class="col-6">
+        					<div class="row-sm">
+	        					<div class="col-6-sm">
 	        						<label for="trace1">Première trace : </label>
 	        						<select id="t1" name="Trace1" size=1>
 	        						</select>
@@ -82,7 +81,7 @@ function generateIndex(geoData) {
 	        							<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
 	        						</div>
 	        					</div>
-	        					<div class="col-6">
+	        					<div class="col-6-sm">
 	        						<label for="trace2">Deuxième trace : </label>
 	        						<select id="t2" name="Trace2" size=1>
 	        						</select>
@@ -92,12 +91,11 @@ function generateIndex(geoData) {
 	        						</div>
 	        					</div>
         					</div>
-        				</form>
+        					<div class="modal-footer">
+        						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre" data-dismiss="modal"></button>
+     						</div>
       				</div>
-      				<div class="modal-footer">
-        				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-        				<input type="button" class="btn btn-primary" name="submit" value="Soumettre"></button>
-     				</div>
     			</div>
   			</div>
 		</div>`;
@@ -298,8 +296,8 @@ function generateGraph(geoData) {
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
 // Return : none
-function deleteTrace(geoData, id) {
-	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+function deleteTrace(geoData, id, conf = true) {
+	if (!conf || confirm("Voulez vous vraiment supprimer ce fichier ?")) {
 		geoData.layersControl.removeLayer(geoData.layers[id]);
 		geoData.map.removeLayer(geoData.layers[id]);
 		geoData.layers.splice(id, 1);
@@ -338,6 +336,7 @@ function setListeners(geoData) {
 	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
+	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
 
     return geoData;
 }
@@ -362,7 +361,6 @@ function setListenersUpdate(geoData) {
 	});
 
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
-
 	return geoData;
 }
 
