@@ -2,7 +2,7 @@ createGeoData()
 .then(generateIndex)
 .then(generateMap)
 .then(generateTiles)
-.then(geoData => addPath(geoData, "gpx/runinlyon_10km.gpx"))
+.then(geoData => addPath(geoData, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 //.then(generateFilesTab)
@@ -59,7 +59,7 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 3/14) +"px; width: 100%; z-Index: 2");
 	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -261,9 +261,9 @@ function generateGraph(geoData) {
 		w2.terminate();
 		w2 = undefined;
 		if (event.data[1].length < $(document).width()){
-			document.getElementById("cvs").setAttribute("width", $(document).width() * 9/10);
+			document.getElementById("cvs").setAttribute("width", $(document).width() * 1.5);
 		}	else {
-			document.getElementById("cvs").setAttribute("width", event.data[1].length);
+			document.getElementById("cvs").setAttribute("width", event.data[1].length * 1.5);
 		}
 
 		var line = new RGraph.Line({
@@ -272,7 +272,7 @@ function generateGraph(geoData) {
             options: {
 								backgroundGridDashed: true,
 								tooltips: function () {
-									console.log("MODIFIER POUR AFFICHER SUR LA CARTE LE POINT SURVOLE");
+									return 'BONJOUR';
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
