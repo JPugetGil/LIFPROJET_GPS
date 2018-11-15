@@ -59,8 +59,8 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 3/14) +"px; width: 100%; z-Index: 2");
-	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 5%");
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
@@ -258,19 +258,16 @@ function generateGraph(geoData) {
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
-		if (event.data[1].length < $(document).width()){
-			document.getElementById("cvs").setAttribute("width", $(document).width() * 1.5);
-		}	else {
-			document.getElementById("cvs").setAttribute("width", event.data[1].length * 1.5);
-		}
-
+		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
+		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
+		document.getElementById("axes").setAttribute("height", $(document).height()/4);
 		var line = new RGraph.Line({
             id: 'cvs',
             data: event.data[1],
             options: {
 								backgroundGridDashed: true,
-								tooltips: function () {
-									return 'BONJOUR';
+								tooltips: function (event) {
+									return event;
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
