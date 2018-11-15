@@ -12,6 +12,15 @@ function calculateDistance(trace) {
 	return distance.toFixed(2);
 }
 
+function calculateDistance2(trace) {
+	let distance = 0;
+	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
+	for(let i = 0; i<trace.length-1; i++) {
+		distance += DistanceBetween2Points(trace[i],trace[i+1]);
+	}
+	return distance.toFixed(2);
+}
+
 // Convert a number in degrees to radians
 // Param : degrees -> number in degrees
 // Return : a number in radians
@@ -119,4 +128,56 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 		}
 	});
 	return points;
+}
+
+function pointsInSquare(coordinates, latlng1, latlng2) {
+	let points = [];
+	let lats = [latlng1.lat, latlng2.lat];
+	let lngs = [latlng1.lng, latlng2.lng];
+	lats.sort(compareNumbers);
+	lngs.sort(compareNumbers);
+	coordinates.forEach( (coord, index) => {
+		if (isBetween(coord[0], lngs[0], lngs[1]) && isBetween(coord[1], lats[0], lats[1])) {
+			let point = {
+				coordinates: coord,
+				index: index
+			};
+			points.push(point);
+		}
+	});
+	return points;
+}
+
+function compareNumbers(a, b) {
+	return a - b;
+}
+
+function substractLatlng(latlng1, latlng2) {
+	let latlng = {};
+	latlng.lat = latlng1.lat - latlng2.lat;
+	latlng.lng = latlng1.lng - latlng2.lng;
+	if (latlng1.hasOwnProperty("alt") && latlng2.hasOwnProperty("alt")) {
+		latlng.alt = 0;
+	}
+	return L.latLng(latlng);
+}
+
+function deplaceLatlngs(latlngs, offset) {
+	return latlngs.map(latlng => {
+		let res = {};
+		res.lat = latlng.lat + offset.lat;
+		res.lng = latlng.lng + offset.lng;
+		if (latlng.hasOwnProperty("alt") && offset.hasOwnProperty("alt")) {
+			res.alt = 0;
+		}
+		return L.latLng(res);
+	});
+}
+
+function differenceBetween2coordTimes(coordT1, coordT2){
+	coordT1 = coordT1.substring(0, coordT1.length-1);
+	coordT2 = coordT2.substring(0, coordT2.length-1);
+	let resT1= new Date(coordT1);
+	let resT2= new Date(coordT2);
+	return (resT2-resT1);
 }

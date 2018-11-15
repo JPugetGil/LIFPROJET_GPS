@@ -1,0 +1,137 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.hbar.js" ></script>
+    
+    <title>RGraph demo: An HBar chart showing Internet users by country</title>
+    
+    
+    
+    <meta name="description" content="An HBar chart showing Internet users by country" />
+     
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    <h1>An HBar chart showing Internet users by country</h1>
+
+    <canvas id="cvs" width="600" height="300">[No canvas support]</canvas>
+    
+    <script>
+        new RGraph.HBar({
+            id: 'cvs',
+            data: [2023, 704, 453,437,345,164,28],
+            options: {
+                labelsAbove: true,
+                backgroundColor: '#DCE6F2',
+                backgroundGridHlines: false,
+                backgroundGridBorder: false,
+                backgroundGridColor: '#4E85C6',
+                noyaxis: true,
+                gutterLeft: 100,
+                textSize: 10,
+                labels: [
+                    'Asia',
+                    'Europe',
+                    'Africa',
+                    'Latin America /\nthe Carribean',
+                    'North America',
+                    'Middle East',
+                    'Oceania /\nAustralia'
+                ],
+                labelsBold: true,
+                labelsAboveBold: true,
+                textAccessible: false,
+                vmargin: 10,
+                colors: ['Gradient(#2E4C72:#4E85C6)'],
+                shadow: true,
+                shadowColor: '#aaa',
+                shadowOffsetx: 2,
+                shadowOffsety: 2,
+                axisColor: '#aaa',
+                xmax: 2300,
+                title: 'Internet Users by Geographic region',
+                titleSize: 16,
+                titleXaxis: 'Millions of users - June 2017',
+                titleXaxisSize: 8,
+                gutterTop: 35,
+                gutterBottom: 50
+            }
+        }).grow();
+    </script>
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.hbar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="600" height="300"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    new RGraph.HBar({
+        id: 'cvs',
+        data: [2023, 704, 453,437,345,164,28],
+        options: {
+            labelsAbove: true,
+            backgroundColor: '#DCE6F2',
+            backgroundGridHlines: false,
+            backgroundGridBorder: false,
+            backgroundGridColor: '#4E85C6',
+            noyaxis: true,
+            gutterLeft: 100,
+            textSize: 10,
+            labels: [
+                'Asia',
+                'Europe',
+                'Africa',
+                'Latin America /\nthe Carribean',
+                'North America',
+                'Middle East',
+                'Oceania /\nAustralia'
+            ],
+            labelsBold: true,
+            labelsAboveBold: true,
+            textAccessible: false,
+            vmargin: 10,
+            colors: ['Gradient(#2E4C72:#4E85C6)'],
+            shadow: true,
+            shadowColor: '#aaa',
+            shadowOffsetx: 2,
+            shadowOffsety: 2,
+            axisColor: '#aaa',
+            xmax: 2300,
+            title: 'Internet Users by Geographic region',
+            titleSize: 16,
+            titleXaxis: 'Millions of users - June 2017',
+            titleXaxisSize: 8,
+            gutterTop: 35,
+            gutterBottom: 50
+        }
+    }).grow();
+&lt;/script&gt;
+</pre>
+
+
+
+    
+
+</body>
+</html>

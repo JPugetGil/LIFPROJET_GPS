@@ -1,0 +1,181 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.drawing.text.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+
+    <title>RGraph demo: A segmented Donut chart</title>
+    
+    
+    <meta name="description" content="A segmented (done by using the ondraw event) Donut chart that uses the RoundRobin effect" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+    
+
+    <h1>A segmented Donut chart</h1>
+    
+    <canvas id="cvs" width="350" height="350" style="background-color: black; float: right">[No canvas support]</canvas>
+    
+    <p>
+        This is an example of using the Pie chart that's customised to such a degree
+        that it appears as more of a progress meter or a "% complete" style meter.
+    </p>
+    
+    <p>
+        The segmentation effect is achieved by using the <b>ondraw</b> event. This
+        event is used by code that draws lines from outside the Donut chart back to
+        the center, drawing them every 10-15 degrees. In this custom code the RGraph
+        API function <b>RGraph.degrees2Radians()</b> is used to do the necessary conversion
+        and the <b>RGraph.path2()</b> function is used to handle the pathing of these lines.
+    </p>
+    
+    <p>
+        The text in the center of the Donut chart is added by using the RGraph
+        Drawing API - the <b>Text</b> drawing API object. On each frame of the
+        roundRobin effect the object is updated with the new percentage and it then
+        gets redrawn. This gives you an effect of the text constantly changing.
+    </p>
+
+    
+    
+    <script>
+        var pie = new RGraph.Pie({
+            id: 'cvs',
+            data: [v = 70,100 - v],
+            options: {
+                variant: 'donut',
+                variantDonutWidth: 50,
+                colors: ['red', 'white'],
+                strokestyle: 'transparent',
+                shadow: false
+            }
+        }).roundRobin({frames: 60}).on('draw', function (obj)
+        {
+            var width = 5;
+
+            for (var i=0; i<360; i+=10) {
+                RGraph.path2(
+                    obj.context,
+                    'b a % % % % % false l % % c f black',
+                    obj.centerx,
+                    obj.centery,
+                    obj.radius + 2,
+                    RGraph.degrees2Radians(i - (width / 2)),
+                    RGraph.degrees2Radians(i + (width / 2)),
+                    obj.centerx,
+                    obj.centery
+                );
+            }
+
+            if (text) {
+                text.text = parseInt(v * obj.get('effect.roundrobin.multiplier')) + '%';
+            }
+        });
+
+
+
+        var text = new RGraph.Drawing.Text({
+            id: 'cvs',
+            x: pie.centerx,
+            y: pie.centery,
+            text: pie.data[0] + '%',
+            options: {
+                font: 'Arial',
+                size: 64,
+                halign: 'center',
+                'valign': 'center',
+                colors: ['#aaa']
+            }
+        }).draw();
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.drawing.text.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.pie.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="350" height="350"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    var pie = new RGraph.Pie({
+        id: 'cvs',
+        data: [v = 70,100 - v],
+        options: {
+            variant: 'donut',
+            variantDonutWidth: 50,
+            colors: ['red', 'white'],
+            strokestyle: 'transparent',
+            shadow: false
+        }
+    }).roundRobin({frames: 60}).on('draw', function (obj)
+    {
+        var width = 5;
+
+        for (var i=0; i&lt;360; i+=10) {
+            RGraph.path2(
+                obj.context,
+                'b a % % % % % false l % % c f black',
+                obj.centerx,
+                obj.centery,
+                obj.radius + 2,
+                RGraph.degrees2Radians(i - (width / 2)),
+                RGraph.degrees2Radians(i + (width / 2)),
+                obj.centerx,
+                obj.centery
+            );
+        }
+
+        if (text) {
+            text.text = parseInt(v * obj.get('effect.roundrobin.multiplier')) + '%';
+        }
+    });
+
+
+
+    var text = new RGraph.Drawing.Text({
+        id: 'cvs',
+        x: pie.centerx,
+        y: pie.centery,
+        text: pie.data[0] + '%',
+        options: {
+            font: 'Arial',
+            size: 64,
+            halign: 'center',
+            'valign': 'center',
+            colors: ['#aaa']
+        }
+    }).draw();
+&lt;/script&gt;
+</pre>
+
+
+
+    
+</body>
+</html>

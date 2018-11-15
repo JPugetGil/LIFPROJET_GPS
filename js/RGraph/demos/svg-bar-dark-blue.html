@@ -1,0 +1,111 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.bar.js" ></script>
+    
+
+    <title>RGraph demo: A dark and graduated blue Bar chart</title>
+
+    
+    <meta name="description" content="A dark and graduated blue Bar chart" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+
+    <h1>A dark and graduated blue Bar chart</h1>
+    
+    <div style="width: 600px; height: 300px; background-color: black; float: right" id="chart-container"></div>
+    
+    <p>
+        A dark and graduated Bar chart. The colors are black at the bottom of the
+        bars graduating to blue towards the top. The background grid is customised
+        too with the horizontal gridlines having been disabled. Nor are there any
+        labels. The chart uses the <span class="inline-code-highlight">grow()</span>
+        effect (as you can see!).
+    </p>
+    
+    <p>
+        Another thing to note here is the complete lack of an labels on the chart.
+        You don't always need to have labels as the meaning of the chart may be
+        clear without them - perhaps having a title elsewhere on the page. I
+        wouldn't imagine that these use cases are very common though - with most charts
+        requiring at least a scale in order to make sense.
+    </p>
+
+    
+    
+
+
+    <script>
+        data = [6,4,5,5,7,4,8];
+    
+        var bar = new RGraph.SVG.Bar({
+            id: 'chart-container',
+            data: data,
+            options: {
+                hmargin:15,
+                xaxis: false,
+                yaxis: false,
+                yaxisLabels: false,
+                backgroundGridColor: '#999',
+                backgroundGridHlines: false,
+                backgroundGridBorder: false,
+                colors: ['Gradient(#6969FF:#6969FF:#000)']
+            }
+        }).wave();
+    </script>
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.bar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="width: 600px; height: 300px" id="chart-container"&gt;&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    data = [6,4,5,5,7,4,8];
+
+    var bar = new RGraph.SVG.Bar({
+        id: 'chart-container',
+        data: data,
+        options: {
+            hmargin:15,
+            xaxis: false,
+            yaxis: false,
+            yaxisLabels: false,
+            backgroundGridColor: '#999',
+            backgroundGridHlines: false,
+            backgroundGridBorder: false,
+            colors: ['Gradient(#6969FF:#6969FF:#000)']
+        }
+    }).wave();
+&lt;/script&gt;
+</pre>
+
+
+
+    
+    
+
+
+
+</body>
+</html>

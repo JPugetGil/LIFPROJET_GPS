@@ -1,0 +1,267 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.key.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+
+    <title>RGraph demo: A nested Donut chart/progress bar</title>
+    
+    <meta name="description" content="A nested Donut chart/progress bar" />
+    
+    <!-- <RGRAPH_REMOVE> -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- </RGRAPH_REMOVE> -->
+
+</head>
+<body>
+
+    
+
+    <h1>A nested Donut chart/progress bar</h1>
+    
+    <canvas id="cvs" width="450" height="475" style="background-color: black; float: right">[No canvas support]</canvas>
+    
+    <p>
+        This is an example of how you can use the RGraph charts to create your own
+        visualisations, of your own design. This is actually the Pie chart using the
+        donut variation to create a set of three nested progress bars. There's a
+        key in order to help identification of the three "progress bars". The initial
+        configuration for the bars is held in a JavaScript object at the top of the
+        code.
+    </p>
+    
+    <p>
+        The donuts are actually drawn twice - once in order to get the darkened
+        background to the Donut rings and then to draw the full color rings.
+    </p>
+    
+    <p>
+        Lastly the API <b>RGraph.path2()</b> and <b>RGraph.getRadiusEndpoint()</b>
+        functions are used again to add circles at each end of the donut rings
+        that are using the same color as the ring itself. This gives the appearance
+        that the donut ring has a rounded end.
+    </p>
+    
+    <p>
+        Each of the full colour donut rings is animated using the <b>roundRobin()</b>
+        effect.
+    </p>
+
+    
+    
+    <script>
+        var rings = [
+            {color: '#2B908F', value: 67, width: 50, radius: 200},
+            {color: '#90EE7E', value: 57, width: 50, radius: 147},
+            {color: '#F45B5B', value: 46, width: 50, radius: 94}
+        ];
+
+        for (var i=0; i<rings.length; ++i) {
+            new RGraph.Pie({
+                id: 'cvs',
+                data: [1],
+                options: {
+                    variant: 'donut',
+                    colors: [rings[i].color],
+                    strokestyle: 'rgba(0,0,0,0)',
+                    shadow: false,
+                    radius: rings[i].radius,
+                    variantDonutWidth: rings[i].width,
+                    key: [
+                        'John ({1}%)'.format(rings[0].value),
+                        'Freddy ({1}%)'.format(rings[1].value),
+                        'Lucy ({1}%)'.format(rings[2].value)
+                    ],
+                    keyPosition: 'gutter',
+                    keyTextSize: 16,
+                    keyTextColor: 'white',
+                    keyColors: ['#2B908F','#90EE7E','#F45B5B'],
+                    textAccessible: false,
+                    keyPositionY: 12.5
+                }
+            }).on('draw', function (obj)
+            {
+                var co = obj.context,
+                    ca = obj.canvas;
+                
+                RGraph.path2(co,
+                    'b a % % % % % false f rgba(0,0,0,0.45)',
+                    obj.centerx,
+                    obj.centery,
+                    obj.radius,
+                    0,
+                    2 * Math.PI
+                );
+
+            }).draw();
+
+            (function (index)
+            {
+                new RGraph.Pie({
+                    id: 'cvs',
+                    data: [rings[index].value,100 - rings[index].value],
+                    options: {
+                        variant: 'donut',
+                        colors: [rings[index].color,'rgba(0,0,0,0)'],
+                        strokestyle: 'rgba(0,0,0,0)',
+                        shadow: false,
+                        radius: rings[index].radius,
+                        variantDonutWidth: rings[index].width
+                    }
+                }).on('draw', function (obj)
+                {
+                    var halfWidth = obj.get('variantDonutWidth') / 2;
+
+                    var co        = obj.context,
+                        endpoint1 = RGraph.getRadiusEndPoint(obj.centerx, obj.centery, RGraph.PI + RGraph.HALFPI, obj.radius);
+                        endpoint2 = RGraph.getRadiusEndPoint(obj.centerx, obj.centery, obj.angles[0][1], obj.radius - halfWidth);
+
+                    RGraph.path2(co,
+                        'b a % % % % % false f %',
+                        endpoint1[0],
+                        endpoint1[1] + halfWidth,
+                        25,
+                        0,
+                        RGraph.TWOPI,
+                        obj.get('colors')[0]
+                    );
+
+                    RGraph.path2(co,
+                        'b a % % % % % false f %',
+                        endpoint2[0],
+                        endpoint2[1],
+                        25,
+                        0,
+                        RGraph.TWOPI,
+                        obj.get('colors')[0]
+                    );
+                    
+                }).roundRobin();
+            })(i);
+        }
+    </script>
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.drawing.text.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.pie.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="450" height="450"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    var rings = [
+        {color: '#2B908F', value: 67, width: 50, radius: 200},
+        {color: '#90EE7E', value: 57, width: 50, radius: 147},
+        {color: '#F45B5B', value: 46, width: 50, radius: 94}
+    ];
+
+    for (var i=0; i&lt;rings.length; ++i) {
+        new RGraph.Pie({
+            id: 'cvs',
+            data: [1],
+            options: {
+                variant: 'donut',
+                colors: [rings[i].color],
+                strokestyle: 'rgba(0,0,0,0)',
+                shadow: false,
+                radius: rings[i].radius,
+                variantDonutWidth: rings[i].width,
+                key: [
+                    'John ({1}%)'.format(rings[0].value),
+                    'Freddy ({1}%)'.format(rings[1].value),
+                    'Lucy ({1}%)'.format(rings[2].value)
+                ],
+                keyPosition: 'gutter',
+                keyTextSize: 16,
+                keyTextColor: 'white',
+                keyColors: ['#2B908F','#90EE7E','#F45B5B'],
+                textAccessible: false,
+                keyPositionY: 12.5
+            }
+        }).on('draw', function (obj)
+        {
+            var co = obj.context,
+                ca = obj.canvas;
+            
+            RGraph.path2(co,
+                'b a % % % % % false f rgba(0,0,0,0.45)',
+                obj.centerx,
+                obj.centery,
+                obj.radius,
+                0,
+                2 * Math.PI
+            );
+
+        }).draw();
+
+        (function (index)
+        {
+            new RGraph.Pie({
+                id: 'cvs',
+                data: [rings[i].value,100 - rings[i].value],
+                options: {
+                    variant: 'donut',
+                    colors: [rings[i].color,'rgba(0,0,0,0)'],
+                    strokestyle: 'rgba(0,0,0,0)',
+                    shadow: false,
+                    radius: rings[i].radius,
+                    variantDonutWidth: rings[i].width
+                }
+            }).on('draw', function (obj)
+            {
+                var halfWidth = obj.get('variantDonutWidth') / 2;
+
+                var co        = obj.context,
+                    endpoint1 = RGraph.getRadiusEndPoint(obj.centerx, obj.centery, RGraph.PI + RGraph.HALFPI, obj.radius);
+                    endpoint2 = RGraph.getRadiusEndPoint(obj.centerx, obj.centery, obj.angles[0][1], obj.radius - halfWidth);
+
+                RGraph.path2(co,
+                    'b a % % % % % false f %',
+                    endpoint1[0],
+                    endpoint1[1] + halfWidth,
+                    25,
+                    0,
+                    RGraph.TWOPI,
+                    obj.get('colors')[0]
+                );
+
+                RGraph.path2(co,
+                    'b a % % % % % false f %',
+                    endpoint2[0],
+                    endpoint2[1],
+                    25,
+                    0,
+                    RGraph.TWOPI,
+                    obj.get('colors')[0]
+                );
+                
+            }).roundRobin();
+        })(i);
+    }
+&lt;/script&gt;
+</pre>
+
+
+
+    
+</body>
+</html>

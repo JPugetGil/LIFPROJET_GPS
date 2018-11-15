@@ -1,12 +1,12 @@
 createGeoData()
 .then(generateIndex)
 .then(generateMap)
-.then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
-.then(movePOV)
+.then(generateTiles)
+.then(geoData => addPath(geoData, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
 .then(geoData => displayPath(geoData,0))
-.then(generateFilesTab)
+.then(movePOV)
 .then(generateGraph)
-.then(generatePoints)
+.then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
 .then(console.log)
@@ -26,10 +26,10 @@ function createGeoData() {
 				layers: [],
 				last: undefined
 			},
+			layersControl: undefined,
 			markersColor: [],
-			tempsMarkers: [],
+			tempMarkers: [],
 			focus: undefined,
-            page: undefined,
             mode: "movemap"
 		};
 		resolve(geoData);
@@ -37,71 +37,66 @@ function createGeoData() {
 	});
 }
 
-// Generate the main section (with the map)
-// Return : none
 function generateIndex(geoData) {
-    geoData.page = "index";
-	document.getElementById("planDeTravail").innerHTML =
-		`<div class="col-lg-8 bg-light">
-			<div class="row">
-				<div class="col-11">
-					<div id="mapid" style="width: 100%; height: 500px"></div>
-					<div id="graph" class="row col-auto bg-light">
-						<div class="c3" id="chart" style="height: 250px; width:98%; position :relative;"></div>
-					</div>
-				</div>
-				<div class="col-1">
-					<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-hand-pointer"></i></button>
-					<button type="button" alt="Annuler" title="Annuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-undo"></i></button>
-					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-redo"></i></button>
-					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-plus"></i></button>
-					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-link"></i></button>
-					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-unlink"></i></button>
-
+	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
+	document.getElementById("mapid").style.zIndex=0;
+	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
+	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
+					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-hand-pointer"></i></button>
+					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
+					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
+					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
+					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink"><i class="fas fa-link"></i></button>
+					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
-					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-divide"></i></button>
+					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
-					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-print"></i></button>
-					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-sm btn-block"><i class="fas fa-file-download"></i></button>
-					<button type="button" id="speed" alt="Vitesse Calcul" title="Calculer les vitesse" class="btn btn-secondary btn-sm btn-block">VITESSE</button>
-				</div>
-			</div>
-
-		</div>
-		<div class="col-lg-4">
-			<div id="tableauFichiers" style="margin-bottom:15px">
-				<table class="table table-striped table-hover table-bordered">
-				   <thead>
-					  	<tr>
-						<th scope="col">#</th>
-						<th scope="col">Nom du fichier</th>
-						<th scope="col">Distance <br />(en km)</th>
-						<th scope="col">Durée <br />(en h)</th>
-						<th scope="col"><i class="fas fa-trash"></i></th>
-						</tr>
-					</thead>
-					<tbody id="fileTable">
-					</tbody>
-				</table>
-			</div>
-			<div id="tableauPoints">
-				<table id="tableData" class="table table-striped table-hover table-bordered">
-					<thead>
-						<tr>
-							<th scope="col">#</th>
-							<th scope="col">Longitude</th>
-							<th scope="col">Latitude</th>
-							<th scope="col">Altitude</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
+					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block"><i class="fas fa-print"></i></button>
+					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
+				</div>`;
+	document.getElementById("features").style.zIndex=1;
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 5%");
+	document.getElementById("workPlan").innerHTML +=
+		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ 			<div class="modal-dialog" role="document">
+    			<div class="modal-content">
+      				<div class="modal-header">
+      					<h4 class="modal-title">Lier</h4>
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      				</div>
+      				<div class="modal-body">
+        				<p>Choississez les deux traces à lier :<p>
+        					<div class="row-sm">
+	        					<div class="col-6-sm">
+	        						<label for="trace1">Première trace : </label>
+	        						<select id="t1" name="Trace1" size=1>
+	        						</select>
+	        						<div>
+	        							<input type="radio" id="start1" name="firstTrace" value="d">Début</input>
+	        							<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
+	        						</div>
+	        					</div>
+	        					<div class="col-6-sm">
+	        						<label for="trace2">Deuxième trace : </label>
+	        						<select id="t2" name="Trace2" size=1>
+	        						</select>
+	        						<div>
+	        							<input type="radio" id="start2" name="secondTrace" value="d" checked>Début</input>
+	        							<input type="radio" id="end2" name="secondTrace" value="f">Fin</input>
+	        						</div>
+	        					</div>
+        					</div>
+        					<div class="modal-footer">
+        						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre"></button>
+     						</div>
+      				</div>
+    			</div>
+  			</div>
 		</div>`;
 	return geoData;
 }
@@ -114,14 +109,23 @@ function help(){
 
 function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
+	geoData.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
+	L.control.scale({imperial: false}).addTo(geoData.map);
+	console.log("TRACER AVEC UNE COULEUR EN FONCTION DE L'ALTITUDE MOYENNE");
 
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	return geoData;
+}
+
+function generateTiles(geoData) {
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox.streets'
-	}).addTo(geoData.map);
+	}).addTo(geoData.map), "Epurée");
+	geoData.layersControl.addBaseLayer(L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}), "Détaillée");
+	geoData.layersControl.addBaseLayer(L.tileLayer(' http://{s}.tile.openstreetmap.fr/openriverboatmap/{z}/{x}/{y}.png'), "OpenRiverboatMap");
 
 	return geoData;
 }
@@ -134,32 +138,17 @@ function addPath(geoData, file) {
 		geoData.paths[index] = toGeoJSON.gpx(gpx);
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
-		geoData.paths[index].markersAdded = [];
-		geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
+		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
         return geoData;
-	})
+	});
 }
 
 // MAP FUNCTIONS //
 
 function movePOV(geoData) {
-	let lastIndex = geoData.paths.length -1;
-	while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
-		lastIndex--;
-	}
-	if (lastIndex >= 0) {
-		let path = geoData.paths[lastIndex];
-		let tabLatitude = [];
-		let tabLongitude = [];
-		for (let i = 0; i < path.features[0].geometry.coordinates.length ; i++) {
-			tabLatitude.push(path.features[0].geometry.coordinates[i][1]);
-			tabLongitude.push(path.features[0].geometry.coordinates[i][0]);
-		}
-		let centreTraceLatitude = moyenneDunTableau(tabLatitude);
-		let centreTraceLongitude = moyenneDunTableau(tabLongitude);
-		let elevationCarte = plusGrandModule(tabLatitude, tabLongitude, centreTraceLatitude, centreTraceLongitude);
-		geoData.map.setView([centreTraceLatitude, centreTraceLongitude],elevationCarte*21);
+	if (geoData.focus !== undefined) {
+		geoData.map.fitBounds(geoData.layers[geoData.focus].getBounds());
 	}
 
 	return geoData;
@@ -186,7 +175,6 @@ function reSample(geoData, number){
 					tolerence += 0.0000002;
 				}
 			}
-			generatePoints(geoData);
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
@@ -196,9 +184,10 @@ function reSample(geoData, number){
 			w.onmessage = event => {
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
-				generatePoints(geoData);
+				w = undefined;
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
+
 				generateGraph(geoData);
 			}
 			w.postMessage(number);
@@ -215,8 +204,7 @@ function keySample(geoData, keyCode) {
 	}
 }
 
-function displayPath(geoData, index) {
-	/*let layer = L.geoJSON(geoData.paths[index]);*/
+function displayPath(geoData, index, display = true) {
 	let latlngs = [];
 	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
 		let point = [
@@ -227,102 +215,60 @@ function displayPath(geoData, index) {
 		latlngs.push(point);
 	});
 	let polyline = L.polyline(latlngs);
+
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
-	if (geoData.paths[index].shown) {
+	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
+	if(display){
 		geoData.map.addLayer(polyline);
-	}
-
-	return geoData;
-}
-
-function generateFilesTab(geoData) {
-	document.getElementById("fileTable").innerHTML = "";
-	geoData.paths.forEach( (current, index) => {
-		let time = "Non défini";
-		if (current.features[0].properties.hasOwnProperty("coordTimes")) {
-			let lastTime = current.features[0].properties.coordTimes[current.features[0].geometry.coordinates.length - 1];
-			let firstTime = current.features[0].properties.time;
-			let date1 = new Date(lastTime);
-			let date2 = new Date(firstTime);
-			let date = date1 - date2;
-			time = secondsToHours(date/1000);
-		}
-
-		document.getElementById("fileTable").innerHTML +=
-			`<tr id="row${index}">
-				<th scope="row" id="cell${index}">${index + 1}</th>
-				<td>${current.file}</td>
-				<td>${calculateDistance(current)}</td>
-				<td>${time}</td>
-				<td><button id="suppr${index}" class="btn btn-danger" type="button">X</button></td>
-			</tr>`;
-	});
-
-	if (geoData.focus !== undefined) {
-		document.getElementById("row" + geoData.focus).classList.add("focus");
+		setFocusClass(geoData);
 	}
 
 	return geoData;
 }
 
 function generateGraph(geoData) {
-	let xs = {};
-	let cols = [];
-	geoData.paths.forEach(current => {
-		if (current.shown) {
-			let file = current.file;
-			let x = "x" + file;
-			xs[file] = x;
+	let w2 = new Worker("js/chart.js", {type:'module'});
+	w2.onmessage = event => {
+		w2.terminate();
+		w2 = undefined;
+		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
+		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
+		document.getElementById("axes").setAttribute("height", $(document).height()/4);
+		var newMarker = new L.marker([-100,-10000]).addTo(geoData.map);
+		var line = new RGraph.Line({
+            id: 'cvs',
+            data: event.data[1],
+            options: {
+								backgroundGridDashed: true,
+								tooltips: function (event) {
+									let x = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][1];
+									let y = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][0];
+									newMarker.setLatLng([x,y]);
+									geoData.map.panTo(new L.LatLng(x,y));
+								},
+                linewidth: 3,
+							 	numxticks: event.data[0].length/10,
+                noyaxis: true,
+                ylabels: false,
+								crosshairs: true,
+								crosshairsSnap: true,
+                textAccessible: true,
+            }
+        }).draw();
 
-			let abscisse = [x];
-			let ordonnee = [file];
-			for (let i = 0; i < current.features[0].geometry.coordinates.length ; i++) {
-				abscisse.push(i+1);
-				ordonnee.push(current.features[0].geometry.coordinates[i][2]);
-			}
-
-			cols.push(abscisse);
-			cols.push(ordonnee);
-		}
-	});
-	c3.generate({
-	    data: {
-	        xs: xs,
-	        columns: cols
-	    }
-	});
-
-	return geoData;
-}
-
-function generatePoints(geoData) {
-	let tableContent = "";
-	let lastIndex = geoData.focus;
-	if (lastIndex === undefined) {
-		lastIndex = geoData.paths.length -1;
-		while (lastIndex >= 0 && !geoData.paths[lastIndex].shown) {
-			lastIndex--;
-		}
+				var yaxis = new RGraph.Drawing.YAxis({
+            id: 'axes',
+            x: 40,
+            options: {
+                max: line.max,
+                colors: ['black'],
+								unitsPost: 'm',
+                textAccessible: true
+            }
+        }).draw();
 	}
-	if (lastIndex >= 0) {
-		let trace = geoData.paths[lastIndex];
-		for (let i=0; i < trace.features[0].geometry.coordinates.length; i++) {
-			tableContent += `<tr>
-								<th scope="row"> ${i+1}</th>
-									<td>
-										${trace.features[0].geometry.coordinates[i][0]}
-									</td>
-								<td>
-									${trace.features[0].geometry.coordinates[i][1]}
-								</td>
-								<td>
-									${trace.features[0].geometry.coordinates[i][2]}
-								</td>
-							  </tr>`;
-		}
-	}
-	document.querySelector("#tableData > tbody").innerHTML = tableContent;
+	w2.postMessage(geoData.paths);
 
 	return geoData;
 }
@@ -330,267 +276,110 @@ function generatePoints(geoData) {
 // Delete a row in the trace table
 // Param : id -> index of the row you want to delete
 // Return : none
-function deleteTrace(geoData, id) {
-	if (confirm("Voulez vous vraiment supprimer ce fichier ?")) {
-		let wasShown = geoData.paths[id].shown;
-   		geoData.map.removeLayer(geoData.layers[id]);
-   		geoData.paths.splice(id, 1);
-   		geoData.layers.splice(id, 1);
-   		if (wasShown) {
-   			generateGraph(geoData);
-   		}
-   		if (geoData.focus === id) {
-   			geoData.focus = geoData.paths.length -1;
-   			if (geoData.focus < 0) {
-   				geoData.focus = undefined;
-   			}
-   			generatePoints(geoData);
+function deleteTrace(geoData, id, conf = true) {
+	if (!conf || confirm("Voulez vous vraiment supprimer ce fichier ?")) {
+		geoData.layersControl.removeLayer(geoData.layers[id]);
+		geoData.map.removeLayer(geoData.layers[id]);
+		geoData.layers.splice(id, 1);
+		geoData.paths.splice(id, 1);
+		if (geoData.focus === id) {
+			resetFocus(geoData);
+			setFocusClass(geoData);
 	   		movePOV(geoData);
-	   	} else {
-	   		if (geoData.focus > id) {
-	   			geoData.focus--;
-	   		}
+	   	} else if (geoData.focus > id) {
+	   		geoData.focus--;
 	   	}
-	   	generateFilesTab(geoData);
-   		setListenersUpdate(geoData);
+		setListenersUpdate(geoData);
 	}
 }
 
-
-function setListeners(geoData) {
-  document.getElementById("importButton").addEventListener("click", upload(geoData));
-  document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
-  document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
-  document.getElementById("fileTable").addEventListener("click", e => changeFocus(geoData, e));
-  document.getElementById("hiddenButton").addEventListener("change", hiddenUpload(geoData));
-  document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
-  document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
-	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
-	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
-	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
-	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
-	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
-	document.getElementById("speed").addEventListener("click", () => getSpeedTab(geoData));
-
-    return geoData;
-}
-
-function setListenersUpdate(geoData){
-	Array.from(document.querySelectorAll("#fileTable button")).forEach( btn => btn.addEventListener("click", event => {
-		let id = event.target.id;
-		deleteTrace(geoData, parseInt(id.substr(5, id.length-5)));
-    }));
+function setGeneralListeners(geoData) {
+	// General
+	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
+	document.getElementById("tutorialButton").addEventListener("click", evt => launchTutorial(geoData));
 
 	return geoData;
 }
 
-// Suppress temporary markers created by modes
-// Param: geoData
-// Return : None
-function deleteOldMarkers(geoData) {
-	geoData.tempsMarkers.forEach(marker => {
-		geoData.map.removeLayer(marker);
-	});
-	geoData.moveMarker = [];
+
+function setListeners(geoData) {
+	// Files import
+    document.getElementById("importButton").addEventListener("click", () => upload(geoData));
+	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
+
+	// Mode buttons
+	document.getElementById("moveMap").addEventListener("click", () => moveMapMode(geoData));
+	document.getElementById("movePoint").addEventListener("click", () => movePointMode(geoData));
+	document.getElementById("reSample").addEventListener("click", () => reSample(geoData,document.getElementById("samplingFactor").value));
+	document.getElementById("samplingFactor").addEventListener("keyup", e => keySample(geoData, e.keyCode));
+	document.getElementById("saveButton").addEventListener("click", () => giveUserGpx(geoData));
+	document.getElementById("addPoint").addEventListener("click", () => addPointMode(geoData));
+	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
+	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
+	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
+
+    return geoData;
 }
 
-function moveMapMode(geoData) {
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "movemap";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
-}
-
-// Mode where points can ba moved
-// Param : geoData
-// Return : None
-function movePointMode(geoData) {
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "movepoint";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
-
-	geoData.map.on("contextmenu", e => {
-		deleteOldMarkers(geoData);
-		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
-		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		points.forEach(point => {
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
-				draggable: true,
-				index: point.index
-			})
-			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
-			.on('dragend', e => dragEndHandler(geoData));
-			geoData.tempsMarkers.push(marker);
-			marker.addTo(geoData.map);
-		});
-	});
-}
-
-// Called during a point drag,
-// Make polyline correspond with the point we are dragging
-// Param : e => event triggered with dragging
-// Return : polyline => a L.polyline object
-function dragHandler(e, polyline) {
-    let latlngs = polyline.getLatLngs();
-    let	latlng = e.target.getLatLng();
-    latlngs.splice(e.target.options.index, 1, latlng);
-    polyline.setLatLngs(latlngs);
-}
-
-// Update geoData with map layers
-// Param : geoData
-// Return : None
-function dragEndHandler(geoData) {
-	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generatePoints(geoData);
-	generateFilesTab(geoData);
-	generateGraph(geoData);
-}
-
-function addPointMode(geoData) {
-	geoData.map.dragging.disable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "addpoint";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-	geoData.map.on("click", e => {
-		var trace = geoData.paths[geoData.focus];
-		var color = geoData.markersColor[geoData.focus % 6];
-		var marker = L.marker(e.latlng, {icon : color}).addTo(geoData.map);
-		marker.bindPopup("<b>Coucou, je suis un point ! </b><br>Mes coordonnées sont : <br>Latitude : " + e.latlng.lat.toFixed(6) + "<br>Longitude : " + e.latlng.lng.toFixed(6));
-		//marker.setOpacity(0);
-		trace.markersAdded.push(marker);
-		marker.index = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
-		console.log(marker.index);
-		trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
-		generatePoints(geoData);
-		generateFilesTab(geoData);
-		geoData.map.removeLayer(geoData.layers[geoData.focus]);
-		displayPath(geoData, geoData.focus);
-
-		marker.on("dragend", f => {
-			newLat = f.target.getLatLng().lat.toFixed(6);
-			newLng = f.target.getLatLng().lng.toFixed(6);
-			marker.bindPopup("<b>Héhé, je me suis déplacé ! </b><br>Mes nouvelles coordonnées sont : <br>Latitude : " + newLat + "<br>Longitude : " + newLng);
-			trace.features[0].geometry.coordinates[marker.index] = Array(newLng, newLat, 0);
-			generatePoints(geoData);
-			generateFilesTab(geoData);
-			geoData.map.removeLayer(geoData.layers[geoData.focus]);
-			displayPath(geoData, geoData.focus);
-		});
-
-		marker.on("click", () => {
-			if(geoData.mode === "deletepoint"){
-				geoData.map.removeLayer(marker);
-				console.log("Je prends " + (trace.features[0].geometry.coordinates.length-marker.index-1));
-				let nb = trace.features[0].geometry.coordinates.length-marker.index-1;
-				trace.features[0].geometry.coordinates.splice(marker.index,1);
-				trace.markersAdded.splice((marker.index-trace.features[0].geometry.coordinates.length-2), 1);
-				for(let i = 0; i < nb ; i++) {
-					trace.markersAdded[i].index--;
-				}
-				generatePoints(geoData);
-				generateFilesTab(geoData);
-				geoData.map.removeLayer(geoData.layers[geoData.focus]);
-				displayPath(geoData, geoData.focus);
+function setListenersUpdate(geoData) {
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input").forEach(input => {
+		input.addEventListener("change", evt => {
+			if (evt.target.checked) {
+				geoData.focus = getIndexFile(evt.target);
+			} else {
+				resetFocus(geoData);
 			}
+			setFocusClass(geoData);
+			movePOV(geoData);
 		});
 	});
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
-}
-
-function deletePointMode(geoData) {
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "deletepoint";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
-
-	geoData.map.on("contextmenu", e => {
-		deleteOldMarkers(geoData);
-		let interval = 0.001; // Coordinates interval, to decide the range of points we handle
-		let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
-		let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
-		points.forEach(point => {
-			let markerIndex = geoData.tempsMarkers.length;
-			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
-				index: point.index
-			})
-			.on('click', e => removePoint(geoData, markerIndex, e.target.options.index));
-			geoData.tempsMarkers.push(marker);
-			marker.addTo(geoData.map);
+	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > span").forEach(span => {
+		span.addEventListener("contextmenu", evt => {
+			evt.preventDefault();
+			deleteTrace(geoData, getIndexFile(evt.target));
 		});
 	});
+
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
+	return geoData;
 }
 
-function removePoint(geoData, markerIndex, index) {
-	geoData.map.removeLayer(geoData.tempsMarkers[markerIndex]);
-    let latlngs = geoData.layers[geoData.focus].getLatLngs();
-    latlngs.splice(index, 1);
-    geoData.layers[geoData.focus].setLatLngs(latlngs);
-	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generatePoints(geoData);
-	generateFilesTab(geoData);
-	generateGraph(geoData);
-}
-
-function linkMode(geoData) {
-	geoData.map.dragging.disable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "link";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
-}
-
-function unlinkMode(geoData) {
-	geoData.map.dragging.disable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
-	deleteOldMarkers(geoData);
-	geoData.mode = "unlink";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
-	geoData.paths[geoData.focus].markersAdded.forEach(m => m.dragging.disable());
-}
-
-// Change the focus to the file we clicked on
-// Param : geoData
-// Param : e -> click event
-function changeFocus(geoData, e) {
-	let self = e.target.parentElement;
-	let siblings = self.parentElement.children;
-	let new_index = undefined; // Index of the new focus
-	let old_index = undefined; // Index of the old focus
+function getIndexFile(element) {
+	let index = undefined;
 	let i = 0;
-	while ((new_index === undefined || old_index === undefined) && i < siblings.length) {
-		if (siblings[i].id === self.id) {
-			new_index = i;
-		}
-		if (siblings[i].classList.contains("focus")) {
-			old_index = i;
+	let clickables = Array.from(document.querySelectorAll(".leaflet-control-layers-overlays > label > div > *"));
+	while (index === undefined && i < clickables.length) {
+		if (element._leaflet_id === clickables[i]._leaflet_id) {
+			index = i % 2 === 0 ? i / 2 : (i-1) / 2;
 		}
 		i++;
 	}
-	siblings[old_index].classList.remove("focus");
-	self.classList.add("focus");
-	geoData.focus = new_index;
+
+	return index;
+}
+
+// Change geoData.focus to the first checked file
+// Param : geoData
+function resetFocus(geoData) {
+	geoData.focus = undefined;
+	let i = 0;
+	let inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input");
+	while (geoData.focus === undefined && i < geoData.paths.length) {
+		if (inputs[i].checked) {
+			geoData.focus = i;
+		}
+		i++;
+	}
+}
+
+function setFocusClass(geoData) {
+	let lines = document.querySelectorAll(".leaflet-control-layers-overlays > label");
+	lines.forEach(input => {
+		input.classList.remove('focus');
+	});
+	if (geoData.focus !== undefined) {
+		lines[geoData.focus].classList.add("focus");
+	}
 }
 
 function createHistory(geoData, index) {

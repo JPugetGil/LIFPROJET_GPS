@@ -1,0 +1,222 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.hbar.js" ></script>
+    
+
+    <title>RGraph demo: An SVG HBar chart that might be used in an infographic</title>
+    
+    
+    <meta name="description" content="An SVG HBar chart that might be used in an infographic" />
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+
+
+    <h1>An SVG HBar chart that might be used in an infographic</h1>
+    <p>The raw data for the chart is first sorted so that the highest number is at the top.</p>
+
+    
+    <div style="width: 350px; height: 300px; display: inline-block" id="chart-container"></div>
+
+
+
+        
+    <script>
+        // The "raw" data
+        data = [
+            [4,'John', 'red'],
+            [8,'Luis','green'],
+            [6,'Joan','blue'],
+            [5,'Larry','brown']
+        ];
+        
+        // Sort the data using the JavaScript sort function
+        data.sort(function (a, b)
+        {
+            return b[0] - a[0];
+        });
+        
+        // Initialise the arrays that are given to RGraph
+        data_extracted   = [];
+        labels_extracted = [];
+        colors_extracted = [];
+        
+        // Seperate out the differnt bits of data into the relevant arrays
+        data.forEach(function (v, k, arr)
+        {
+            data_extracted.push(v[0])
+            labels_extracted.push(v[1] + ' ({1}%)'.format(v[0]))
+            colors_extracted.push(v[2]);
+        });
+
+        hbar = new RGraph.SVG.HBar({
+            id: 'chart-container',
+            data: data_extracted,
+            options: {
+                yaxisLabels: labels_extracted,
+                xaxis:false,
+                yaxis: false,
+                colors: ['red','green','blue','brown'],
+                colorsSequential: true,
+                backgroundGridHlines: false,
+                backgroundGridBorder: false,
+                vmargin: 10
+            }
+        }).draw();
+        
+        // Loop through the bars
+        for (var i=0; i<hbar.coords.length; ++i) {
+        
+            // Get the credentials of the Bar chart
+            var x = parseFloat(hbar.coords[i].element.getAttribute('x')),
+                y = parseFloat(hbar.coords[i].element.getAttribute('y')),
+                w = parseFloat(hbar.coords[i].element.getAttribute('width')),
+                h = parseFloat(hbar.coords[i].element.getAttribute('height')),
+                c = hbar.coords[i].element.getAttribute('fill');
+        
+            // Add the circles at the end
+            RGraph.SVG.create({
+                svg: hbar.svg,
+                type: 'circle',
+                attr: {
+                    cx: x + w,
+                    cy: y + (h / 2),
+                    r: 30,
+                    fill: c,
+                    stroke: 'white',
+                    'stroke-width': 7
+                }
+            });
+
+            // Draw the text that goes inside the circle
+            RGraph.SVG.text({
+                object: hbar,
+                x: x + w,
+                y: y + (h / 2),
+                text: i+1,
+                halign: 'center',
+                valign: 'center',
+                color: 'white',
+                size: 30,
+                bold: true
+            });
+        }
+    </script>
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.hbar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="padding: 15px"&gt;
+    &lt;div style="width: 350px; height: 500px" id="chart-container"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    <span>// The "raw" data</span>
+    data = [
+        [4,'John', 'red'],
+        [8,'Luis','green'],
+        [6,'Joan','blue'],
+        [5,'Larry','brown']
+    ];
+    
+    <span>// Sort the data using the JavaScript sort function</span>
+    data.sort(function (a, b)
+    {
+        return b[0] - a[0];
+    });
+    
+    <span>// Initialise the arrays that are given to RGraph</span>
+    data_extracted   = [];
+    labels_extracted = [];
+    colors_extracted = [];
+    
+    <span>// Seperate out the differnt bits of data into the relevant arrays</span>
+    data.forEach(function (v, k, arr)
+    {
+        data_extracted.push(v[0])
+        labels_extracted.push(v[1] + ' ({1}%)'.format(v[0]))
+        colors_extracted.push(v[2]);
+    });
+
+    hbar = new RGraph.SVG.HBar({
+        id: 'chart-container',
+        data: data_extracted,
+        options: {
+            yaxisLabels: labels_extracted,
+            xaxis:false,
+            yaxis: false,
+            colors: ['red','green','blue','brown'],
+            colorsSequential: true,
+            backgroundGridHlines: false,
+            backgroundGridBorder: false,
+            vmargin: 10
+        }
+    }).draw();
+    
+    <span>// Loop through the bars</span>
+    for (var i=0; i&lt;hbar.coords.length; ++i) {
+    
+        <span>// Get the credentials of the Bar chart</span>
+        var x = parseFloat(hbar.coords[i].element.getAttribute('x')),
+            y = parseFloat(hbar.coords[i].element.getAttribute('y')),
+            w = parseFloat(hbar.coords[i].element.getAttribute('width')),
+            h = parseFloat(hbar.coords[i].element.getAttribute('height')),
+            c = hbar.coords[i].element.getAttribute('fill');
+    
+        <span>// Add the circles at the end</span>
+        RGraph.SVG.create({
+            svg: hbar.svg,
+            type: 'circle',
+            attr: {
+                cx: x + w,
+                cy: y + (h / 2),
+                r: 30,
+                fill: c,
+                stroke: 'white',
+                'stroke-width': 7
+            }
+        });
+
+        <span>// Draw the text that goes inside the circle</span>
+        RGraph.SVG.text({
+            object: hbar,
+            x: x + w,
+            y: y + (h / 2),
+            text: i+1,
+            halign: 'center',
+            valign: 'center',
+            color: 'white',
+            size: 30,
+            bold: true
+        });
+    }
+&lt;/script&gt;
+</pre>
+
+
+
+    
+    
+
+
+
+</body>
+</html>

@@ -1,17 +1,5 @@
 // CONVERSIONS //
 
-// Make a string longer by copying its content nb times
-// Param : text -> the string to copy
-// Param : nb -> the number of times you want to copy >= 1
-// Return : the result string
-function repeatString(text, nb = 2) {
-	let repeated = text;
-	for (let i = 0; i < nb-1; i++) {
-		repeated += text;
-	}
-	return repeated;
-}
-
 // Convert a geoJSON feature of type 'LineString' to a geoJSON 'FeatureCollection' of 'Point'-typed features
 // Param : a geoJSON feature of type 'LineString'
 // Return a geoJSON 'FeatureCollection' of 'Point'-typed features
@@ -52,11 +40,11 @@ function geoJsonToXml(geoJS) {
 	xml += `${feed}${tab}<trk>`;
 	if (hasProperties) {
 		if (geoJS.properties.hasOwnProperty("name")) {
-			xml += `${feed}${repeatString(tab,2)}<name>${geoJS.properties.name}</name>`;
+			xml += `${feed}${tab.repeat(2)}<name>${geoJS.properties.name}</name>`;
 		}
 	}
 
-	xml += `${feed}${repeatString(tab,2)}<trkseg>`;
+	xml += `${feed}${tab.repeat(2)}<trkseg>`;
 
 	let hasElevation = geoJS.geometry.coordinates[0].length > 2;
 	let hasTime = false;
@@ -67,26 +55,26 @@ function geoJsonToXml(geoJS) {
 	}
 
 	geoJS.geometry.coordinates.forEach( (current, index) => {
-		xml += `${feed}${repeatString(tab,3)}<trkpt lat='${current[1]}' lon='${current[0]}'>`;
+		xml += `${feed}${tab.repeat(3)}<trkpt lat='${current[1]}' lon='${current[0]}'>`;
 		if (hasElevation) {
-			xml += `${feed}${repeatString(tab,4)}<ele>${current[2]}</ele>`;
+			xml += `${feed}${tab.repeat(4)}<ele>${current[2]}</ele>`;
 		}
 		if (hasTime) {
 			let time = geoJS.properties.coordTimes[index];
-			xml += `${feed}${repeatString(tab,4)}<time>${time}</time>`;
+			xml += `${feed}${tab.repeat(4)}<time>${time}</time>`;
 		}
 		if (hasHeart) {
 			let heartRate = geoJS.properties.heartRates[index];
-			xml += `${feed}${repeatString(tab,4)}<extensions>`;
-			xml += `${feed}${repeatString(tab,5)}<gpxtpx:TrackPointExtension>`;
-			xml += `${feed}${repeatString(tab,6)}<gpxtpx:hr>${heartRate}</gpxtpx:hr>`;
-			xml += `${feed}${repeatString(tab,5)}</gpxtpx:TrackPointExtension>`;
-			xml += `${feed}${repeatString(tab,4)}</extensions>`;
+			xml += `${feed}${tab.repeat(4)}<extensions>`;
+			xml += `${feed}${tab.repeat(5)}<gpxtpx:TrackPointExtension>`;
+			xml += `${feed}${tab.repeat(6)}<gpxtpx:hr>${heartRate}</gpxtpx:hr>`;
+			xml += `${feed}${tab.repeat(5)}</gpxtpx:TrackPointExtension>`;
+			xml += `${feed}${tab.repeat(4)}</extensions>`;
 		}
-		xml += `${feed}${repeatString(tab,3)}</trkpt>`;
+		xml += `${feed}${tab.repeat(3)}</trkpt>`;
 	});
 
-	xml += `${feed}${repeatString(tab,2)}</trkseg>`;
+	xml += `${feed}${tab.repeat(2)}</trkseg>`;
 	xml += `${feed}${tab}</trk>${feed}</gpx>`;
 
 	return xml;

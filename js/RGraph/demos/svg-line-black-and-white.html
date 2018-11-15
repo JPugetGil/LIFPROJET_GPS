@@ -1,0 +1,160 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.line.js" ></script>
+    
+    <title>RGraph demo: An SVG black and white Line chart</title>
+    
+    
+    <meta name="description" content="An SVG black and white Line chart" />
+     
+    <meta name="robots" content="noindex,nofollow" />
+
+</head>
+<body>
+
+    <h1>An SVG black and white Line chart</h1>
+    
+    <p>
+        This is an SVG version of <a href="/demos/line-black-and-white.html">a canvas Line chart</a>.
+    </p>
+
+    <div id="cc" style="width:700px; height: 300px"></div>
+    
+    <script>
+        var line = new RGraph.SVG.Line({
+            id: 'cc',
+            data: [0,10,46,13,74,100,51],
+            options: {
+                linewidth: 7,
+                colors: ['black'],
+                shadow: false,
+                xaxisTickmarks: false,
+                xaxisLinewidth: 7,
+                yaxisTickmarks: false,
+                yaxisLinewidth: 7,
+                yaxisLabelsCount: 2,
+                yaxisUnitsPost: '%',
+                tickmarksStyle: 'filledcircle',
+                tickmarksSize: 15,
+                gutterLeft: 125,
+                gutterRight: 5,
+                gutterBottom: 25,
+                gutterTop: 20,
+                backgroundGrid: false,
+                textSize: 24,
+                textFont: 'Verdana',
+                hmargin: 35,
+                yaxisLabelsOffsetx: -25
+            }
+        
+        // Draw the "tails" to the axes
+        }).on('draw', function (obj)
+        {
+            var prop = obj.properties,
+                size = 20;
+
+            var path = RGraph.SVG.create({
+                svg: obj.svg,
+                type: 'path',
+                parent: obj.svg.all,
+                attr: {
+                    d: 'M {1} {2} L {3} {4} L {5} {6}'.format(
+                        prop.gutterLeft - size,
+                        obj.height - prop.gutterBottom,
+                        prop.gutterLeft,
+                        obj.height - prop.gutterBottom,
+                        prop.gutterLeft,
+                        obj.height - prop.gutterBottom + size
+                    ),
+                    stroke: 'black',
+                    'stroke-width': 7,
+                    fill: 'rgba(0,0,0,0)'
+                }
+            });
+        }).trace({frames: 60});
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.line.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div id="cc" style="width:700px; height: 300px"&gt;&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    var line = new RGraph.SVG.Line({
+        id: 'cc',
+        data: [0,10,46,13,74,100,51],
+        options: {
+            linewidth: 7,
+            colors: ['black'],
+            shadow: false,
+            xaxisTickmarks: false,
+            xaxisLinewidth: 7,
+            yaxisTickmarks: false,
+            yaxisLinewidth: 7,
+            yaxisLabelsCount: 2,
+            yaxisUnitsPost: '%',
+            tickmarksStyle: 'filledcircle',
+            tickmarksSize: 15,
+            gutterLeft: 125,
+            gutterRight: 5,
+            gutterBottom: 25,
+            gutterTop: 20,
+            backgroundGrid: false,
+            textSize: 24,
+            textFont: 'Verdana',
+            hmargin: 35,
+            yaxisLabelsOffsetx: -25
+        }
+    
+    // Draw the "tails" to the axes
+    }).on('draw', function (obj)
+    {
+        var prop = obj.properties,
+            size = 20;
+
+        var path = RGraph.SVG.create({
+            svg: obj.svg,
+            type: 'path',
+            parent: obj.svg.all,
+            attr: {
+                d: 'M {1} {2} L {3} {4} L {5} {6}'.format(
+                    prop.gutterLeft - size,
+                    obj.height - prop.gutterBottom,
+                    prop.gutterLeft,
+                    obj.height - prop.gutterBottom,
+                    prop.gutterLeft,
+                    obj.height - prop.gutterBottom + size
+                ),
+                stroke: 'black',
+                'stroke-width': 7,
+                fill: 'rgba(0,0,0,0)'
+            }
+        });
+        
+        $cl(path);
+    }).trace({frames: 60});
+&lt;/script&gt;
+</pre>
+
+</body>
+</html>
