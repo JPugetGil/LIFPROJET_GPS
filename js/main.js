@@ -267,7 +267,9 @@ function generateGraph(geoData) {
             options: {
 								backgroundGridDashed: true,
 								tooltips: function (event) {
-									return event;
+									let x = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][1];
+									let y = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][0];
+									geoData.map.panTo(new L.LatLng(x,y));
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
