@@ -157,18 +157,19 @@ function substractLatlng(latlng1, latlng2) {
 	latlng.lat = latlng1.lat - latlng2.lat;
 	latlng.lng = latlng1.lng - latlng2.lng;
 	if (latlng1.hasOwnProperty("alt") && latlng2.hasOwnProperty("alt")) {
-		latlng.alt = latlng1.alt - latlng2.alt;
+		latlng.alt = 0;
 	}
 	return L.latLng(latlng);
 }
 
 function deplaceLatlngs(latlngs, offset) {
 	return latlngs.map(latlng => {
-		latlng[0] += offset[0];
-		latlng[1] += offset[1];
-		if (offset.length > 2) {
-			latlng[2] += offset[2];
+		let res = {};
+		res.lat = latlng.lat + offset.lat;
+		res.lng = latlng.lng + offset.lng;
+		if (latlng.hasOwnProperty("alt") && offset.hasOwnProperty("alt")) {
+			res.alt = 0;
 		}
-		return latlng;
+		return L.latLng(res);
 	});
 }
