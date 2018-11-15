@@ -81,11 +81,13 @@ function movePointMode(geoData) {
 			}).on("dragend", evt => {
 				draggable = false;
 				let newCenter = evt.target._latlng;
-				let offset = substractLatlng(center, newCenter);
+				let offset = substractLatlng(newCenter, center);
 				console.log(offset);
 				let originalsLatlngs = polyline.getLatLngs();
 			    let	newLatlngs = deplaceLatlngs(originalsLatlngs, offset);
 			    //latlngs.splice(e.target.options.index, 1, latlng);
+				console.log(polyline.getLatLngs());
+				console.log(newLatlngs);
 			    polyline.setLatLngs(newLatlngs);
 				console.log(polyline.getLatLngs());
 				polyline.redraw();
@@ -226,7 +228,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0).reverse());
 			if(definedCoordTimes){
 				traceBorn.features[0].properties.coordTimes = geoData.paths[idTrace1].features[0].properties.coordTimes.slice(0).concat(geoData.paths[idTrace2].features[0].properties.coordTimes.slice(0).reverse());
-			}	
+			}
 			if(definedHeartRates){
 				traceBorn.features[0].properties.heartRates = geoData.paths[idTrace1].features[0].properties.heartRates.slice(0).concat(geoData.paths[idTrace2].features[0].properties.heartRates.slice(0).reverse());
 			}
@@ -255,7 +257,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 	if(idTrace1 == idTrace2){
 		document.getElementById("buttonLink").removeAttribute("data-dismiss", "modal");
 		alert("Vous avez sélectionné 2 fois la même trace.");
-	}	
+	}
 	else{
 		document.getElementById("buttonLink").setAttribute("data-dismiss", "modal");
 		deleteTrace(geoData, idTrace2, false);
