@@ -71,8 +71,8 @@ function generateIndex(geoData) {
       				</div>
       				<div class="modal-body">
         				<p>Choississez les deux traces à lier :<p>
-        					<div class="row">
-	        					<div class="col-6">
+        					<div class="row-sm">
+	        					<div class="col-6-sm">
 	        						<label for="trace1">Première trace : </label>
 	        						<select id="t1" name="Trace1" size=1>
 	        						</select>
@@ -81,7 +81,7 @@ function generateIndex(geoData) {
 	        							<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
 	        						</div>
 	        					</div>
-	        					<div class="col-6">
+	        					<div class="col-6-sm">
 	        						<label for="trace2">Deuxième trace : </label>
 	        						<select id="t2" name="Trace2" size=1>
 	        						</select>
