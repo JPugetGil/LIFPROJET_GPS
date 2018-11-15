@@ -12,7 +12,7 @@ function launchTutorial(geoData) {
     createGeoData()
     .then(geoDataT => mapReplacements(geoData, geoDataT))
     .then(generateTiles)
-    .then(geoDataT => addPath(geoDataT, "data/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
+    .then(geoDataT => addPath(geoDataT, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
     .then(geoDataT => displayPath(geoDataT, 0))
     .then(movePOV)
     .then(geoDataT => {
@@ -22,7 +22,7 @@ function launchTutorial(geoData) {
 
         return geoDataT;
     })
-    //.then(geoDataT => createCloneStop(button, geoData, geoDataT))
+    .then(replaceListeners)
     .catch(console.error)
 }
 
@@ -36,7 +36,9 @@ function stopTutorial(geoData, geoDataT) {
     button.children[0].classList.add("fa-play");
 
     mapOriginals(geoData, geoDataT);
+    replaceListeners(geoData);
     movePOV(geoData);
+    setFocusClass(geoData);
 
     clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
@@ -44,7 +46,9 @@ function stopTutorial(geoData, geoDataT) {
 }
 
 function mapReplacements(geoData, geoDataT) {
+    deleteOldMarkers(geoData);
     geoDataT.map = geoData.map;
+    geoData.layers.forEach(layer => layer.remove());
     geoData.layersControl.remove();
     geoDataT.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
 
@@ -52,6 +56,26 @@ function mapReplacements(geoData, geoDataT) {
 }
 
 function mapOriginals(geoData, geoDataT) {
+    deleteOldMarkers(geoDataT);
+    geoDataT.layers.forEach(layer => layer.remove());
     geoDataT.layersControl.remove();
     geoData.layersControl.addTo(geoData.map);
+    if (geoData.focus !== undefined) {
+        geoData.layers[geoData.focus].addTo(geoData.map);
+    }
+}
+
+function createClone(element) {
+    element.parentNode.replaceChild(element.cloneNode(true), element);
+}
+
+function replaceListeners(geoData) {
+    Array.from(document.querySelectorAll("#features button")).forEach(button => {
+        createClone(button);
+    });
+    createClone(document.getElementById("samplingFactor"));
+    setListeners(geoData);
+    setListenersUpdate(geoData);
+
+    return geoData;
 }

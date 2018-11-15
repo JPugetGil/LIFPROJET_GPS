@@ -11,7 +11,7 @@ function upload(geoData) {
 function hiddenUpload(geoData) {
     let path = document.getElementById("hiddenButton").value;
     let length = path.length - 11;
-    let realPath = "data/" + path.substr(12, length);
+    let realPath = "gpx/" + path.substr(12, length);
     addPath(geoData, realPath)
 		.then(geoData => displayPath(geoData, geoData.paths.length-1))
 		.then(movePOV)

@@ -22,7 +22,7 @@ function moveMapMode(geoData) {
 // Param : geoData
 // Return : None
 function movePointMode(geoData) {
-	geoData.map.dragging.enable();
+	geoData.map.dragging.disable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -49,6 +49,28 @@ function movePointMode(geoData) {
 		} else {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir déplacer ses points.");
 		}
+	});
+
+	let start;
+	geoData.map.on("mousedown", evt => {
+		deleteOldMarkers(geoData);
+		if (evt.originalEvent.button === 0) {
+			start = evt.latlng;
+		}
+	});
+	geoData.map.on("mouseup", evt => {
+		let points = pointsInSquare(geoData.paths[geoData.focus].features[0].geometry.coordinates, start, evt.latlng);
+		console.log(points);
+		points.forEach(point => {
+			let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				draggable: true,
+				index: point.index
+			})
+			.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
+			.on('dragend', e => dragEndHandler(geoData));
+			geoData.tempMarkers.push(marker);
+			marker.addTo(geoData.map);
+		});
 	});
 }
 

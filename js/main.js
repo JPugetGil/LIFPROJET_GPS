@@ -2,11 +2,12 @@ createGeoData()
 .then(generateIndex)
 .then(generateMap)
 .then(generateTiles)
-.then(geoData => addPath(geoData, "data/runinlyon_10km.gpx"))
+.then(geoData => addPath(geoData, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 //.then(generateFilesTab)
 .then(generateGraph)
+.then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
 .then(console.log)
@@ -58,9 +59,9 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 3/14) +"px; width: 100%; z-Index: 2");
 	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 41px");
-	document.getElementById("workPlan").innerHTML += 
+	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
     			<div class="modal-content">
@@ -258,9 +259,9 @@ function generateGraph(geoData) {
 		w2.terminate();
 		w2 = undefined;
 		if (event.data[1].length < $(document).width()){
-			document.getElementById("cvs").setAttribute("width", $(document).width() * 9/10);
+			document.getElementById("cvs").setAttribute("width", $(document).width() * 1.5);
 		}	else {
-			document.getElementById("cvs").setAttribute("width", event.data[1].length);
+			document.getElementById("cvs").setAttribute("width", event.data[1].length * 1.5);
 		}
 
 		var line = new RGraph.Line({
@@ -269,7 +270,7 @@ function generateGraph(geoData) {
             options: {
 								backgroundGridDashed: true,
 								tooltips: function () {
-									console.log("MODIFIER POUR AFFICHER SUR LA CARTE LE POINT SURVOLE");
+									return 'BONJOUR';
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
@@ -315,12 +316,16 @@ function deleteTrace(geoData, id, conf = true) {
 	}
 }
 
-
-function setListeners(geoData) {
+function setGeneralListeners(geoData) {
 	// General
 	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
 	document.getElementById("tutorialButton").addEventListener("click", evt => launchTutorial(geoData));
 
+	return geoData;
+}
+
+
+function setListeners(geoData) {
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
 	document.getElementById("hiddenButton").addEventListener("change", () => hiddenUpload(geoData));
