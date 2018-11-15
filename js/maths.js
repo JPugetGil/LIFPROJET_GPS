@@ -130,8 +130,24 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 	return points;
 }
 
-function pointsInSquare(latlng1, latlng2) {
-	console.log("In pointsInSquare");
-	console.log(latlng1);
-	console.log(latlng2);
+function pointsInSquare(coordinates, latlng1, latlng2) {
+	let points = [];
+	let lats = [latlng1.lat, latlng2.lat];
+	let lngs = [latlng1.lng, latlng2.lng];
+	lats.sort(compareNumbers);
+	lngs.sort(compareNumbers);
+	coordinates.forEach( (coord, index) => {
+		if (isBetween(coord[0], lngs[0], lngs[1]) && isBetween(coord[1], lats[0], lats[1])) {
+			let point = {
+				coordinates: coord,
+				index: index
+			};
+			points.push(point);
+		}
+	});
+	return points;
+}
+
+function compareNumbers(a, b) {
+	return a - b;
 }
