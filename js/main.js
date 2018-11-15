@@ -5,7 +5,6 @@ createGeoData()
 .then(geoData => addPath(geoData, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
-//.then(generateFilesTab)
 .then(generateGraph)
 .then(setGeneralListeners)
 .then(setListeners)
@@ -112,6 +111,7 @@ function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
 	geoData.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
 	L.control.scale({imperial: false}).addTo(geoData.map);
+	console.log("TRACER AVEC UNE COULEUR EN FONCTION DE L'ALTITUDE MOYENNE");
 
 	return geoData;
 }
@@ -223,32 +223,6 @@ function displayPath(geoData, index, display = true) {
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
-
-	return geoData;
-}
-
-function generateFilesTab(geoData) {
-	document.getElementById("fileTable").innerHTML = "";
-	geoData.paths.forEach( (current, index) => {
-		let time = "Non défini";
-		if (current.features[0].properties.hasOwnProperty("coordTimes")) {
-			let lastTime = current.features[0].properties.coordTimes[current.features[0].geometry.coordinates.length - 1];
-			let firstTime = current.features[0].properties.time;
-			let date1 = new Date(lastTime);
-			let date2 = new Date(firstTime);
-			let date = date1 - date2;
-			time = secondsToHours(date/1000);
-		}
-
-		document.getElementById("fileTable").innerHTML +=
-			`<tr id="row${index}">
-				<th scope="row" id="cell${index}">${index + 1}</th>
-				<td>${current.file}</td>
-				<td>${calculateDistance(current)}</td>
-				<td>${time}</td>
-				<td><button id="suppr${index}" class="btn btn-danger" type="button">X</button></td>
-			</tr>`;
-	});
 
 	return geoData;
 }
