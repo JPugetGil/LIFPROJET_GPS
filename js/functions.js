@@ -69,7 +69,7 @@ function deleteTrace(id) {
 function saveAndGet() {
 	let geoJS = geoPaths.paths[0];
 	let xml = geoJsonToXml(geoJS);
-	
+
 	let filename = "export.gpx";
 	let element = document.createElement('a');
 	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
@@ -84,6 +84,7 @@ function saveAndGet() {
 
 
 // CONVERSION FUNCTIONS //
+
 
 
 // Make a string longer by copying its content nb times
