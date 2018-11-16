@@ -237,12 +237,12 @@ function generateGraph(geoData) {
 		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
 		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
 		var newMarker = new L.marker([-100,-10000]).addTo(geoData.map);
-		let aze = L.layerGroup([newMarker]).addTo(geoData.map);
+		let lay = L.layerGroup([newMarker]).addTo(geoData.map);
 		document.getElementById("cvs").addEventListener('mouseover', () => {
-			aze = L.layerGroup([newMarker]).addTo(geoData.map);
+			lay = L.layerGroup([newMarker]).addTo(geoData.map);
 		});
 		document.getElementById("cvs").addEventListener("mouseout", () => {
-			geoData.map.removeLayer(aze);
+			geoData.map.removeLayer(lay);
 		});
 
 		var line = new RGraph.Line({
@@ -264,7 +264,7 @@ function generateGraph(geoData) {
 								crosshairsSnap: true,
                 textAccessible: true,
             }
-        }).unfoldFromCenterTrace();
+        }).draw();
 	}
 	w2.postMessage(geoData.paths);
 
