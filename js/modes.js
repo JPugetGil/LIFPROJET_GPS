@@ -210,6 +210,12 @@ function linkMode(geoData) {
 
 function fusion(geoData, idTrace1, idTrace2, mode){
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
+	if (document.getElementById("traceName").value == ""){
+		traceBorn.file = "Nouvelle Trace";
+	}
+	else{
+		traceBorn.file = document.getElementById("traceName").value;
+	}
 	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes");
 	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates");
 	switch(mode) {
