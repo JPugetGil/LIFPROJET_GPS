@@ -51,7 +51,7 @@ function movePointMode(geoData) {
 		}
 	});
 
-	let start;
+	/*let start;
 	let draggable = false;
 	geoData.map.on("mousedown", evt => {
 		if (!draggable) {
@@ -95,7 +95,7 @@ function movePointMode(geoData) {
 			marker.addTo(geoData.map);
 			draggable = true;
 		}
-	});
+	});*/
 }
 
 // Called during a point drag,
