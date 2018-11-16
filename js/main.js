@@ -206,6 +206,28 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index, display = true) {
+	let color;
+	let mean = getElevationMean(geoData);
+	if (mean<500){
+		color = "#0000FF";
+	} else if (mean >= 500 && mean<1000) {
+		color = "#007FFF";
+	} else if (mean >= 1000 && mean< 1500){
+		color = "#00FFFF";
+	} else if (mean >= 1500 && mean< 2000){
+		color = "#00FF7F";
+	} else if (mean >= 2000 && mean< 2500){
+		color = "#00FF00";
+	} else if (mean >= 2500 && mean< 3000){
+		color = "#7FFF00";
+	} else if (mean >= 3000 && mean< 3500){
+		color = "#FFFF00";
+	} else if (mean >= 3500 && mean< 4000){
+		color = "#FF7F00";
+	} else {
+		color = "#FF0000";
+	}
+
 	let latlngs = [];
 	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
 		let point = [
@@ -215,7 +237,7 @@ function displayPath(geoData, index, display = true) {
 		];
 		latlngs.push(point);
 	});
-	let polyline = L.polyline(latlngs);
+	let polyline = L.polyline(latlngs, {color: color});
 
 	geoData.layers[index] = polyline;
 	geoData.layersHistory[index] = [];
