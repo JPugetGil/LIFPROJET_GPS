@@ -51,7 +51,7 @@ function movePointMode(geoData) {
 		}
 	});
 
-	let start;
+	/*let start;
 	let draggable = false;
 	geoData.map.on("mousedown", evt => {
 		if (!draggable) {
@@ -95,7 +95,7 @@ function movePointMode(geoData) {
 			marker.addTo(geoData.map);
 			draggable = true;
 		}
-	});
+	});*/
 }
 
 // Called during a point drag,
@@ -195,6 +195,7 @@ function linkMode(geoData) {
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	if (geoData.paths.length < 2){
+		document.getElementById("link").removeAttribute("data-toggle", "modal");
 		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
 	}
 	else {
@@ -210,6 +211,12 @@ function linkMode(geoData) {
 
 function fusion(geoData, idTrace1, idTrace2, mode){
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
+	if (document.getElementById("traceName").value == ""){
+		traceBorn.file = "Nouvelle Trace";
+	}
+	else{
+		traceBorn.file = document.getElementById("traceName").value;
+	}
 	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes");
 	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates");
 	switch(mode) {
