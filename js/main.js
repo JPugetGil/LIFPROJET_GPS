@@ -58,8 +58,7 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2");
-	document.getElementById("box").setAttribute("style", "width:"+ ($(document).width() * 19/20)+"px; overflow: auto; position: absolute; left: 5%");
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
@@ -229,13 +228,21 @@ function displayPath(geoData, index, display = true) {
 
 function generateGraph(geoData) {
 	let w2 = new Worker("js/chart.js", {type:'module'});
+	RGraph.reset(document.getElementById('cvs'));
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
 		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
 		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
-		document.getElementById("axes").setAttribute("height", $(document).height()/4);
 		var newMarker = new L.marker([-100,-10000]).addTo(geoData.map);
+		let aze = L.layerGroup([newMarker]).addTo(geoData.map);
+		document.getElementById("cvs").addEventListener('mouseover', () => {
+			aze = L.layerGroup([newMarker]).addTo(geoData.map);
+		});
+		document.getElementById("cvs").addEventListener("mouseout", () => {
+			geoData.map.removeLayer(aze);
+		});
+
 		var line = new RGraph.Line({
             id: 'cvs',
             data: event.data[1],
@@ -249,24 +256,13 @@ function generateGraph(geoData) {
 								},
                 linewidth: 3,
 							 	numxticks: event.data[0].length/10,
-                noyaxis: true,
-                ylabels: false,
+                ylabels: true,
+								unitsPost: 'm',
 								crosshairs: true,
 								crosshairsSnap: true,
                 textAccessible: true,
             }
-        }).draw();
-
-				var yaxis = new RGraph.Drawing.YAxis({
-            id: 'axes',
-            x: 40,
-            options: {
-                max: line.max,
-                colors: ['black'],
-								unitsPost: 'm',
-                textAccessible: true
-            }
-        }).draw();
+        }).unfoldFromCenterTrace();
 	}
 	w2.postMessage(geoData.paths);
 
