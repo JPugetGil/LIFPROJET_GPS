@@ -23,13 +23,17 @@
 		<div class="row-2 d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-dark border-bottom shadow-sm">
 		  <h5 class="my-0 mr-md-auto font-weight-normal text-light"><a class="p-2 text-white" href="index.html">Improve my GPX</a></h5>
 		  <nav class="my-2 my-md-0 mr-md-3">
-				<input type="file" id="hiddenButton"/>
-				<input type="button" id="importButton" class="btn btn-outline-success" value="Importer"/>
-	            <a id="descriptionButton" type="button" class="btn btn-outline-warning" href="html/description.html" target="_blank">Description</a>
-				<a type="button" id="aboutButton" class="btn btn-outline-info" href="html/apropos.html" target="_blank">A Propos</a>
-				<!--<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger"><i id="tutorialToggle" class="fas fa-toggle-off"></i> Tutoriel</button>-->
-				<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger"><i id="tutorialToggle" class="fas fa-play"></i> Tutoriel</button>
-				<button type="button" id="helpButton" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-primary" onclick="help();">Besoin d'aide ?</button>
+				<div class="btn-group" role="group">
+					<input type="file" id="hiddenButton"/>
+					<input type="button" id="importButton" class="btn btn-outline-success" value="Importer"/>
+					<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger"><i id="tutorialToggle" class="fas fa-play"></i> Tutoriel</button>
+				</div>
+				<div class="btn-group" role="group">
+					<a id="descriptionButton" type="button" class="btn btn-outline-warning" href="html/description.html" target="_blank">Description</a>
+					<a type="button" id="aboutButton" class="btn btn-outline-warning" href="html/apropos.html" target="_blank">A Propos</a>
+					<button type="button" id="helpButton" alt="Ouvre une fenêtre d'aide" title="Ouvre une fenêtre d'aide" class="btn btn-outline-warning" onclick="help();">Besoin d'aide ?</button>
+				</div>
+
 		  </nav>
 	  	</div>
 		<div id="workPlan" class="row-10">

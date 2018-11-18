@@ -256,13 +256,16 @@ function generateGraph(geoData) {
 		w2 = undefined;
 		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
 		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
-		var newMarker = new L.marker([-100,-10000]).addTo(geoData.map);
-		let lay = L.layerGroup([newMarker]).addTo(geoData.map);
+		if (newMarker == undefined){
+			var newMarker = new L.marker([-100,-10000]);
+			var lay = new L.layerGroup([newMarker]).addTo(geoData.map);
+		}
+
 		document.getElementById("cvs").addEventListener('mouseover', () => {
 			lay = L.layerGroup([newMarker]).addTo(geoData.map);
 		});
 		document.getElementById("cvs").addEventListener("mouseout", () => {
-			geoData.map.removeLayer(lay);
+			geoData.map.removeLayer(newMarker);
 		});
 
 		var line = new RGraph.Line({
