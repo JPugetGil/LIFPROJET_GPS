@@ -21,7 +21,7 @@
 					</li>
 					<li>
 						<button type="button" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-md"><i class="fas fa-divide"></i></button>
-						<p>Ce bouton permet de rééchantillonner le fichier, c'est-à-dire afficher un certain nombre de points seulement. Le champ de saisie situé à côté du bouton permet de choisir le facteur par lequel le nombre de données sera divisé.</p>
+						<p>Ce bouton permet de rééchantillonner le fichier, c'est-à-dire d'enlever un certain nombre de points. Le champ de saisie situé au-dessus du bouton permet de choisir le nombre de données à enlever.</p>
 					</li>
 					<li>
 						<button type="button" class="btn btn-secondary btn-md"  alt="Annuler" title="Annuler"><i class="fas fa-undo"></i></button>
@@ -33,19 +33,23 @@
 					</li>
 					<li>
 						<button type="button" class="btn btn-secondary btn-md" alt="Ajouter un point" title="Ajouter un point"><i class="fas fa-plus"></i></button>
-						<p>Ce bouton permet d'ajouter un point à la trace GPS sélectionnée.</p>
+						<p>Ce bouton permet d'ajouter un point à partir de la fin de la trace GPS sélectionnée.</p>
 					</li>
 					<li>
 						<button type="button" class="btn btn-secondary btn-md" alt="Supprimer un point" title="Supprimer un point"><i class="fas fa-minus"></i></button>
-						<p>Ce bouton permet de supprimer un point sélectionné.</p>
+						<p>Cette option permet la suppression du point sélectionné.</p>
 					</li>
 					<li>
 						<button type="button" class="btn btn-secondary btn-md" alt="Lier" title="Lier"><i class="fas fa-link"></i></button>
-						<p>Ce bouton permet de fusionner deux traces.</p>
+						<p>Cette fonctionnalité fusionne deux traces en fonction du côté souhaité.</p>
 					</li>
 					<li>
 						<button type="button" class="btn btn-secondary btn-md" alt="Délier" title="Délier"><i class="fas fa-unlink"></i></button>
-						<p>Ce bouton permet de couper en deux morceaux une trace.</p>
+						<p>Ce bouton permet de couper en deux morceaux une trace à partir du point sélectionné.</p>
+					</li>
+					<li>
+						<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-md"><i class="fas fa-file-download"></i></button>
+						<p>Une fois l'édition de votre trace, ce bouton permet de télécharger le nouveau fichier.</p>
 					</li>
 					<li>
 						<h4>Altitude moyenne:</h4>
