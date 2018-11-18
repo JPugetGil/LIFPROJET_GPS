@@ -58,7 +58,6 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
  			<div class="modal-dialog" role="document">
@@ -112,8 +111,6 @@ function generateMap(geoData) {
 	geoData.map = L.map('mapid').setView([0,0], 0);
 	geoData.layersControl = L.control.layers(null, null, {position: "topleft"}).addTo(geoData.map);
 	L.control.scale({imperial: false}).addTo(geoData.map);
-	console.log("TRACER AVEC UNE COULEUR EN FONCTION DE L'ALTITUDE MOYENNE");
-
 	return geoData;
 }
 
@@ -151,7 +148,7 @@ function movePOV(geoData) {
 	if (geoData.focus !== undefined) {
 		geoData.map.fitBounds(geoData.layers[geoData.focus].getBounds());
 	}
-
+	generateGraph(geoData)
 	return geoData;
 }
 
@@ -208,21 +205,21 @@ function keySample(geoData, keyCode) {
 function displayPath(geoData, index, display = true) {
 	let color;
 	let mean = getElevationMean(geoData);
-	if (mean<500){
+	if (mean<600){
 		color = "#0000FF";
-	} else if (mean >= 500 && mean<1000) {
+	} else if (mean >= 600 && mean<1200) {
 		color = "#007FFF";
-	} else if (mean >= 1000 && mean< 1500){
+	} else if (mean >= 1200 && mean< 1800){
 		color = "#00FFFF";
-	} else if (mean >= 1500 && mean< 2000){
+	} else if (mean >= 1800 && mean< 2400){
 		color = "#00FF7F";
-	} else if (mean >= 2000 && mean< 2500){
+	} else if (mean >= 2400 && mean< 3000){
 		color = "#00FF00";
-	} else if (mean >= 2500 && mean< 3000){
+	} else if (mean >= 3000 && mean< 3600){
 		color = "#7FFF00";
-	} else if (mean >= 3000 && mean< 3500){
+	} else if (mean >= 3600 && mean< 4200){
 		color = "#FFFF00";
-	} else if (mean >= 3500 && mean< 4000){
+	} else if (mean >= 4200 && mean< 4800){
 		color = "#FF7F00";
 	} else {
 		color = "#FF0000";
@@ -253,6 +250,7 @@ function displayPath(geoData, index, display = true) {
 function generateGraph(geoData) {
 	let w2 = new Worker("js/chart.js", {type:'module'});
 	RGraph.reset(document.getElementById('cvs'));
+	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
 	w2.onmessage = event => {
 		w2.terminate();
 		w2 = undefined;
