@@ -2,10 +2,9 @@ createGeoData()
 .then(generateIndex)
 .then(generateMap)
 .then(generateTiles)
-.then(geoData => addPath(geoData, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
+.then(geoData => addPath(geoData, "gpx/runinlyon_10km.gpx"))
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
-.then(generateGraph)
 .then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
@@ -148,7 +147,7 @@ function movePOV(geoData) {
 	if (geoData.focus !== undefined) {
 		geoData.map.fitBounds(geoData.layers[geoData.focus].getBounds());
 	}
-	generateGraph(geoData)
+	generateGraph(geoData);
 	return geoData;
 }
 
@@ -243,7 +242,6 @@ function displayPath(geoData, index, display = true) {
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
-
 	return geoData;
 }
 
@@ -286,7 +284,8 @@ function generateGraph(geoData) {
             }
         }).draw();
 	}
-	w2.postMessage(geoData.paths);
+
+	w2.postMessage(geoData.paths[geoData.focus]);
 
 	return geoData;
 }
