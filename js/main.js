@@ -206,22 +206,24 @@ function displayPath(geoData, index, display = true) {
 	let mean = getElevationMean(geoData);
 	if (mean<600){
 		color = "#0000FF";
-	} else if (mean >= 600 && mean<1200) {
+	} else if (mean >= 600 && mean <1200) {
 		color = "#007FFF";
-	} else if (mean >= 1200 && mean< 1800){
+	} else if (mean >= 1200 && mean < 1800){
 		color = "#00FFFF";
-	} else if (mean >= 1800 && mean< 2400){
+	} else if (mean >= 1800 && mean < 2400){
 		color = "#00FF7F";
-	} else if (mean >= 2400 && mean< 3000){
+	} else if (mean >= 2400 && mean < 3000){
 		color = "#00FF00";
-	} else if (mean >= 3000 && mean< 3600){
+	} else if (mean >= 3000 && mean < 3600){
 		color = "#7FFF00";
-	} else if (mean >= 3600 && mean< 4200){
+	} else if (mean >= 3600 && mean < 4200){
 		color = "#FFFF00";
-	} else if (mean >= 4200 && mean< 4800){
+	} else if (mean >= 4200 && mean < 4800){
 		color = "#FF7F00";
-	} else {
+	} else if (mean >= 4800 && mean < 5200) {
 		color = "#FF0000";
+	} else {
+		color = "#000000";
 	}
 
 	let latlngs = [];
