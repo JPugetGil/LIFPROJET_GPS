@@ -220,7 +220,7 @@ function displayPath(geoData, index, display = true) {
 		color = "#FFFF00";
 	} else if (mean >= 4200 && mean < 4800){
 		color = "#FF7F00";
-	} else if (mean >= 4800 && mean < 5200) {
+	} else if (mean >= 4800 && mean < 5400) {
 		color = "#FF0000";
 	} else {
 		color = "#000000";

@@ -10,47 +10,114 @@
 	<body>
 		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom shadow-sm">
 			<h5 class="my-0 mr-md-auto font-weight-normal text-light">Aide pour le site Improve my GPX</h5></div>
-		<div class="col-sm" style="background-color  : #C0C0C0;">
+		<div class="col-sm" style="background-color  : #909090;">
 			<u class="text-light text-center"><h3>Comment utiliser la carte ?</h3></u>
-			<div class="row">
-				<div class="col-md text-light">
-					<button type="button" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-md"><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-md"><i class="fas fa-hand-pointer"></i></button>
-					Ces deux boutons permettent de changer le mode de la souris. Pour passer dans le mode : déplacement de point, il faut cliquer sur le deuxième bouton (Celui avec la main). Le premier bouton permet de remettre la souris dans son état par défaut ce qui permet de redéplacer la carte à nouveau.
-				</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-md"><i class="fas fa-divide"></i></button>
-				Ce bouton permet de rééchantillonner le fichier, c'est-à-dire afficher un certain nombre de points seulement. Le champ de saisie situé à côté du bouton permet de choisir le facteur par lequel le nombre de données sera divisé.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md"  alt="Annuler" title="Annuler"><i class="fas fa-undo"></i></button>
-				Ce bouton permet d'annuler la dernière action effectuée.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md" alt="Désannuler" title="Désannuler"><i class="fas fa-redo"></i></button>
-				Ce bouton permet d'annuler l'annulation de la dernière action effectuée.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md" alt="Ajouter un point" title="Ajouter un point"><i class="fas fa-plus"></i></button>
-				Ce bouton permet d'ajouter un point à la trace GPS sélectionnée.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md" alt="Supprimer un point" title="Supprimer un point"><i class="fas fa-minus"></i></button>
-				Ce bouton permet de supprimer un point sélectionné.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md" alt="Lier" title="Lier"><i class="fas fa-link"></i></button>
-				Ce bouton permet de fusionner deux traces.</div>
-			</div><br />
-			<div class="row">
-				<div class="col-md text-light"><button type="button" class="btn btn-secondary btn-md" alt="Délier" title="Délier"><i class="fas fa-unlink"></i></button>
-				Ce bouton permet de couper en deux morceaux une trace.</div>
-			</div><br />
+			<div class="col-md text-light">
+				<ul>
+					<li>
+						<button type="button" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-md"><i class="fas fa-arrows-alt"></i></button>
+						<button type="button" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-md"><i class="fas fa-hand-pointer"></i></button>
+						<p>Ces deux boutons permettent de changer le mode de la souris. Pour passer dans le mode : déplacement de point, il faut cliquer sur le deuxième bouton (Celui avec la main). Le premier bouton permet de remettre la souris dans son état par défaut ce qui permet de redéplacer la carte à nouveau.</p>
+					</li>
+					<li>
+						<button type="button" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-md"><i class="fas fa-divide"></i></button>
+						<p>Ce bouton permet de rééchantillonner le fichier, c'est-à-dire afficher un certain nombre de points seulement. Le champ de saisie situé à côté du bouton permet de choisir le facteur par lequel le nombre de données sera divisé.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md"  alt="Annuler" title="Annuler"><i class="fas fa-undo"></i></button>
+						<p>Ce bouton permet d'annuler la dernière action effectuée.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md" alt="Désannuler" title="Désannuler"><i class="fas fa-redo"></i></button>
+						<p>Ce bouton permet d'annuler l'annulation de la dernière action effectuée.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md" alt="Ajouter un point" title="Ajouter un point"><i class="fas fa-plus"></i></button>
+						<p>Ce bouton permet d'ajouter un point à la trace GPS sélectionnée.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md" alt="Supprimer un point" title="Supprimer un point"><i class="fas fa-minus"></i></button>
+						<p>Ce bouton permet de supprimer un point sélectionné.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md" alt="Lier" title="Lier"><i class="fas fa-link"></i></button>
+						<p>Ce bouton permet de fusionner deux traces.</p>
+					</li>
+					<li>
+						<button type="button" class="btn btn-secondary btn-md" alt="Délier" title="Délier"><i class="fas fa-unlink"></i></button>
+						<p>Ce bouton permet de couper en deux morceaux une trace.</p>
+					</li>
+					<li>
+						<h4>Altitude moyenne:</h4>
+						<ol>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#0000FF"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> x < 600m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#007FFF"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 600m ≤ x < 1200m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#00FFFF"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 1200m ≤ x < 1800m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#00FF7F"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 1800m ≤ x < 2400m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#00FF00"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 2400m ≤ x < 3000m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#7FFF00"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 3000m ≤ x < 3600m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#FFFF00"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 3600m ≤ x < 4200m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#FF7F00"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 4200m ≤ x < 4800m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#FF0000"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 4800m ≤ x < 5400m</p>
+							</li>
+							<li>
+								<p><svg height="20" width="20">
+								  <circle r="10" cx="10" cy="10" fill="#000000"/>
+								  Désolé, votre navigateur n'est pas compatible avec le format SVG.
+								</svg> 5400m ≤ x</p>
+							</li>
+						</ol>
+					</li>
+				</ul>
+			</div>
 			<h4 class="text-light" style="padding-bottom : 10%;">Nous espérons que vous passerez un bon moment en utilisant Improve my GPX ! <i class="fas fa-smile-wink"></i></h4>
 		</div>
 	</body>
-	<footer class="footer" style="position:fixed; bottom:0; width:100%; height:40px; line-height:40px; background-color: #f6f6f6;">
+	<footer class="footer" style="position:fixed; bottom:0; width:100%; height:5%; background-color: #f6f6f6;">
 	<div class="d-flex flex-column flex-sm-row align-items-center px-sm-4 mb-3 bg-light border-bottom shadow-sm">
 		<p class="p-2 text-dark" >GIL Jérôme - PEYROT Thomas - SCRIVEN Anthony</p>
 	</div>
