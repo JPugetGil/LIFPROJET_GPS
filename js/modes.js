@@ -128,18 +128,23 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		if (geoData.focus !== undefined) {
-			var trace = geoData.paths[geoData.focus];
-			trace.features[0].geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
+			var trace = geoData.paths[geoData.focus].features[0];
+			trace.geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 			let latlngs = geoData.layers[geoData.focus].getLatLngs();
 			let latlng = L.latLng(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0));
 			latlngs.push(latlng);
-            console.log(latlngs);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
             
-			//generateFilesTab(geoData);
-			//geoData.map.removeLayer(geoData.layers[geoData.focus]);
-			//displayPath(geoData, geoData.focus);
-		} else {
+            
+            if (trace.hasOwnProperty("properties")) {
+                if (trace.properties.hasOwnProperty("coordTimes")) {
+                    trace.properties.coordTimes.push(trace.properties.coordTimes[trace.properties.coordTimes.length -1]);
+                }
+                if (trace.properties.hasOwnProperty("heartRates")) {
+                    trace.properties.heartRates.push(trace.properties.heartRates[trace.properties.heartRates.length -1]);
+                }
+            }
+        } else {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir y ajouter des points.");
 		}
 	});
