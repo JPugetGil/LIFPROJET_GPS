@@ -87,3 +87,17 @@ button.btn.btncol:before
     display:block;
     width:15px;
 }
+
+#traceInfos
+{
+	position: absolute;
+	bottom: 10%;
+	right: 5%;
+}
+
+.col-6
+{
+	text-align: center;
+	border: solid 1px;
+	background-color: #C0C0C0;
+}

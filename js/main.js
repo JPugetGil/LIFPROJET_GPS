@@ -55,6 +55,7 @@ function generateIndex(geoData) {
 
 					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block"><i class="fas fa-print"></i></button>
 					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
+					<button id="infos" type="button" data-toggle="collapse" data-target="#traceInfos" alt="Ouvre une fenêtre avec plus d'informations sur la trace" title="Ouvre une fenêtre avec plus d'informations sur la trace" class="btn btn-dark btn-xs btn-block"><i class="fas fa-info-circle"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
 	document.getElementById("workPlan").innerHTML +=
@@ -339,6 +340,7 @@ function setListeners(geoData) {
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
+	document.getElementById("infos").addEventListener("click", () => infoTrace(geoData));
 
     return geoData;
 }
