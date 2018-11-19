@@ -188,9 +188,22 @@ function removePoint(geoData, markerIndex, index) {
     let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
-	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	//generateFilesTab(geoData);
-	generateGraph(geoData);
+    let trace = geoData.paths[geoData.focus].features[0];
+	trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
+    
+     if (trace.hasOwnProperty("properties")) {
+        if (trace.properties.hasOwnProperty("coordTimes")) {
+            let coordTimes = trace.properties.coordTimes;
+            coordTimes.splice(index, 1);
+            trace.properties.coordTimes = coordTimes;
+        }
+        if (trace.properties.hasOwnProperty("heartRates")) {
+            let heartRates = trace.properties.heartRates;
+            heartRates.splice(index, 1);
+            trace.properties.heartRates = heartRates;
+        }
+    }
+    generateGraph(geoData);
 }
 
 function linkMode(geoData) {
