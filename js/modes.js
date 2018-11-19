@@ -352,15 +352,18 @@ function cutIn2(geoData, index) {
 
 	if(geoData.paths[indexNewPath].features[0].properties.hasOwnProperty("coordTimes")){
 		geoData.paths[indexNewPath].features[0].properties.coordTimes = geoData.paths[geoData.focus].features[0].properties.coordTimes.slice(index);
+        geoData.paths[geoData.focus].features[0].properties.coordTimes = geoData.paths[geoData.focus].features[0].properties.coordTimes.slice(0, index);
 	}
 	if(geoData.paths[indexNewPath].features[0].properties.hasOwnProperty("heartRates")){
 		geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
-	}
+        geoData.paths[geoData.focus].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(0, index);
+    }
 
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
+    console.log(geoData.paths);
 }
 
 function copyAttrPath(geoData, oldPath) {
@@ -376,13 +379,13 @@ function copyAttrPath(geoData, oldPath) {
 		newPath.features[0].properties.time = oldPath.features[0].properties.time;
 	}
 	if(oldPath.features[0].properties.hasOwnProperty("coordTimes")){
-		newPath.features[0].properties.time = [];
+		newPath.features[0].properties.coordTimes = [];
 	}
 	if(oldPath.features[0].properties.hasOwnProperty("heartRates")){
 		newPath.features[0].properties.heartRates = [];
 	}
 	if(oldPath.features[0].properties.hasOwnProperty("name")){
-		newPath.features[0].properties.name = oldPath.features[0].properties.name
+		newPath.features[0].properties.name = oldPath.features[0].properties.name;
 	}
 	newPath.shown = oldPath.shown;
 	newPath.file = oldPath.file + "(" + geoData.paths.length + ")";
