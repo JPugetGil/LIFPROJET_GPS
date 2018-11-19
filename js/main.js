@@ -176,6 +176,7 @@ function reSample(geoData, number){
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
+			infoTrace(geoData);
 
 		} else {
 			let w = new Worker("js/resample.js", {type:'module'});
@@ -187,6 +188,7 @@ function reSample(geoData, number){
 				displayPath(geoData, geoData.focus);
 
 				generateGraph(geoData);
+				infoTrace(geoData);
 			}
 			w.postMessage(number);
 			w.postMessage(geoData.paths[geoData.focus]);

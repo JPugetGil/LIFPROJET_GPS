@@ -116,6 +116,7 @@ function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
 	generateGraph(geoData);
+	infoTrace(geoData);
 }
 
 function addPointMode(geoData) {
@@ -134,6 +135,7 @@ function addPointMode(geoData) {
 			let latlng = L.latLng(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0));
 			latlngs.push(latlng);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
+			infoTrace(geoData);
             
             
             if (trace.hasOwnProperty("properties")) {
@@ -204,6 +206,7 @@ function removePoint(geoData, markerIndex, index) {
         }
     }
     generateGraph(geoData);
+    infoTrace(geoData);
 }
 
 function linkMode(geoData) {
@@ -290,6 +293,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 		geoData.paths[geoData.paths.length] = traceBorn;
 		displayPath(geoData, geoData.paths.length-1);
 		setListenersUpdate(geoData);
+		infoTrace(geoData);
 	}
 }
 
@@ -363,6 +367,7 @@ function cutIn2(geoData, index) {
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
+	infoTrace(geoData);
     console.log(geoData.paths);
 }
 
