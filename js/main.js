@@ -270,11 +270,8 @@ function generateGraph(geoData) {
 			var lay = new L.layerGroup([newMarker]).addTo(geoData.map);
 		}
 
-		document.getElementById("cvs").addEventListener('mouseover', () => {
-			lay = L.layerGroup([newMarker]).addTo(geoData.map);
-		});
 		document.getElementById("cvs").addEventListener("mouseout", () => {
-			geoData.map.removeLayer(newMarker);
+			newMarker.setLatLng([-100,-10000]);
 		});
 
 		var line = new RGraph.Line({
