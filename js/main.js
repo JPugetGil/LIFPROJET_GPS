@@ -251,6 +251,12 @@ function displayPath(geoData, index, display = true) {
 }
 
 function generateGraph(geoData) {
+	if (document.getElementById("toHide").className =! "collapse show"){
+		$('#toHide').collapse({
+		  hide: false
+		});
+	}
+
 	let w2 = new Worker("js/chart.js", {type:'module'});
 	RGraph.reset(document.getElementById('cvs'));
 	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
