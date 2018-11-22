@@ -98,6 +98,9 @@ function generateIndex(geoData) {
     			</div>
   			</div>
 		</div>`;
+	$('[data-toggle="popover"]').popover();
+	$('[data-toggle="popover"]').popover('disable');
+
 	return geoData;
 }
 

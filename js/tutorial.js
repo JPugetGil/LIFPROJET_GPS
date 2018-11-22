@@ -23,6 +23,7 @@ function launchTutorial(geoData) {
         return geoDataT;
     })
     .then(replaceListeners)
+    .then(tutorialSpecificities)
     .catch(console.error)
 }
 
@@ -35,6 +36,7 @@ function stopTutorial(geoData, geoDataT) {
     button.children[0].classList.remove("fa-stop");
     button.children[0].classList.add("fa-play");
 
+    tutorialSpecificitiesRemove();
     mapOriginals(geoData, geoDataT);
     replaceListeners(geoData);
     movePOV(geoData);
@@ -78,4 +80,23 @@ function replaceListeners(geoData) {
     setListenersUpdate(geoData);
 
     return geoData;
+}
+
+function tutorialSpecificities(geoData) {
+    let titles = [];
+    Array.from($('[data-toggle="popover"]')).forEach(button => {
+        titles.push(button.title);
+    });
+
+    $('[data-toggle="popover"]').popover("enable");
+    Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
+        button.title = titles[i];
+    });
+
+    return geoData;
+}
+
+function tutorialSpecificitiesRemove() {
+    $('[data-toggle="popover"]').popover('hide');
+    $('[data-toggle="popover"]').popover('disable');
 }
