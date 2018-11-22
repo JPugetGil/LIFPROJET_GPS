@@ -115,6 +115,7 @@ function dragHandler(e, polyline) {
 function dragEndHandler(geoData) {
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
+	savePaths(geoData);
 	generateGraph(geoData);
 	infoTrace(geoData);
 }
@@ -146,6 +147,7 @@ function addPointMode(geoData) {
                     trace.properties.heartRates.push(trace.properties.heartRates[trace.properties.heartRates.length -1]);
                 }
             }
+            savePaths(geoData);
         } else {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir y ajouter des points.");
 		}
@@ -205,6 +207,7 @@ function removePoint(geoData, markerIndex, index) {
             trace.properties.heartRates = heartRates;
         }
     }
+    savePaths(geoData);
     generateGraph(geoData);
     infoTrace(geoData);
 }
@@ -294,6 +297,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 		displayPath(geoData, geoData.paths.length-1);
 		setListenersUpdate(geoData);
 		infoTrace(geoData);
+		savePaths(geoData);
 	}
 }
 
@@ -363,6 +367,7 @@ function cutIn2(geoData, index) {
         geoData.paths[geoData.focus].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(0, index);
     }
 
+    savePaths(geoData);
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
@@ -399,8 +404,50 @@ function copyAttrPath(geoData, oldPath) {
 	return newPath;
 }
 
+function copyAllPaths(geoData, paths) {
+	let tabPaths = [];
+	for(let i = 0; i<paths.length; i++){
+		tabPaths.push(copyAttrPath(geoData, paths[i]));
+		tabPaths[i].file = paths[i].file;
+		tabPaths[i].features[0].geometry.coordinates = paths[i].features[0].geometry.coordinates.slice(0);
+		if(paths[i].features[0].properties.hasOwnProperty("coordTimes")){
+			tabPaths[i].features[0].properties.coordTimes = paths[i].features[0].properties.coordTimes.slice(0);
+		}
+		if(paths[i].features[0].properties.hasOwnProperty("heartRates")){
+			tabPaths[i].features[0].properties.heartRates = paths[i].features[0].properties.heartRates.slice(0);
+		}
+	}
+	return tabPaths;
+}
+
 function infoTrace(geoData){
 	let distance = calculateDistance(geoData.paths[geoData.focus]);
 	document.getElementById("colInfo3").innerHTML = distance;
 	document.getElementById("colInfo4").innerHTML = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
+}
+
+function undoMode(geoData){
+	geoData.map.dragging.enable();
+	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
+	geoData.mode = "undo";
+	console.log("mode : " + geoData.mode);
+
+}
+
+function savePaths(geoData){
+	if (geoData.historyUndo.current === undefined){
+		geoData.historyUndo.current = 0;
+		geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
+	}
+	else{
+		for(let i = geoData.historyUndo.paths.length; i > 0; i--){
+			if(i != 4){
+				geoData.historyUndo.paths[i] = copyAllPaths(geoData, geoData.historyUndo.paths[i-1]);
+			}
+		}
+	geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
+	console.log(geoData.historyUndo);
+	}
 }

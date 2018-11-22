@@ -16,15 +16,15 @@ function createGeoData() {
 		let geoData = {
 			map: undefined,
 			paths: [],
-			pathsHistory: {
+			historyUndo: {
 				paths: [],
-				last: undefined
+				current: undefined 
+			},
+			historyRedo: {
+				paths: [],
+				current: undefined 
 			},
 			layers: [],
-			layersHistory: {
-				layers: [],
-				last: undefined
-			},
 			layersControl: undefined,
 			markersColor: [],
 			tempMarkers: [],
@@ -42,8 +42,8 @@ function generateIndex(geoData) {
 	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
 	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
 					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-hand-pointer"></i></button>
-					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
-					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
+					<button type="button" id="undo" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
+					<button type="button" id="redo" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
 					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
 					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
 					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink"><i class="fas fa-link"></i></button>
@@ -138,6 +138,7 @@ function addPath(geoData, file) {
 		geoData.paths[index].shown = true;
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
+		savePaths(geoData);
         return geoData;
 	});
 }
@@ -177,6 +178,7 @@ function reSample(geoData, number){
 			displayPath(geoData, geoData.focus);
 			generateGraph(geoData);
 			infoTrace(geoData);
+			savePaths(geoData);
 
 		} else {
 			let w = new Worker("js/resample.js", {type:'module'});
@@ -241,7 +243,7 @@ function displayPath(geoData, index, display = true) {
 	let polyline = L.polyline(latlngs, {color: color});
 
 	geoData.layers[index] = polyline;
-	geoData.layersHistory[index] = [];
+	//geoData.layersHistory[index] = [];
 	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	if(display){
 		geoData.map.addLayer(polyline);
@@ -346,6 +348,7 @@ function setListeners(geoData) {
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
 	document.getElementById("infos").addEventListener("click", () => infoTrace(geoData));
+	document.getElementById("undo").addEventListener("click", () => undoMode(geoData));
 
     return geoData;
 }
@@ -409,9 +412,4 @@ function setFocusClass(geoData) {
 	if (geoData.focus !== undefined) {
 		lines[geoData.focus].classList.add("focus");
 	}
-}
-
-function createHistory(geoData, index) {
-	geoData.pathsHistory[index].paths.push(geoData.paths[index]);
-	geoData.layersHistory[index].layers.push(geoData.layers[index]);
 }
