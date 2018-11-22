@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<gpx version='1.1'>
+	<trk>
+		<name>Running</name>
+		<trkseg>
+			<trkpt lat='48.867087' lon='2.783489'>
+			</trkpt>
+			<trkpt lat='48.866464' lon='2.764778'>
+			</trkpt>
+			<trkpt lat='48.862737' lon='2.789669'>
+			</trkpt>
+		</trkseg>
+	</trk>
+</gpx>
