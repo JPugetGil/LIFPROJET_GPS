@@ -4,8 +4,6 @@ function launchTutorial(geoData) {
     console.log("Début du tutoriel");
     let button = document.getElementById("tutorialButton");
     button.title = "Stop le tutoriel";
-    /*button.children[0].classList.remove("fa-toggle-off");
-    button.children[0].classList.add("fa-toggle-on");*/
     button.children[0].classList.remove("fa-play");
     button.children[0].classList.add("fa-stop");
 
@@ -23,7 +21,7 @@ function launchTutorial(geoData) {
         return geoDataT;
     })
     .then(replaceListeners)
-    .then(tutorialSpecificities)
+    .then(teach)
     .catch(console.error)
 }
 
@@ -31,12 +29,10 @@ function stopTutorial(geoData, geoDataT) {
     console.log("Fin du tutoriel");
     let button = document.getElementById("tutorialButton");
     button.title = "Lance un tutoriel";
-    /*button.children[0].classList.remove("fa-toggle-on");
-    button.children[0].classList.add("fa-toggle-off");*/
     button.children[0].classList.remove("fa-stop");
     button.children[0].classList.add("fa-play");
 
-    tutorialSpecificitiesRemove();
+    resetPopovers();
     mapOriginals(geoData, geoDataT);
     replaceListeners(geoData);
     movePOV(geoData);
@@ -82,21 +78,24 @@ function replaceListeners(geoData) {
     return geoData;
 }
 
-function tutorialSpecificities(geoData) {
+function resetPopovers() {
     let titles = [];
     Array.from($('[data-toggle="popover"]')).forEach(button => {
         titles.push(button.title);
     });
-
-    $('[data-toggle="popover"]').popover("enable");
-    Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
-        button.title = titles[i];
-    });
-
-    return geoData;
-}
-
-function tutorialSpecificitiesRemove() {
     $('[data-toggle="popover"]').popover('hide');
     $('[data-toggle="popover"]').popover('disable');
+    Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
+        button.title = titles[i];
+   	});
+}
+
+function activatePopover(id) {
+    let realId = '#' + id;
+    $(realId).popover('show');
+    $(realId).popover('disable');
+}
+
+function teach() {
+    activatePopover("deletePoint");
 }
