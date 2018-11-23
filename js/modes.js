@@ -294,10 +294,10 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 		deleteTrace(geoData, idTrace2, false);
 		deleteTrace(geoData, idTrace1, false);
 		geoData.paths[geoData.paths.length] = traceBorn;
+		savePaths(geoData);
 		displayPath(geoData, geoData.paths.length-1);
 		setListenersUpdate(geoData);
 		infoTrace(geoData);
-		savePaths(geoData);
 	}
 }
 
@@ -433,7 +433,7 @@ function undoMode(geoData){
 	deleteOldMarkers(geoData);
 	geoData.mode = "undo";
 	console.log("mode : " + geoData.mode);
-
+	itWasBetterBefore(geoData);
 }
 
 function savePaths(geoData){
@@ -442,12 +442,39 @@ function savePaths(geoData){
 		geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
 	}
 	else{
+		geoData.historyRedo.paths = [];
+		geoData.historyRedo.current = undefined;
+		geoData.historyUndo.current = 0;
 		for(let i = geoData.historyUndo.paths.length; i > 0; i--){
 			if(i != 4){
 				geoData.historyUndo.paths[i] = copyAllPaths(geoData, geoData.historyUndo.paths[i-1]);
 			}
 		}
 	geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
-	console.log(geoData.historyUndo);
+	//console.log(geoData.historyUndo);
 	}
+}
+
+function itWasBetterBefore(geoData){
+	if(geoData.historyUndo.current != 3){
+		geoData.historyUndo.current ++;
+		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		if(geoData.historyRedo.current === undefined){
+			geoData.historyRedo.current = 0;
+			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
+		}else{
+			for(let i = geoData.historyRedo.paths.length-1; i > 0; i--){
+				if(i != 3){
+					geoData.historyRedo.paths[i] = copyAllPaths(geoData, geoData.historyRedo.paths[i-1]);
+				}
+			}
+			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
+			console.log(geoData.historyRedo);
+		}
+		displayPath(geoData, geoData.focus);
+		infoTrace(geoData);
+	}else{
+		alert("Vous ne pouvez pas annuler plus de 3 fois.");
+	}
+
 }

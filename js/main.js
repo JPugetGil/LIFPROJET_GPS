@@ -207,6 +207,9 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index, display = true) {
+	/*geoData.map.eachLayer(function(layer){
+		geoData.map.removeLayer(layer);
+	});*/
 	let color;
 	let mean = getElevationMean(geoData);
 	if (mean<600){
@@ -232,21 +235,35 @@ function displayPath(geoData, index, display = true) {
 	}
 
 	let latlngs = [];
-	geoData.paths[index].features[0].geometry.coordinates.forEach(coord => {
+	if(geoData.historyRedo.current === undefined || geoData.historyRedo.current == 0){
+		geoData.historyUndo.paths[geoData.historyUndo.current][index].features[0].geometry.coordinates.forEach(coord => {
 		let point = [
 			coord[1],
 			coord[0],
 			coord[2]
 		];
 		latlngs.push(point);
-	});
-	let polyline = L.polyline(latlngs, {color: color});
+		});
+	var polyline = L.polyline(latlngs, {color: color});
+	geoData.layers[geoData.focus] = polyline;
+	geoData.layersControl.addOverlay(polyline, geoData.historyUndo.paths[geoData.historyUndo.current][index].file);
+	}else{
+		geoData.historyRedo.paths[geoData.historyRedo.current][index].features[0].geometry.coordinates.forEach(coord => {
+		let point = [
+			coord[1],
+			coord[0],
+			coord[2]
+		];
+		latlngs.push(point);
+		});
+	var polyline = L.polyline(latlngs, {color: color});
+	//console.log(polyline);
+	geoData.layers[geoData.focus] = polyline;
+	geoData.layersControl.addOverlay(polyline, geoData.historyRedo.paths[geoData.historyRedo.current][index].file);
+	}
 
-	geoData.layers[index] = polyline;
-	//geoData.layersHistory[index] = [];
-	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	if(display){
-		geoData.map.addLayer(polyline);
+		geoData.map.addLayer(geoData.layers[geoData.focus]);
 		setFocusClass(geoData);
 	}
 	return geoData;
