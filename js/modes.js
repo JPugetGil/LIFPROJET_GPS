@@ -113,6 +113,9 @@ function dragHandler(e, polyline) {
 // Param : geoData
 // Return : None
 function dragEndHandler(geoData) {
+	let event = new Event("movePoint");
+	document.getElementById("tutorialButton").dispatchEvent(event);
+
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
 	generateGraph(geoData);
@@ -137,6 +140,8 @@ function addPointMode(geoData) {
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
 			infoTrace(geoData);
 
+			let event = new Event("addPoint");
+			document.getElementById("tutorialButton").dispatchEvent(event);
 
             if (trace.hasOwnProperty("properties")) {
                 if (trace.properties.hasOwnProperty("coordTimes")) {
@@ -205,6 +210,10 @@ function removePoint(geoData, markerIndex, index) {
             trace.properties.heartRates = heartRates;
         }
     }
+
+	let event = new Event("deletePoint");
+	document.getElementById("tutorialButton").dispatchEvent(event);
+
     generateGraph(geoData);
     infoTrace(geoData);
 }
