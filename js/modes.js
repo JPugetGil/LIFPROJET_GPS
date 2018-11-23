@@ -22,7 +22,7 @@ function moveMapMode(geoData) {
 // Param : geoData
 // Return : None
 function movePointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -136,8 +136,8 @@ function addPointMode(geoData) {
 			latlngs.push(latlng);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
 			infoTrace(geoData);
-            
-            
+
+
             if (trace.hasOwnProperty("properties")) {
                 if (trace.properties.hasOwnProperty("coordTimes")) {
                     trace.properties.coordTimes.push(trace.properties.coordTimes[trace.properties.coordTimes.length -1]);
@@ -192,7 +192,7 @@ function removePoint(geoData, markerIndex, index) {
     geoData.layers[geoData.focus].setLatLngs(latlngs);
     let trace = geoData.paths[geoData.focus].features[0];
 	trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-    
+
      if (trace.hasOwnProperty("properties")) {
         if (trace.properties.hasOwnProperty("coordTimes")) {
             let coordTimes = trace.properties.coordTimes;
