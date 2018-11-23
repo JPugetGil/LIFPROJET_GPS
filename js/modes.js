@@ -22,7 +22,7 @@ function moveMapMode(geoData) {
 // Param : geoData
 // Return : None
 function movePointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -113,6 +113,9 @@ function dragHandler(e, polyline) {
 // Param : geoData
 // Return : None
 function dragEndHandler(geoData) {
+	let event = new Event("movePoint");
+	document.getElementById("tutorialButton").dispatchEvent(event);
+
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
 	savePaths(geoData);
@@ -137,8 +140,10 @@ function addPointMode(geoData) {
 			latlngs.push(latlng);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
 			infoTrace(geoData);
-            
-            
+
+			let event = new Event("addPoint");
+			document.getElementById("tutorialButton").dispatchEvent(event);
+
             if (trace.hasOwnProperty("properties")) {
                 if (trace.properties.hasOwnProperty("coordTimes")) {
                     trace.properties.coordTimes.push(trace.properties.coordTimes[trace.properties.coordTimes.length -1]);
@@ -194,7 +199,7 @@ function removePoint(geoData, markerIndex, index) {
     geoData.layers[geoData.focus].setLatLngs(latlngs);
     let trace = geoData.paths[geoData.focus].features[0];
 	trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-    
+
      if (trace.hasOwnProperty("properties")) {
         if (trace.properties.hasOwnProperty("coordTimes")) {
             let coordTimes = trace.properties.coordTimes;
@@ -208,6 +213,8 @@ function removePoint(geoData, markerIndex, index) {
         }
     }
     savePaths(geoData);
+	let event = new Event("deletePoint");
+	document.getElementById("tutorialButton").dispatchEvent(event);
     generateGraph(geoData);
     infoTrace(geoData);
 }
