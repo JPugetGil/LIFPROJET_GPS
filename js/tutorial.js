@@ -8,9 +8,10 @@ function launchTutorial(geoData) {
     button.children[0].classList.add("fa-stop");
 
     createGeoData()
+    .then(setUpPopovers)
     .then(geoDataT => mapReplacements(geoData, geoDataT))
     .then(generateTiles)
-    .then(geoDataT => addPath(geoDataT, "gpx/lac-blanc-via-lac-cornu-et-lac-noir.gpx"))
+    .then(geoDataT => addPath(geoDataT, "gpx/disneyland_paris.gpx"))
     .then(geoDataT => displayPath(geoDataT, 0))
     .then(movePOV)
     .then(geoDataT => {
