@@ -18,11 +18,11 @@ function createGeoData() {
 			paths: [],
 			historyUndo: {
 				paths: [],
-				current: undefined 
+				current: undefined
 			},
 			historyRedo: {
 				paths: [],
-				current: undefined 
+				current: undefined
 			},
 			layers: [],
 			layersControl: undefined,
@@ -186,6 +186,7 @@ function reSample(geoData, number){
 			}
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
+			document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 			generateGraph(geoData);
 			infoTrace(geoData);
 			savePaths(geoData);
@@ -198,7 +199,7 @@ function reSample(geoData, number){
 				w = undefined;
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
-
+				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 				generateGraph(geoData);
 				infoTrace(geoData);
 			}
