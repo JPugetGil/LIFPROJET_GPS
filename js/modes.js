@@ -478,6 +478,10 @@ function itWasBetterBefore(geoData){
 			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
 			console.log(geoData.historyRedo);
 		}
+		if(geoData.historyUndo.paths[geoData.historyUndo.current] === undefined){
+			alert("Il n'y a rien à annuler.");
+			geoData.historyUndo.current --;
+		}
 		displayPath(geoData, geoData.focus);
 		infoTrace(geoData);
 	}else{
