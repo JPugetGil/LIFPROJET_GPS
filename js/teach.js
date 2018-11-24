@@ -25,8 +25,8 @@ function setUpPopovers(geoData) {
 
 	document.getElementById("moveMap").setAttribute("data-content", moveMapDesc);
 	document.getElementById("movePoint").setAttribute("data-content", movePointDesc);
-	document.getElementById("undo").setAttribute("data-content", undoDesc);
-	document.getElementById("redo").setAttribute("data-content", redoDesc);
+	document.getElementById("undo").setAttribute("data-content", undoDesc); //
+	document.getElementById("redo").setAttribute("data-content", redoDesc); //
 	document.getElementById("addPoint").setAttribute("data-content", addPointDesc);
 	document.getElementById("deletePoint").setAttribute("data-content", deletePointDesc);
 	document.getElementById("link").setAttribute("data-content", linkDesc);
@@ -56,6 +56,9 @@ function teachPart(id) {
         // Next id to activate
         let nextId;
         switch (id) {
+            case "infos":
+                nextId = "movePoint";
+                break;
             case "movePoint":
                 nextId = "addPoint";
                 break;
@@ -63,6 +66,27 @@ function teachPart(id) {
                 nextId = "deletePoint";
                 break;
             case "deletePoint":
+                nextId = "unlink";
+                break;
+            case "unlink":
+                nextId = "link";
+                break;
+            case "link":
+                nextId = "samplingFactor";
+                break;
+            case "samplingFactor":
+                nextId = "undo";
+                break;
+            case "undo":
+                nextId = "redo";
+                break;
+            case "redo":
+                nextId = "saveButton";
+                break;
+            case "saveButton":
+                nextId = "print";
+                break;
+            case "print":
                 nextId = "";
                 break;
             default:
@@ -79,5 +103,5 @@ function teachPart(id) {
 }
 
 function teach() {
-    teachPart("movePoint");
+    teachPart("infos");
 }
