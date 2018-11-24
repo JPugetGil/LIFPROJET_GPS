@@ -51,18 +51,33 @@ function desactivatePopover(id) {
     $(realId).popover('disable');
 }
 
-function teach() {
-    let button = document.getElementById("tutorialButton");
-    activatePopover("movePoint");
-    button.addEventListener("movePoint", () => {
-        desactivatePopover("movePoint");
-        activatePopover("addPoint");
-        button.addEventListener("addPoint", () => {
-            desactivatePopover("addPoint");
-            activatePopover("deletePoint");
-            button.addEventListener("deletePoint", () => {
-                desactivatePopover("deletePoint");
-            });
+function teachPart(id) {
+    if (id !== "") {
+        // Next id to activate
+        let nextId;
+        switch (id) {
+            case "movePoint":
+                nextId = "addPoint";
+                break;
+            case "addPoint":
+                nextId = "deletePoint";
+                break;
+            case "deletePoint":
+                nextId = "";
+                break;
+            default:
+                nextId = "";
+        }
+
+        // Current execution
+        activatePopover(id);
+        document.getElementById("tutorialButton").addEventListener(id, () => {
+            desactivatePopover(id);
+            teachPart(nextId);
         });
-    });
+    }
+}
+
+function teach() {
+    teachPart("movePoint");
 }
