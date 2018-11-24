@@ -16,6 +16,7 @@ function moveMapMode(geoData) {
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
+	document.getElementById("tutorialButton").dispatchEvent(new Event("moveMap"));
 }
 
 // Mode where points can ba moved
@@ -113,8 +114,7 @@ function dragHandler(e, polyline) {
 // Param : geoData
 // Return : None
 function dragEndHandler(geoData) {
-	let event = new Event("movePoint");
-	document.getElementById("tutorialButton").dispatchEvent(event);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("movePoint"));
 
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
@@ -140,9 +140,7 @@ function addPointMode(geoData) {
 			latlngs.push(latlng);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
 			infoTrace(geoData);
-
-			let event = new Event("addPoint");
-			document.getElementById("tutorialButton").dispatchEvent(event);
+			document.getElementById("tutorialButton").dispatchEvent(new Event("addPoint"));
 
             if (trace.hasOwnProperty("properties")) {
                 if (trace.properties.hasOwnProperty("coordTimes")) {
@@ -213,8 +211,7 @@ function removePoint(geoData, markerIndex, index) {
         }
     }
     savePaths(geoData);
-	let event = new Event("deletePoint");
-	document.getElementById("tutorialButton").dispatchEvent(event);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("deletePoint"));
     generateGraph(geoData);
     infoTrace(geoData);
 }
@@ -325,6 +322,7 @@ function linkTrace(geoData){
 	}
 	let mode = val1 + val2;
 	fusion(geoData, idTrace1, idTrace2, mode);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("link"));
 }
 
 function unlinkMode(geoData) {
@@ -380,6 +378,7 @@ function cutIn2(geoData, index) {
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
 	infoTrace(geoData);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("unlink"));
     console.log(geoData.paths);
 }
 
@@ -428,6 +427,8 @@ function copyAllPaths(geoData, paths) {
 }
 
 function infoTrace(geoData){
+	document.getElementById("tutorialButton").dispatchEvent(new Event("infos"));
+
 	let distance = calculateDistance(geoData.paths[geoData.focus]);
 	document.getElementById("colInfo3").innerHTML = distance;
 	document.getElementById("colInfo4").innerHTML = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
@@ -441,6 +442,8 @@ function undoMode(geoData){
 	geoData.mode = "undo";
 	console.log("mode : " + geoData.mode);
 	itWasBetterBefore(geoData);
+
+	document.getElementById("tutorialButton").dispatchEvent(new Event("undo"));
 }
 
 function savePaths(geoData){

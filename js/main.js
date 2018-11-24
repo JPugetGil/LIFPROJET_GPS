@@ -18,11 +18,11 @@ function createGeoData() {
 			paths: [],
 			historyUndo: {
 				paths: [],
-				current: undefined 
+				current: undefined
 			},
 			historyRedo: {
 				paths: [],
-				current: undefined 
+				current: undefined
 			},
 			layers: [],
 			layersControl: undefined,
@@ -50,7 +50,7 @@ function generateIndex(geoData) {
 					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink" data-toggle="popover" data-placement="left" data-content=""></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez" data-toggle="popover" data-placement="left" data-content="">
-					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-divide"></i></button>
+					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
 					<button id="print" type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-print"></i></button>
@@ -186,6 +186,7 @@ function reSample(geoData, number){
 			}
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
+			document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 			generateGraph(geoData);
 			infoTrace(geoData);
 			savePaths(geoData);
@@ -198,7 +199,7 @@ function reSample(geoData, number){
 				w = undefined;
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
-
+				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 				generateGraph(geoData);
 				infoTrace(geoData);
 			}
