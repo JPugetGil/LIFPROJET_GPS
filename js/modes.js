@@ -469,17 +469,18 @@ function itWasBetterBefore(geoData){
 	if(geoData.historyUndo.current != 3){
 		geoData.historyUndo.current ++;
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
 		if(geoData.historyRedo.current === undefined){
 			geoData.historyRedo.current = 0;
 			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
 		}else{
-			for(let i = geoData.historyRedo.paths.length-1; i > 0; i--){
+			for(let i = geoData.historyRedo.paths.length; i > 0; i--){
 				if(i != 3){
 					geoData.historyRedo.paths[i] = copyAllPaths(geoData, geoData.historyRedo.paths[i-1]);
 				}
 			}
 			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
-			console.log(geoData.historyRedo);
+			
 		}
 		if(geoData.historyUndo.paths[geoData.historyUndo.current] === undefined){
 			alert("Il n'y a rien à annuler.");

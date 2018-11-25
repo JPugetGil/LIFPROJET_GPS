@@ -218,9 +218,6 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index, display = true) {
-	/*geoData.map.eachLayer(function(layer){
-		geoData.map.removeLayer(layer);
-	});*/
 	let color;
 	let mean = getElevationMean(geoData);
 	if (mean<600){
