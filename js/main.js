@@ -8,6 +8,10 @@ createGeoData()
 .then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
+.then(geoData => {
+	moveMapMode(geoData);
+	return geoData;
+})
 .then(console.log)
 .catch(console.error);
 
