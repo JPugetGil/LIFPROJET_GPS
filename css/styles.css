@@ -27,10 +27,6 @@
 	display: none;
 }
 
-#descriptionButton:hover {
-	color: white;
-}
-
 footer {
 	position: fixed;
 	bottom: 0;
