@@ -115,10 +115,9 @@ function dragHandler(e, polyline) {
 // Return : None
 function dragEndHandler(geoData) {
 	document.getElementById("tutorialButton").dispatchEvent(new Event("movePoint"));
-
+	savePaths(geoData);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
-	savePaths(geoData);
 	generateGraph(geoData);
 	infoTrace(geoData);
 }
@@ -133,6 +132,7 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		if (geoData.focus !== undefined) {
+			savePaths(geoData);
 			var trace = geoData.paths[geoData.focus].features[0];
 			trace.geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 			let latlngs = geoData.layers[geoData.focus].getLatLngs();
@@ -150,7 +150,6 @@ function addPointMode(geoData) {
                     trace.properties.heartRates.push(trace.properties.heartRates[trace.properties.heartRates.length -1]);
                 }
             }
-            savePaths(geoData);
         } else {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir y ajouter des points.");
 		}
@@ -188,6 +187,7 @@ function deletePointMode(geoData) {
 }
 
 function removePoint(geoData, markerIndex, index) {
+	savePaths(geoData);
 	geoData.map.removeLayer(geoData.tempMarkers[markerIndex]);
 	for (let i = markerIndex+1; i < geoData.tempMarkers.length; i++) {
 		geoData.tempMarkers[i].options.index--;
@@ -210,7 +210,6 @@ function removePoint(geoData, markerIndex, index) {
             trace.properties.heartRates = heartRates;
         }
     }
-    savePaths(geoData);
 	document.getElementById("tutorialButton").dispatchEvent(new Event("deletePoint"));
     generateGraph(geoData);
     infoTrace(geoData);
@@ -240,6 +239,7 @@ function linkMode(geoData) {
 }
 
 function fusion(geoData, idTrace1, idTrace2, mode){
+	savePaths(geoData);
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
 	if (document.getElementById("traceName").value == ""){
 		traceBorn.file = "Nouvelle Trace";
@@ -298,7 +298,6 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 		deleteTrace(geoData, idTrace2, false);
 		deleteTrace(geoData, idTrace1, false);
 		geoData.paths[geoData.paths.length] = traceBorn;
-		savePaths(geoData);
 		displayPath(geoData, geoData.paths.length-1);
 		setListenersUpdate(geoData);
 		infoTrace(geoData);
@@ -354,6 +353,7 @@ function unlinkMode(geoData) {
 }
 
 function cutIn2(geoData, index) {
+	savePaths(geoData);
 	let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 	let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, (coordinates.length - index));
@@ -371,8 +371,6 @@ function cutIn2(geoData, index) {
 		geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
         geoData.paths[geoData.focus].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(0, index);
     }
-
-    savePaths(geoData);
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
@@ -447,49 +445,58 @@ function undoMode(geoData){
 }
 
 function savePaths(geoData){
-	if (geoData.historyUndo.current === undefined){
-		geoData.historyUndo.current = 0;
-		geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
-	}
-	else{
-		geoData.historyRedo.paths = [];
-		geoData.historyRedo.current = undefined;
-		geoData.historyUndo.current = 0;
-		for(let i = geoData.historyUndo.paths.length; i > 0; i--){
-			if(i != 4){
-				geoData.historyUndo.paths[i] = copyAllPaths(geoData, geoData.historyUndo.paths[i-1]);
-			}
-		}
-	geoData.historyUndo.paths[0] = copyAllPaths(geoData, geoData.paths);
-	//console.log(geoData.historyUndo);
-	}
+	geoData.savedState.paths = copyAllPaths(geoData, geoData.paths);
+	geoData.savedState.undo = false;
+}
+
+function permuteStates(geoData){
+	let temp = [];
+	temp = copyAllPaths(geoData, geoData.paths);
+	geoData.paths = copyAllPaths(geoData, geoData.savedState.paths);
+	geoData.savedState.paths = copyAllPaths(geoData, temp);
 }
 
 function itWasBetterBefore(geoData){
-	if(geoData.historyUndo.current != 3){
-		geoData.historyUndo.current ++;
+	if(!geoData.savedState.undo){
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
-		if(geoData.historyRedo.current === undefined){
-			geoData.historyRedo.current = 0;
-			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
-		}else{
-			for(let i = geoData.historyRedo.paths.length; i > 0; i--){
-				if(i != 3){
-					geoData.historyRedo.paths[i] = copyAllPaths(geoData, geoData.historyRedo.paths[i-1]);
-				}
-			}
-			geoData.historyRedo.paths[0] = copyAllPaths(geoData, geoData.historyUndo.paths[0]);
-			
-		}
-		if(geoData.historyUndo.paths[geoData.historyUndo.current] === undefined){
-			alert("Il n'y a rien à annuler.");
-			geoData.historyUndo.current --;
-		}
+		permuteStates(geoData);
+		displayPath(geoData, geoData.focus);
+		/*if(geoData.paths.length < geoData.savedState.paths.length){
+			console.log(geoData.layers);
+			geoData.map.removeLayer(geoData.layers[geoData.paths.length-1]);
+			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length-1]);
+			setFocusClass(geoData);
+		}*/
+		infoTrace(geoData);
+		setListenersUpdate(geoData);
+		geoData.savedState.undo = true;
+	}else{
+		alert("Il n'y a rien à annuler.");
+	}
+}
+
+function redoMode(geoData){
+	geoData.map.dragging.enable();
+	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
+	geoData.mode = "redo";
+	console.log("mode : " + geoData.mode);
+	backToTheFuture(geoData);
+}
+
+function backToTheFuture(geoData){
+	if(geoData.savedState.undo){
+		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
+		permuteStates(geoData)
 		displayPath(geoData, geoData.focus);
 		infoTrace(geoData);
-	}else{
-		alert("Vous ne pouvez pas annuler plus de 3 fois.");
-	}
+		setListenersUpdate(geoData);
+		geoData.savedState.undo = false;
 
+	}else{
+		alert("Il n'y a rien à désannuler.");
+	}
 }
