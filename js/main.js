@@ -2,7 +2,8 @@ createGeoData()
 .then(generateIndex)
 .then(generateMap)
 .then(generateTiles)
-.then(geoData => addPath(geoData, "gpx/runinlyon_10km.gpx"))
+.then(geoData => addPath(geoData, "gpx/gps-trace-242.gpx"))
+.then(checkElevation)
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 .then(setGeneralListeners)
@@ -140,6 +141,43 @@ function addPath(geoData, file) {
 		geoData.focus = index;
         return geoData;
 	});
+}
+
+function checkElevation(geoData){
+	var listCoord;
+	let compt;
+	let tabPromises;
+
+	for(let j=0; j<geoData.paths.length; j++){
+		tabPromises = []; //FAIRE EN SORTE QU'IL TESTE TOUS LES ELEMENTS DE LA TRACE !
+
+		if(geoData.paths[j].features[0].geometry.coordinates[0][2]==undefined){
+			listCoord = "";
+			compt = 0;
+			for (let i=0; i<geoData.paths[j].features[0].geometry.coordinates.length; i++){
+				listCoord += geoData.paths[j].features[0].geometry.coordinates[i][1] + "," + geoData.paths[j].features[0].geometry.coordinates[i][0] + ",";
+				if (!((i!=geoData.paths[j].features[0].geometry.coordinates.length-1) && (i%50!=0) || (i==0))){
+					listCoord = listCoord.substring(0, listCoord.length-1);
+					let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+					tabPromises.push($.getJSON(link, function(data) {}));
+					listCoord = "";
+				}
+			}
+			Promise.all(tabPromises).then(function(values) {
+				values.forEach(function(element){
+					for(let k=0; k<element.resourceSets[0].resources[0].elevations.length; k++){
+						let x = compt*50+k;
+						geoData.paths[j].features[0].geometry.coordinates[x].push(element.resourceSets[0].resources[0].elevations[k]);
+					}
+					compt++;
+				});
+
+				return geoData;
+			}).then(generateGraph);
+		}
+
+	}
+	return geoData;
 }
 
 // MAP FUNCTIONS //
