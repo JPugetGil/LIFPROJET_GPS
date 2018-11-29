@@ -373,6 +373,7 @@ function setListenersUpdate(geoData) {
 			} else {
 				resetFocus(geoData);
 			}
+			deleteOldMarkers(geoData);
 			setFocusClass(geoData);
 			movePOV(geoData);
 		});
@@ -381,6 +382,7 @@ function setListenersUpdate(geoData) {
 		span.addEventListener("contextmenu", evt => {
 			evt.preventDefault();
 			deleteTrace(geoData, getIndexFile(evt.target));
+			deleteOldMarkers(geoData);
 		});
 	});
 
