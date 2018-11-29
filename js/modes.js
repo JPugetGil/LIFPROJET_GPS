@@ -377,7 +377,6 @@ function cutIn2(geoData, index) {
 	setListenersUpdate(geoData);
 	infoTrace(geoData);
 	document.getElementById("tutorialButton").dispatchEvent(new Event("unlink"));
-    console.log(geoData.paths);
 }
 
 function copyAttrPath(geoData, oldPath) {
@@ -462,12 +461,14 @@ function itWasBetterBefore(geoData){
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
 		permuteStates(geoData);
 		displayPath(geoData, geoData.focus);
-		/*if(geoData.paths.length < geoData.savedState.paths.length){
-			console.log(geoData.layers);
-			geoData.map.removeLayer(geoData.layers[geoData.paths.length-1]);
-			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length-1]);
+		if(geoData.paths.length > geoData.savedState.paths.length){
+			displayPath(geoData, geoData.paths.length-1, false);
 			setFocusClass(geoData);
-		}*/
+		}
+		if(geoData.paths.length < geoData.savedState.paths.length){
+			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length]);
+			setFocusClass(geoData);
+		}
 		infoTrace(geoData);
 		setListenersUpdate(geoData);
 		geoData.savedState.undo = true;
@@ -492,6 +493,14 @@ function backToTheFuture(geoData){
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
 		permuteStates(geoData)
 		displayPath(geoData, geoData.focus);
+		if(geoData.paths.length < geoData.savedState.paths.length){
+			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length]);
+			setFocusClass(geoData);
+		}
+		if(geoData.paths.length > geoData.savedState.paths.length){
+			displayPath(geoData, geoData.paths.length-1, false);
+			setFocusClass(geoData);
+		}
 		infoTrace(geoData);
 		setListenersUpdate(geoData);
 		geoData.savedState.undo = false;
