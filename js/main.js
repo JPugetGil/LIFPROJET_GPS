@@ -30,6 +30,7 @@ function createGeoData() {
 			markersColor: [],
 			tempMarkers: [],
 			focus: undefined,
+			savedState: {},
             mode: "movemap"
 		};
 		resolve(geoData);
