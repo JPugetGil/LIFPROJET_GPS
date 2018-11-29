@@ -260,9 +260,6 @@ function displayPath(geoData, index, display = true) {
 		setFocusClass(geoData);
 	}
 	return geoData;
-
-	
-	return geoData;
 }
 
 function generateGraph(geoData) {
