@@ -250,15 +250,17 @@ function displayPath(geoData, index, display = true) {
 			coord[2]
 		];
 		latlngs.push(point);
-		});
-	var polyline = L.polyline(latlngs, {color: color});
-	geoData.layers[geoData.focus] = polyline;
-	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
+	});
+	let polyline = L.polyline(latlngs, {color: color});
 
+	geoData.layers[index] = polyline;
+	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	if(display){
-		geoData.map.addLayer(geoData.layers[geoData.focus]);
+		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
+	return geoData;
+
 	
 	return geoData;
 }
