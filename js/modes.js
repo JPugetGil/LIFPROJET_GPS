@@ -38,7 +38,7 @@ function movePointMode(geoData) {
 			let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 			let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
 			points.forEach(point => {
-				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0], point.coordinates[2]), {
 					draggable: true,
 					index: point.index
 				})
@@ -105,7 +105,7 @@ function movePointMode(geoData) {
 // Return : polyline => a L.polyline object
 function dragHandler(e, polyline) {
     let latlngs = polyline.getLatLngs();
-    let	latlng = e.target.getLatLng();
+	let latlng = L.latLng(e.target.getLatLng().lat, e.target.getLatLng().lng, e.oldLatLng.alt);
     latlngs.splice(e.target.options.index, 1, latlng);
     polyline.setLatLngs(latlngs);
 }
