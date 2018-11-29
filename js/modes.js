@@ -16,13 +16,14 @@ function moveMapMode(geoData) {
 	geoData.mode = "movemap";
 	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
+	document.getElementById("tutorialButton").dispatchEvent(new Event("moveMap"));
 }
 
 // Mode where points can ba moved
 // Param : geoData
 // Return : None
 function movePointMode(geoData) {
-	geoData.map.dragging.disable();
+	geoData.map.dragging.enable();
 	geoData.map.off("click");
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
@@ -37,7 +38,7 @@ function movePointMode(geoData) {
 			let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 			let points = pointsInInterval(coordinates, e.latlng.lat, e.latlng.lng, interval);
 			points.forEach(point => {
-				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0]), {
+				let marker = L.marker(L.latLng(point.coordinates[1], point.coordinates[0], point.coordinates[2]), {
 					draggable: true,
 					index: point.index
 				})
@@ -104,7 +105,7 @@ function movePointMode(geoData) {
 // Return : polyline => a L.polyline object
 function dragHandler(e, polyline) {
     let latlngs = polyline.getLatLngs();
-    let	latlng = e.target.getLatLng();
+	let latlng = L.latLng(e.target.getLatLng().lat, e.target.getLatLng().lng, e.oldLatLng.alt);
     latlngs.splice(e.target.options.index, 1, latlng);
     polyline.setLatLngs(latlngs);
 }
@@ -113,6 +114,8 @@ function dragHandler(e, polyline) {
 // Param : geoData
 // Return : None
 function dragEndHandler(geoData) {
+	document.getElementById("tutorialButton").dispatchEvent(new Event("movePoint"));
+	savePaths(geoData);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	//generateFilesTab(geoData);
 	generateGraph(geoData);
@@ -129,6 +132,7 @@ function addPointMode(geoData) {
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		if (geoData.focus !== undefined) {
+			savePaths(geoData);
 			var trace = geoData.paths[geoData.focus].features[0];
 			trace.geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
 			let latlngs = geoData.layers[geoData.focus].getLatLngs();
@@ -136,8 +140,8 @@ function addPointMode(geoData) {
 			latlngs.push(latlng);
 			geoData.layers[geoData.focus].setLatLngs(latlngs);
 			infoTrace(geoData);
-            
-            
+			document.getElementById("tutorialButton").dispatchEvent(new Event("addPoint"));
+
             if (trace.hasOwnProperty("properties")) {
                 if (trace.properties.hasOwnProperty("coordTimes")) {
                     trace.properties.coordTimes.push(trace.properties.coordTimes[trace.properties.coordTimes.length -1]);
@@ -183,6 +187,7 @@ function deletePointMode(geoData) {
 }
 
 function removePoint(geoData, markerIndex, index) {
+	savePaths(geoData);
 	geoData.map.removeLayer(geoData.tempMarkers[markerIndex]);
 	for (let i = markerIndex+1; i < geoData.tempMarkers.length; i++) {
 		geoData.tempMarkers[i].options.index--;
@@ -192,7 +197,7 @@ function removePoint(geoData, markerIndex, index) {
     geoData.layers[geoData.focus].setLatLngs(latlngs);
     let trace = geoData.paths[geoData.focus].features[0];
 	trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-    
+
      if (trace.hasOwnProperty("properties")) {
         if (trace.properties.hasOwnProperty("coordTimes")) {
             let coordTimes = trace.properties.coordTimes;
@@ -205,6 +210,7 @@ function removePoint(geoData, markerIndex, index) {
             trace.properties.heartRates = heartRates;
         }
     }
+	document.getElementById("tutorialButton").dispatchEvent(new Event("deletePoint"));
     generateGraph(geoData);
     infoTrace(geoData);
 }
@@ -233,6 +239,7 @@ function linkMode(geoData) {
 }
 
 function fusion(geoData, idTrace1, idTrace2, mode){
+	savePaths(geoData);
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
 	if (document.getElementById("traceName").value == ""){
 		traceBorn.file = "Nouvelle Trace";
@@ -314,6 +321,7 @@ function linkTrace(geoData){
 	}
 	let mode = val1 + val2;
 	fusion(geoData, idTrace1, idTrace2, mode);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("link"));
 }
 
 function unlinkMode(geoData) {
@@ -345,6 +353,7 @@ function unlinkMode(geoData) {
 }
 
 function cutIn2(geoData, index) {
+	savePaths(geoData);
 	let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
 	let latlngs = geoData.layers[geoData.focus].getLatLngs();
     latlngs.splice(index, (coordinates.length - index));
@@ -362,12 +371,12 @@ function cutIn2(geoData, index) {
 		geoData.paths[indexNewPath].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(index);
         geoData.paths[geoData.focus].features[0].properties.heartRates = geoData.paths[geoData.focus].features[0].properties.heartRates.slice(0, index);
     }
-
 	displayPath(geoData, indexNewPath, false);
 	setFocusClass(geoData);
 	deleteOldMarkers(geoData);
 	setListenersUpdate(geoData);
 	infoTrace(geoData);
+	document.getElementById("tutorialButton").dispatchEvent(new Event("unlink"));
     console.log(geoData.paths);
 }
 
@@ -399,8 +408,95 @@ function copyAttrPath(geoData, oldPath) {
 	return newPath;
 }
 
+function copyAllPaths(geoData, paths) {
+	let tabPaths = [];
+	for(let i = 0; i<paths.length; i++){
+		tabPaths.push(copyAttrPath(geoData, paths[i]));
+		tabPaths[i].file = paths[i].file;
+		tabPaths[i].features[0].geometry.coordinates = paths[i].features[0].geometry.coordinates.slice(0);
+		if(paths[i].features[0].properties.hasOwnProperty("coordTimes")){
+			tabPaths[i].features[0].properties.coordTimes = paths[i].features[0].properties.coordTimes.slice(0);
+		}
+		if(paths[i].features[0].properties.hasOwnProperty("heartRates")){
+			tabPaths[i].features[0].properties.heartRates = paths[i].features[0].properties.heartRates.slice(0);
+		}
+	}
+	return tabPaths;
+}
+
 function infoTrace(geoData){
+	document.getElementById("tutorialButton").dispatchEvent(new Event("infos"));
+
 	let distance = calculateDistance(geoData.paths[geoData.focus]);
 	document.getElementById("colInfo3").innerHTML = distance;
 	document.getElementById("colInfo4").innerHTML = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
+}
+
+function undoMode(geoData){
+	geoData.map.dragging.enable();
+	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
+	geoData.mode = "undo";
+	console.log("mode : " + geoData.mode);
+	itWasBetterBefore(geoData);
+
+	document.getElementById("tutorialButton").dispatchEvent(new Event("undo"));
+}
+
+function savePaths(geoData){
+	geoData.savedState.paths = copyAllPaths(geoData, geoData.paths);
+	geoData.savedState.undo = false;
+}
+
+function permuteStates(geoData){
+	let temp = [];
+	temp = copyAllPaths(geoData, geoData.paths);
+	geoData.paths = copyAllPaths(geoData, geoData.savedState.paths);
+	geoData.savedState.paths = copyAllPaths(geoData, temp);
+}
+
+function itWasBetterBefore(geoData){
+	if(!geoData.savedState.undo){
+		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
+		permuteStates(geoData);
+		displayPath(geoData, geoData.focus);
+		/*if(geoData.paths.length < geoData.savedState.paths.length){
+			console.log(geoData.layers);
+			geoData.map.removeLayer(geoData.layers[geoData.paths.length-1]);
+			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length-1]);
+			setFocusClass(geoData);
+		}*/
+		infoTrace(geoData);
+		setListenersUpdate(geoData);
+		geoData.savedState.undo = true;
+	}else{
+		alert("Il n'y a rien à annuler.");
+	}
+}
+
+function redoMode(geoData){
+	geoData.map.dragging.enable();
+	geoData.map.off("click");
+	geoData.map.off("contextmenu");
+	deleteOldMarkers(geoData);
+	geoData.mode = "redo";
+	console.log("mode : " + geoData.mode);
+	backToTheFuture(geoData);
+}
+
+function backToTheFuture(geoData){
+	if(geoData.savedState.undo){
+		geoData.map.removeLayer(geoData.layers[geoData.focus]);
+		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
+		permuteStates(geoData)
+		displayPath(geoData, geoData.focus);
+		infoTrace(geoData);
+		setListenersUpdate(geoData);
+		geoData.savedState.undo = false;
+
+	}else{
+		alert("Il n'y a rien à désannuler.");
+	}
 }

@@ -30,7 +30,10 @@ function giveUserGpx(geoData) {
 		let geoJS = geoData.paths[geoData.focus];
 		let xml = geoJsonToXml(geoJS);
 
-		let filename = "export.gpx";
+		let filename = geoData.paths[geoData.focus].file.trim();
+		if (filename.length < 5 || filename.substr(filename.length -4, filename.length) != ".gpx") {
+			filename += ".gpx";
+		}
 		let element = document.createElement('a');
 		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xml));
 		element.setAttribute('download', filename);
