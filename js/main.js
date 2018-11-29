@@ -310,46 +310,48 @@ function generateGraph(geoData) {
 		});
 	}
 
-	let w2 = new Worker("js/chart.js", {type:'module'});
 	RGraph.reset(document.getElementById('cvs'));
-	document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
-	w2.onmessage = event => {
-		w2.terminate();
-		w2 = undefined;
-		document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
-		document.getElementById("cvs").setAttribute("height", $(document).height()/4);
-		if (newMarker == undefined){
-			var newMarker = new L.marker([-100,-10000]);
-			var lay = new L.layerGroup([newMarker]).addTo(geoData.map);
+	if (geoData.focus !== undefined) {
+		let w2 = new Worker("js/chart.js", {type:'module'});
+		document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
+		w2.onmessage = event => {
+			w2.terminate();
+			w2 = undefined;
+			document.getElementById("cvs").setAttribute("width", $(document).width() / 1.11);
+			document.getElementById("cvs").setAttribute("height", $(document).height()/4);
+			if (newMarker == undefined){
+				var newMarker = new L.marker([-100,-10000]);
+				var lay = new L.layerGroup([newMarker]).addTo(geoData.map);
+			}
+
+			document.getElementById("cvs").addEventListener("mouseout", () => {
+				newMarker.setLatLng([-100,-10000]);
+			});
+
+			var line = new RGraph.Line({
+	            id: 'cvs',
+	            data: event.data[1],
+	            options: {
+									backgroundGridDashed: true,
+									tooltips: function (event) {
+										let x = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][1];
+										let y = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][0];
+										newMarker.setLatLng([x,y]);
+										geoData.map.panTo(new L.LatLng(x,y));
+									},
+	                linewidth: 3,
+								 	numxticks: event.data[0].length/10,
+	                ylabels: true,
+									unitsPost: 'm',
+									crosshairs: true,
+									crosshairsSnap: true,
+	                textAccessible: true,
+	            }
+	        }).draw();
 		}
 
-		document.getElementById("cvs").addEventListener("mouseout", () => {
-			newMarker.setLatLng([-100,-10000]);
-		});
-
-		var line = new RGraph.Line({
-            id: 'cvs',
-            data: event.data[1],
-            options: {
-								backgroundGridDashed: true,
-								tooltips: function (event) {
-									let x = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][1];
-									let y = geoData.paths[geoData.focus].features[0].geometry.coordinates[event][0];
-									newMarker.setLatLng([x,y]);
-									geoData.map.panTo(new L.LatLng(x,y));
-								},
-                linewidth: 3,
-							 	numxticks: event.data[0].length/10,
-                ylabels: true,
-								unitsPost: 'm',
-								crosshairs: true,
-								crosshairsSnap: true,
-                textAccessible: true,
-            }
-        }).draw();
+		w2.postMessage(geoData.paths[geoData.focus]);
 	}
-
-	w2.postMessage(geoData.paths[geoData.focus]);
 
 	return geoData;
 }
