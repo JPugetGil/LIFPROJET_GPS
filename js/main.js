@@ -295,7 +295,7 @@ function displayPath(geoData, index, display = true) {
 }
 
 function generateGraph(geoData) {
-	if (document.getElementById("toHide").className =! "collapse show"){
+	if (document.getElementById("toHide").className != "collapse show"){
 		$('#toHide').collapse({
 		  hide: false
 		});
