@@ -309,10 +309,8 @@ function displayPath(geoData, index, display = true) {
 }
 
 function generateGraph(geoData) {
-	if (document.getElementById("toHide").className != "collapse show"){
-		$('#toHide').collapse({
-		  hide: false
-		});
+	if (document.getElementById("toHide").className === "collapse"){
+			$('#toHide').collapse('toggle');
 	}
 
 	RGraph.reset(document.getElementById('cvs'));
