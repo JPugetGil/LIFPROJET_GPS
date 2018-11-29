@@ -3,15 +3,12 @@ createGeoData()
 .then(generateMap)
 .then(generateTiles)
 .then(geoData => addPath(geoData, "gpx/runinlyon_10km.gpx"))
+.then(checkElevation)
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 .then(setGeneralListeners)
 .then(setListeners)
 .then(setListenersUpdate)
-.then(geoData => {
-	moveMapMode(geoData);
-	return geoData;
-})
 .then(console.log)
 .catch(console.error);
 
@@ -20,11 +17,15 @@ function createGeoData() {
 		let geoData = {
 			map: undefined,
 			paths: [],
-			savedState: {
+			pathsHistory: {
 				paths: [],
-				undo: false
+				last: undefined
 			},
 			layers: [],
+			layersHistory: {
+				layers: [],
+				last: undefined
+			},
 			layersControl: undefined,
 			markersColor: [],
 			tempMarkers: [],
@@ -40,22 +41,22 @@ function generateIndex(geoData) {
 	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 	document.getElementById("mapid").style.zIndex=0;
 	document.getElementById("features").style.width= ($(document).width() * 1/30) +"px";
-	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-hand-pointer"></i></button>
-					<button type="button" id="undo" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-undo"></i></button>
-					<button type="button" id="redo" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo" data-toggle="popover" data-placement="left" data-content=""></i></button>
-					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-plus"></i></button>
-					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-link"></i></button>
-					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink" data-toggle="popover" data-placement="left" data-content=""></i></button>
+	document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block"><i class="fas fa-arrows-alt"></i></button>
+					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-hand-pointer"></i></button>
+					<button type="button" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-undo"></i></button>
+					<button type="button" alt="Désannuler" title="Désannuler" class="btn btn-dark btn-xs btn-block"><i class="fas fa-redo"></i></button>
+					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-plus"></i></button>
+					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block"><i class="fas fa-minus"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink"><i class="fas fa-link"></i></button>
+					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block"><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
-					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez" data-toggle="popover" data-placement="left" data-content="">
+					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez">
 					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block"><i class="fas fa-divide"></i></button>
 					</div>
 
-					<button id="print" type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-print"></i></button>
-					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-file-download"></i></button>
-					<button id="infos" type="button" data-toggle="collapse" data-target="#traceInfos" alt="Ouvre une fenêtre avec plus d'informations sur la trace" title="Ouvre une fenêtre avec plus d'informations sur la trace" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-content=""><i class="fas fa-info-circle"></i></button>
+					<button type="button" alt="Imprimer" Title="Imprimer" onclick="window.print()" value="Imprimer" class="btn btn-dark btn-xs btn-block"><i class="fas fa-print"></i></button>
+					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block"><i class="fas fa-file-download"></i></button>
+					<button id="infos" type="button" data-toggle="collapse" data-target="#traceInfos" alt="Ouvre une fenêtre avec plus d'informations sur la trace" title="Ouvre une fenêtre avec plus d'informations sur la trace" class="btn btn-dark btn-xs btn-block"><i class="fas fa-info-circle"></i></button>
 				</div>`;
 	document.getElementById("features").style.zIndex=1;
 	document.getElementById("workPlan").innerHTML +=
@@ -98,16 +99,6 @@ function generateIndex(geoData) {
     			</div>
   			</div>
 		</div>`;
-	let titles = [];
-    Array.from($('[data-toggle="popover"]')).forEach(button => {
-        titles.push(button.title);
-    });
-	$('[data-toggle="popover"]').popover();
-    Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
-        button.title = titles[i];
-   	});
-	$('[data-toggle="popover"]').popover('disable');
-
 	return geoData;
 }
 
@@ -148,9 +139,55 @@ function addPath(geoData, file) {
 		geoData.paths[index].shown = true;
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
-		savePaths(geoData);
         return geoData;
 	});
+}
+
+function checkElevation(geoData){
+	var listCoord;
+	let compt;
+	let tabPromises;
+	let thereIsElevation;
+	let point;
+	for(let j=0; j<geoData.paths.length; j++){
+		tabPromises = []; //FAIRE EN SORTE QU'IL TESTE TOUS LES ELEMENTS DE LA TRACE !
+		thereIsElevation = true;
+		point = 0;
+
+		while(thereIsElevation && (point!==geoData.paths[j].features[0].geometry.coordinates.length-1)){
+			if(geoData.paths[j].features[0].geometry.coordinates[point][2] == undefined)
+				thereIsElevation = false;
+			point++;
+		}
+
+		if(!thereIsElevation){
+			listCoord = "";
+			compt = 0;
+			for (let i=0; i<geoData.paths[j].features[0].geometry.coordinates.length; i++){
+				listCoord += geoData.paths[j].features[0].geometry.coordinates[i][1] + "," + geoData.paths[j].features[0].geometry.coordinates[i][0] + ",";
+				if (!((i!=geoData.paths[j].features[0].geometry.coordinates.length-1) && (i%50!=0) || (i==0))){
+					listCoord = listCoord.substring(0, listCoord.length-1);
+					let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+					tabPromises.push($.getJSON(link, function(data) {}));
+					listCoord = "";
+				}
+			}
+
+			Promise.all(tabPromises).then(function(values) {
+				values.forEach(function(element){
+					for(let k=0; k<element.resourceSets[0].resources[0].elevations.length; k++){
+						let x = compt*50+k;
+						geoData.paths[j].features[0].geometry.coordinates[x].push(element.resourceSets[0].resources[0].elevations[k]);
+					}
+					compt++;
+				});
+
+				return geoData;
+			}).then(generateGraph);
+		}
+
+	}
+	return geoData;
 }
 
 // MAP FUNCTIONS //
@@ -186,10 +223,8 @@ function reSample(geoData, number){
 			}
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
-			document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 			generateGraph(geoData);
 			infoTrace(geoData);
-			savePaths(geoData);
 
 		} else {
 			let w = new Worker("js/resample.js", {type:'module'});
@@ -199,7 +234,7 @@ function reSample(geoData, number){
 				w = undefined;
 				geoData.map.removeLayer(geoData.layers[geoData.focus]);
 				displayPath(geoData, geoData.focus);
-				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
+
 				generateGraph(geoData);
 				infoTrace(geoData);
 			}
@@ -254,6 +289,7 @@ function displayPath(geoData, index, display = true) {
 	let polyline = L.polyline(latlngs, {color: color});
 
 	geoData.layers[index] = polyline;
+	geoData.layersHistory[index] = [];
 	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
 	if(display){
 		geoData.map.addLayer(polyline);
@@ -358,8 +394,6 @@ function setListeners(geoData) {
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
 	document.getElementById("infos").addEventListener("click", () => infoTrace(geoData));
-	document.getElementById("undo").addEventListener("click", () => undoMode(geoData));
-	document.getElementById("redo").addEventListener("click", () => redoMode(geoData));
 
     return geoData;
 }
@@ -423,4 +457,9 @@ function setFocusClass(geoData) {
 	if (geoData.focus !== undefined) {
 		lines[geoData.focus].classList.add("focus");
 	}
+}
+
+function createHistory(geoData, index) {
+	geoData.pathsHistory[index].paths.push(geoData.paths[index]);
+	geoData.layersHistory[index].layers.push(geoData.layers[index]);
 }
