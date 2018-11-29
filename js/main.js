@@ -150,16 +150,14 @@ function checkElevation(geoData){
 	let thereIsElevation;
 	let point;
 	for(let j=0; j<geoData.paths.length; j++){
-		tabPromises = []; //FAIRE EN SORTE QU'IL TESTE TOUS LES ELEMENTS DE LA TRACE !
+		tabPromises = [];
 		thereIsElevation = true;
 		point = 0;
-
 		while(thereIsElevation && (point!==geoData.paths[j].features[0].geometry.coordinates.length-1)){
 			if(geoData.paths[j].features[0].geometry.coordinates[point][2] == undefined)
 				thereIsElevation = false;
 			point++;
 		}
-
 		if(!thereIsElevation){
 			listCoord = "";
 			compt = 0;
@@ -172,7 +170,6 @@ function checkElevation(geoData){
 					listCoord = "";
 				}
 			}
-
 			Promise.all(tabPromises).then(function(values) {
 				values.forEach(function(element){
 					for(let k=0; k<element.resourceSets[0].resources[0].elevations.length; k++){
@@ -181,7 +178,6 @@ function checkElevation(geoData){
 					}
 					compt++;
 				});
-
 				return geoData;
 			}).then(generateGraph);
 		}
