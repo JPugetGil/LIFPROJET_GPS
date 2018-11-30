@@ -242,8 +242,7 @@ function reSample(geoData, number){
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
 				w = undefined;
-				geoData.map.removeLayer(geoData.layers[geoData.focus]);
-				displayPath(geoData, geoData.focus);
+				redisplayPath(geoData, geoData.focus);
 				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 				savePaths(geoData);
 				generateGraph(geoData);
@@ -272,7 +271,16 @@ function displayPath(geoData, index, display = true) {
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
+	setListenersUpdate(geoData)
+
 	return geoData;
+}
+
+function redisplayPath(geoData, index) {
+	geoData.layersControl.removeLayer(geoData.layers[index]);
+	geoData.map.removeLayer(geoData.layers[index]);
+
+	displayPath(geoData, index);
 }
 
 function getPolyline(geoData, index) {
