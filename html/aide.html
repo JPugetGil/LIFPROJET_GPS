@@ -20,7 +20,7 @@
 						<ol>
 							<li>
 								<button type="button" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-secondary btn-md"><i class="fas fa-arrows-alt"></i></button>
-								<p>Permet d'activer ou désactiver le déplacement de la carte.</p>
+								<p>Permet de déplacer la carte uniquement.</p>
 							</li>
 							<li>
 								<button type="button" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-secondary btn-md"><i class="fas fa-hand-pointer"></i></button>
@@ -42,15 +42,15 @@
 					</li>
 					<li>
 						<h4>Historique:</h4>
-						<p><span class="badge badge-warning">ATTENTION</span> Vous ne pouvez annuler que jusqu'à 3 actions.</p>
+						<p><span class="badge badge-warning">ATTENTION</span> Vous ne pouvez annuler uniquement la dernière action réalisée.</p>
 						<ol>
 							<li>
 								<button type="button" class="btn btn-secondary btn-md"  alt="Annuler" title="Annuler"><i class="fas fa-undo"></i></button>
 								<p>Ce bouton permet d'annuler la dernière action effectuée.</p>
 							</li>
 							<li>
-								<button type="button" class="btn btn-secondary btn-md" alt="Désannuler" title="Désannuler"><i class="fas fa-redo"></i></button>
-								<p>Ce bouton permet d'annuler l'annulation de la dernière action effectuée.</p>
+								<button type="button" class="btn btn-secondary btn-md" alt="Réitérer" title="Réitérer"><i class="fas fa-redo"></i></button>
+								<p>Ce bouton permet de réitérer la dernière action annulée.</p>
 							</li>
 						</ol>
 					</li>
@@ -59,7 +59,7 @@
 						<ol>
 							<li>
 								<button type="button" class="btn btn-secondary btn-md" alt="Lier" title="Lier"><i class="fas fa-link"></i></button>
-								<p>Cette fonctionnalité fusionne deux traces en fonction du côté souhaité.</p>
+								<p>Cette fonctionnalité fusionne deux traces choisies en fonction du côté souhaité.</p>
 							</li>
 							<li>
 								<button type="button" alt="reSample" title="Rééchantillonner" class="btn btn-secondary btn-md"><i class="fas fa-divide"></i></button>
@@ -67,10 +67,13 @@
 							</li>
 						</ol>
 					</li>
-					<li>
 						<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-secondary btn-md"><i class="fas fa-file-download"></i></button>
 						<p>Une fois l'édition de votre trace, ce bouton permet de télécharger le nouveau fichier.</p>
-					</li>
+					</li><br />
+					<li>
+						<h4>Supprimer une trace</h4>
+						<p> Pour supprimer une trace, il vous suffit de faire un clic droit sur la trace que vous souhaitez supprimer.</p> 
+					</li><br />
 					<li>
 						<h4>Altitude moyenne:</h4>
 						<ol>
@@ -135,6 +138,9 @@
 								</svg> 5400m ≤ x</p>
 							</li>
 						</ol>
+					</li>
+					<li>
+						<h5>Pour une prise en main plus facile de notre site, nous vous invitons à essayer le Tutoriel.</h5><br />
 					</li>
 				</ul>
 			</div>
