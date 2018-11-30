@@ -23,6 +23,7 @@ function launchTutorial(geoData) {
     })
     .then(replaceListeners)
     .then(teach)
+    .then(console.log)
     .catch(console.error)
 }
 

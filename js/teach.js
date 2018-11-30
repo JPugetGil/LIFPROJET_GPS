@@ -102,6 +102,7 @@ function teachPart(id) {
     }
 }
 
-function teach() {
+function teach(geoData) {
     teachPart("infos");
+    return geoData;
 }
