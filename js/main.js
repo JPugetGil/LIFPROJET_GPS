@@ -24,7 +24,8 @@ function createGeoData() {
 			layersControl: undefined,
 			savedState: {
 				paths: [],
-				undo: false
+				undo: false,
+				upload: false
 			},
 			layers: [],
 			markersColor: [],
@@ -151,6 +152,7 @@ function addPath(geoData, file) {
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
 		savePaths(geoData);
+		geoData.savedState.upload = true;
         return geoData;
 	});
 }
