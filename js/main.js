@@ -264,6 +264,18 @@ function keySample(geoData, keyCode) {
 }
 
 function displayPath(geoData, index, display = true) {
+	let polyline = getPolyline(geoData, index);
+
+	geoData.layers[index] = polyline;
+	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
+	if(display){
+		geoData.map.addLayer(polyline);
+		setFocusClass(geoData);
+	}
+	return geoData;
+}
+
+function getPolyline(geoData, index) {
 	let color;
 	let mean = getElevationMean(geoData);
 	if (mean<600){
@@ -297,15 +309,7 @@ function displayPath(geoData, index, display = true) {
 		];
 		latlngs.push(point);
 	});
-	let polyline = L.polyline(latlngs, {color: color});
-
-	geoData.layers[index] = polyline;
-	geoData.layersControl.addOverlay(polyline, geoData.paths[index].file);
-	if(display){
-		geoData.map.addLayer(polyline);
-		setFocusClass(geoData);
-	}
-	return geoData;
+	return L.polyline(latlngs, {color: color});
 }
 
 function generateGraph(geoData) {
