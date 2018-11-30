@@ -51,52 +51,6 @@ function movePointMode(geoData) {
 			alert("Vous devez avoir une trace sélectionnée pour pouvoir déplacer ses points.");
 		}
 	});
-
-	/*let start;
-	let draggable = false;
-	geoData.map.on("mousedown", evt => {
-		if (!draggable) {
-			deleteOldMarkers(geoData);
-			if (evt.originalEvent.button === 0) {
-				start = evt.latlng;
-			}
-		}
-	});
-	geoData.map.on("mouseup", evt => {
-		let points = pointsInSquare(geoData.paths[geoData.focus].features[0].geometry.coordinates, start, evt.latlng);
-		if (points.length > 0) {
-			let latlngs = [];
-			points.forEach(point => {
-				let latlng = [
-					point.coordinates[1],
-					point.coordinates[0],
-					point.coordinates[2]
-				];
-				latlngs.push(latlng);
-			});
-			let polyline = L.polyline(latlngs, {color: "red"});
-			polyline.addTo(geoData.map);
-			let center = polyline.getCenter();
-			let marker = L.marker(center, {
-				draggable: true,
-			})
-			.on("dragend", evt => {
-				draggable = false;
-				let newCenter = evt.target._latlng;
-				let offset = substractLatlng(newCenter, center);
-				let realLatlngs = geoData.layers[geoData.focus].getLatLngs();
-			    let	newLatlngs = deplaceLatlngs(polyline.getLatLngs(), offset);
-				points.forEach( (point, i) => {
-					realLatlngs.splice(point.index, 1, newLatlngs[i]);
-				});
-			    geoData.layers[geoData.focus].setLatLngs(realLatlngs);
-				geoData.map.removeLayer(polyline);
-			});
-			geoData.tempMarkers.push(marker);
-			marker.addTo(geoData.map);
-			draggable = true;
-		}
-	});*/
 }
 
 // Called during a point drag,
@@ -446,6 +400,7 @@ function undoMode(geoData){
 function savePaths(geoData){
 	geoData.savedState.paths = copyAllPaths(geoData, geoData.paths);
 	geoData.savedState.undo = false;
+	geoData.savedState.upload = false;
 }
 
 function permuteStates(geoData){
@@ -456,6 +411,10 @@ function permuteStates(geoData){
 }
 
 function itWasBetterBefore(geoData){
+	if(geoData.savedState.upload){
+		geoData.savedState.undo = true;
+		geoData.savedState.upload = false;
+	}
 	if(!geoData.savedState.undo){
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
@@ -488,10 +447,14 @@ function redoMode(geoData){
 }
 
 function backToTheFuture(geoData){
+	if(!geoData.savedState.upload){
+		geoData.savedState.undo = false;
+		geoData.savedState.upload = true;
+	}
 	if(geoData.savedState.undo){
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
-		permuteStates(geoData)
+		permuteStates(geoData);
 		displayPath(geoData, geoData.focus);
 		if(geoData.paths.length < geoData.savedState.paths.length){
 			geoData.layersControl.removeLayer(geoData.layers[geoData.paths.length]);
