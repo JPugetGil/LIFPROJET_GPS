@@ -447,10 +447,6 @@ function redoMode(geoData){
 }
 
 function backToTheFuture(geoData){
-	if(!geoData.savedState.upload){
-		geoData.savedState.undo = false;
-		geoData.savedState.upload = true;
-	}
 	if(geoData.savedState.undo){
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
 		geoData.layersControl.removeLayer(geoData.layers[geoData.focus]);
