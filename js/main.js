@@ -163,6 +163,7 @@ function checkElevation(geoData){
 	let tabPromises;
 	let thereIsElevation;
 	let point;
+	var x;
 	for(let j=0; j<geoData.paths.length; j++){
 		tabPromises = [];
 		thereIsElevation = true;
@@ -177,7 +178,7 @@ function checkElevation(geoData){
 			compt = 0;
 			for (let i=0; i<geoData.paths[j].features[0].geometry.coordinates.length; i++){
 				listCoord += geoData.paths[j].features[0].geometry.coordinates[i][1] + "," + geoData.paths[j].features[0].geometry.coordinates[i][0] + ",";
-				if (!((i!=geoData.paths[j].features[0].geometry.coordinates.length-1) && (i%50!=0) || (i==0))){
+				if (((i===geoData.paths[j].features[0].geometry.coordinates.length-1) || (i%50===0) && (i!==0))){
 					listCoord = listCoord.substring(0, listCoord.length-1);
 					let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
 					tabPromises.push($.getJSON(link, function(data) {}));
@@ -186,11 +187,10 @@ function checkElevation(geoData){
 			}
 			Promise.all(tabPromises).then(function(values) {
 				values.forEach(function(element){
-					for(let k=0; k<element.resourceSets[0].resources[0].elevations.length; k++){
-						let x = compt*50+k;
-						geoData.paths[j].features[0].geometry.coordinates[x].push(element.resourceSets[0].resources[0].elevations[k]);
-					}
-					compt++;
+					element.resourceSets[0].resources[0].elevations.forEach(function(alt){
+						geoData.paths[j].features[0].geometry.coordinates[compt].push(alt);
+						compt++;
+					});
 				});
 				return geoData;
 			}).then(generateGraph);
@@ -244,8 +244,7 @@ function reSample(geoData, number){
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
 				w = undefined;
-				geoData.map.removeLayer(geoData.layers[geoData.focus]);
-				displayPath(geoData, geoData.focus);
+				redisplayPath(geoData, geoData.focus);
 				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 				savePaths(geoData);
 				generateGraph(geoData);
@@ -274,7 +273,16 @@ function displayPath(geoData, index, display = true) {
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
+	setListenersUpdate(geoData)
+
 	return geoData;
+}
+
+function redisplayPath(geoData, index) {
+	geoData.layersControl.removeLayer(geoData.layers[index]);
+	geoData.map.removeLayer(geoData.layers[index]);
+
+	displayPath(geoData, index);
 }
 
 function getPolyline(geoData, index) {
