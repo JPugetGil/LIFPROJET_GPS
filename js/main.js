@@ -3,7 +3,6 @@ createGeoData()
 .then(generateMap)
 .then(generateTiles)
 .then(geoData => addPath(geoData, "gpx/runinlyon_10km.gpx"))
-.then(checkElevation)
 .then(geoData => displayPath(geoData,0))
 .then(movePOV)
 .then(setGeneralListeners)
@@ -151,6 +150,7 @@ function addPath(geoData, file) {
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
 		savePaths(geoData);
+		checkElevation(geoData);
         return geoData;
 	});
 }
