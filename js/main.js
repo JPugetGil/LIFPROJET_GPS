@@ -215,6 +215,7 @@ function movePOV(geoData) {
 function reSample(geoData, number){
 	number = Number(number);
 	if(Number.isInteger(number) && number > 0 && number < (geoData.paths[geoData.focus].features[0].geometry.coordinates.length-2)){
+		savePaths(geoData);
 		if (typeof(Worker) === undefined) {
 			let tolerence = 0.00001;
 			let tabDistance = [];
@@ -234,7 +235,6 @@ function reSample(geoData, number){
 			geoData.map.removeLayer(geoData.layers[geoData.focus]);
 			displayPath(geoData, geoData.focus);
 			document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
-			savePaths(geoData);
 			generateGraph(geoData);
 			infoTrace(geoData);
 
@@ -246,7 +246,6 @@ function reSample(geoData, number){
 				w = undefined;
 				redisplayPath(geoData, geoData.focus);
 				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
-				savePaths(geoData);
 				generateGraph(geoData);
 				infoTrace(geoData);
 			}
