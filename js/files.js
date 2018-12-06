@@ -41,6 +41,7 @@ function giveUserGpx(geoData) {
 		document.body.appendChild(element);
 		element.click();
 		document.body.removeChild(element);
+		document.getElementById("tutorialButton").dispatchEvent(new Event("saveButton"));
 	} else {
 		alert("Vous devez avoir une trace sélectionnée pour pouvoir l'exporter.");
 	}
