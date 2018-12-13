@@ -25,11 +25,11 @@ Responsive design :computer: :on: :iphone:
 - [ ] Brave
 - [ ] Chrome
 - [ ] Chromium
-- [x] Edge :heavy_check_mark:
+- [x] Edge
 - [ ] Internet Explorer
 - [ ] Opera
 - [ ] Safari
-- [ ] Tor
+- [x] Tor
 
 ## Documentation
 * Cahier des charges -> doc/Cahier des Charges.pdf
