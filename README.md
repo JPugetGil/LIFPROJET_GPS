@@ -21,7 +21,7 @@ Dans l'interface vous pouvez importer vos fichiers.
 Responsive design :computer: :on: :iphone:
 
 ### Navigateurs
-- [x] Firefox :thumbsup: recommended by **GPS**
+- [x] Firefox :thumbsup: (Recommended by **G.P.S.**)
 - [ ] Brave
 - [ ] Chrome
 - [ ] Chromium
