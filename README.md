@@ -41,6 +41,10 @@ Pour que ça fonctionne:
 * Une fois la clé générée, allez dans main.js, puis dans la fonction "checkElevation(geoData)",
 * Dans la variable link, modifiez KEY et insérez votre Clé : "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"KEY";
 
+* Il est impératif d'héberger l'application,
+* Pour cela, vous pouvez utiliser la commande "http-server --cors ./" dans le dossier du projet afin de faire un serveur local qui héberge le site.
+L'argument --cors permet de gérer les cross origins et d'éviter les erreurs.
+
 ## Origine
 ![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png) <br/>
 La formation de Licence Informatique de l'Université Claude Bernard Lyon 1 contient l'UE LIFProjet. <br/>
