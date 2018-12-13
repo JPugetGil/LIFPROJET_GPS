@@ -39,7 +39,7 @@ Afin de pouvoir générer le graphe d'altitude lorsque le fichier GPX n'a pas d'
 Pour que ça fonctionne:
 * il faut générer une clé Bing dev disponible à ce lien : https://www.bingmapsportal.com/,
 * Une fois la clé générée, allez dans main.js, puis dans la fonction "checkElevation(geoData)",
-* Dans la variable link, modifiez KEY et insérez votre Clé : "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"**KEY**";
+* Dans la variable link, modifiez KEY et insérez votre Clé : "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"KEY";
 
 ## Origine
 ![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png) <br/>
