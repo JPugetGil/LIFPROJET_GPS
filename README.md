@@ -26,7 +26,7 @@ Responsive design :computer: :on: :iphone:
 - [ ] Chrome
 - [ ] Chromium
 - [x] Edge
-- [ ] Internet Explorer
+- [ ] Internet Explorer :poop:
 - [ ] Opera
 - [ ] Safari
 - [x] Tor
