@@ -145,7 +145,7 @@ function addPath(geoData, file) {
 		let index = geoData.paths.length;
 		let indexFile = file.lastIndexOf("/");
 		let filename = file.substr(indexFile+1);
-		geoData.paths[index] = toGeoJSON.gpx(gpx);
+		geoData.paths[index] = toGeoJSON.gpx((new DOMParser()).parseFromString(gpx, 'text/xml'));
 		geoData.paths[index].file = filename;
 		geoData.paths[index].shown = true;
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
