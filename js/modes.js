@@ -466,6 +466,6 @@ function backToTheFuture(geoData){
 
 		document.getElementById("tutorialButton").dispatchEvent(new Event("redo"));
 	}else{
-		alert("Il n'y a rien à désannuler.");
+		alert("Il n'y a rien à réitérer.");
 	}
 }
