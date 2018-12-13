@@ -24,7 +24,7 @@ Responsive design :computer: :on: :iphone:
 - [ ] Brave
 - [ ] Chrome
 - [ ] Chromium
-- [ ] Edge
+- [x] Edge
 - [ ] Internet Explorer
 - [ ] Opera
 - [ ] Safari
