@@ -11,7 +11,7 @@ function upload(geoData) {
 function hiddenUpload(geoData) {
     let file = document.getElementById("hiddenButton").files[0];
     let url = URL.createObjectURL(file);
-    addPath(geoData, url)
+    addPath(geoData, url, file.name)
 		.then(geoData => displayPath(geoData, geoData.paths.length-1))
 		.then(movePOV)
 		/*.then(generateFilesTab)
