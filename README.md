@@ -1,11 +1,12 @@
 # Improve my GPX :registered:
-Ce site web vous permet de visualiser et d'éditer vos traces GPS. 
+Ce site web vous permet de visualiser et d'éditer vos traces GPS.
+Le lien de l'application web : http://persohemoreg.alwaysdata.net/works/improvemygpx/
 
 ## Importer ses traces
 Accèder au site en ouvrant le fichier index.html dans votre navigateur web préféré. <br/>
 Récupérer vos données de randonnées sous le format de fichier **.gpx**. <br/>
-Mettez votre fichier dans le dossier data. :open_file_folder: <br/> 
-Dans l'interface vous pouvez importer vos fichiers. 
+Mettez votre fichier dans le dossier data. :open_file_folder: <br/>
+Dans l'interface vous pouvez importer vos fichiers.
 
 ## Description des fonctionnalités
 * Visualisation de traces GPS
@@ -30,14 +31,21 @@ Responsive design :computer: :on: :iphone:
 - [ ] Safari
 - [ ] Tor
 
-## Documentation 
-* Cahier des charges -> doc/Cahier des Charges.pdf 
+## Documentation
+* Cahier des charges -> doc/Cahier des Charges.pdf
+
+###
+Afin de pouvoir générer le graphe d'altitude lorsque le fichier GPX n'a pas d'altitude, nous utilisons l'API "Microsoft".
+Pour que ça fonctionne:
+* il faut générer une clé Bing dev disponible à ce lien : https://www.bingmapsportal.com/,
+* Une fois la clé générée, allez dans main.js, puis dans la fonction "checkElevation(geoData)",
+* Dans la variable link, modifiez KEY et insérez votre Clé : "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"**KEY**";
 
 ## Origine
 ![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png) <br/>
 La formation de Licence Informatique de l'Université Claude Bernard Lyon 1 contient l'UE LIFProjet. <br/>
 Cette UE consiste en la réalisation d'un projet parmi une liste proposée par les enseignants. <br/>
-Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur le web. 
+Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur le web.
 
 ## Participants
 
@@ -48,4 +56,4 @@ Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur l
 
 ### Responsables
 * Rémy CAZABET
-* Alexandre MEYER 
+* Alexandre MEYER
