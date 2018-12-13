@@ -1,5 +1,5 @@
 # Improve my GPX :registered:
-Ce site web vous permet de visualiser et d'éditer vos traces GPS.
+Ce site web vous permet de visualiser et d'éditer vos traces GPS. <br/>
 Le lien de l'application web : http://persohemoreg.alwaysdata.net/works/improvemygpx/
 
 ## Importer ses traces
@@ -20,16 +20,18 @@ Dans l'interface vous pouvez importer vos fichiers.
 ## Compatibilité
 Responsive design :computer: :on: :iphone:
 
-### Navigateurs
+### Navigateurs supportés
 - [x] Firefox :thumbsup: (Recommended by **G.P.S.**)
-- [ ] Brave
-- [ ] Chrome
-- [ ] Chromium
+- [x] Brave
+- [x] Chrome
+- [x] Chromium
 - [x] Edge
-- [ ] Internet Explorer :poop:
-- [ ] Opera
-- [ ] Safari
-- [x] Tor
+- [x] Opera
+- [x] Safari
+- [x] Tor <br/>
+
+### Navigateurs non supportés
+- [ ] Internet Explorer (Nous avons décidé de ne pas développer pour IE, car il ne supporte pas l'ES6.)
 
 ## Documentation
 * Cahier des charges -> doc/Cahier des Charges.pdf

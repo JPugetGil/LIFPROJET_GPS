@@ -145,8 +145,10 @@ function addPath(geoData, file, name = "") {
 		let index = geoData.paths.length;
 		let indexFile = file.lastIndexOf("/");
 		let filename = file.substr(indexFile+1);
-		//geoData.paths[index] = toGeoJSON.gpx((new DOMParser()).parseFromString(gpx, 'text/xml'));
-		geoData.paths[index] = toGeoJSON.gpx(gpx);
+		if (typeof(gpx) === "object") {
+			gpx = new XMLSerializer().serializeToString(gpx);
+		}
+		geoData.paths[index] = toGeoJSON.gpx((new DOMParser()).parseFromString(gpx, 'text/xml'));
 		geoData.paths[index].file = (name === "" ? filename : name);
 		geoData.paths[index].shown = true;
 		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
@@ -240,7 +242,7 @@ function reSample(geoData, number){
 			infoTrace(geoData);
 
 		} else {
-			let w = new Worker("js/resample.js", {type:'module'});
+			let w = new Worker("js/resample.js");
 			w.onmessage = event => {
 				geoData.paths[geoData.focus] = event.data;
 				w.terminate();
@@ -329,7 +331,7 @@ function generateGraph(geoData) {
 
 	RGraph.reset(document.getElementById('cvs'));
 	if (geoData.focus !== undefined) {
-		let w2 = new Worker("js/chart.js", {type:'module'});
+		let w2 = new Worker("js/chart.js");
 		document.getElementById("graph").setAttribute("style", "height:"+ ($(document).height() * 2/7) +"px; width: 100%; z-Index: 2; padding-left: 5%");
 		w2.onmessage = event => {
 			w2.terminate();

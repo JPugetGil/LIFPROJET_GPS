@@ -26,7 +26,6 @@ self.onmessage = event => {
         while(number>0){
             path.features[0].geometry.coordinates.splice(tabEcart.indexOf(tabEcart.min())+1,1);
             indexMin = tabEcart.indexOf(tabEcart.min());
-            console.log(tabEcart.indexOf(tabEcart.min()));
             tabEcart.splice(tabEcart.indexOf(tabEcart.min()),1);
             tabEcart[indexMin-1]=((DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin],path.features[0].geometry.coordinates[indexMin+1])+DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin+1],path.features[0].geometry.coordinates[indexMin+2]))-DistanceBetween2Points(path.features[0].geometry.coordinates[indexMin],path.features[0].geometry.coordinates[indexMin+2]));
             number--;
