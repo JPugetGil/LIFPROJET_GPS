@@ -44,6 +44,7 @@ Pour que ça fonctionne:
 * Il est impératif d'héberger l'application,
 * Pour cela, vous pouvez utiliser la commande "http-server --cors ./" dans le dossier du projet afin de faire un serveur local qui héberge le site.
 L'argument --cors permet de gérer les cross origins et d'éviter les erreurs.
+* Attention, l'API Bing limite à 50000 requêtes par jour.
 
 ## Origine
 ![Logo UCBL](https://www.univ-lyon1.fr/images/www/logo-lyon1.png) <br/>
