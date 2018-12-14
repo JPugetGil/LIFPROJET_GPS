@@ -22,7 +22,7 @@ Responsive design :computer: :on: :iphone:
 
 ### Navigateurs supportés
 - [x] Firefox :thumbsup: (Recommended by **G.P.S.**)
-- [ ] Brave
+- [x] Brave
 - [x] Chrome
 - [x] Chromium
 - [x] Edge
