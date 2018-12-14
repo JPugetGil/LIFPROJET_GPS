@@ -29,7 +29,7 @@ Responsive design :computer: :on: :iphone:
 - [x] Opera
 - [ ] Safari
 - [x] Tor <br/>
-Nous avons décidé de ne pas développer pour IE, car il ne supporte pas Leaflet.
+Nous avons décidé de ne pas développer pour IE, car il ne supporte pas l'ES6.
 - [ ] Internet Explorer :poop:
 
 ## Documentation
