@@ -23,13 +23,14 @@ Responsive design :computer: :on: :iphone:
 ### Navigateurs
 - [x] Firefox :thumbsup: (Recommended by **G.P.S.**)
 - [ ] Brave
-- [ ] Chrome
-- [ ] Chromium
+- [x] Chrome
+- [x] Chromium
 - [x] Edge
-- [ ] Internet Explorer :poop:
-- [ ] Opera
+- [x] Opera
 - [ ] Safari
 - [x] Tor
+Nous avons décidé de ne pas développer pour IE, car il ne supporte pas Leaflet.
+- [ ] Internet Explorer :poop:
 
 ## Documentation
 * Cahier des charges -> doc/Cahier des Charges.pdf
