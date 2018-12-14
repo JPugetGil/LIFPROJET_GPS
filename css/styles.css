@@ -87,8 +87,8 @@ button.btn.btncol:before
 #traceInfos
 {
 	position: absolute;
-	bottom: 10%;
-	right: 5%;
+	top: 15%;
+	right: 7%;
 }
 
 .col-6
