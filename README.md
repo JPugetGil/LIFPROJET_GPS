@@ -20,7 +20,7 @@ Dans l'interface vous pouvez importer vos fichiers.
 ## Compatibilité
 Responsive design :computer: :on: :iphone:
 
-### Navigateurs
+### Navigateurs supportés
 - [x] Firefox :thumbsup: (Recommended by **G.P.S.**)
 - [ ] Brave
 - [x] Chrome
@@ -29,8 +29,9 @@ Responsive design :computer: :on: :iphone:
 - [x] Opera
 - [ ] Safari
 - [x] Tor <br/>
-Nous avons décidé de ne pas développer pour IE, car il ne supporte pas l'ES6.
-- [ ] Internet Explorer :poop:
+
+### Navigateurs non supportés
+- [ ] Internet Explorer (Nous avons décidé de ne pas développer pour IE, car il ne supporte pas l'ES6.)
 
 ## Documentation
 * Cahier des charges -> doc/Cahier des Charges.pdf
