@@ -27,7 +27,7 @@ Responsive design :computer: :on: :iphone:
 - [x] Chromium
 - [x] Edge
 - [x] Opera
-- [ ] Safari
+- [x] Safari
 - [x] Tor <br/>
 
 ### Navigateurs non supportés
