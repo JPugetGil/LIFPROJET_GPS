@@ -64,7 +64,13 @@ function desactivatePopover(id) {
 }
 
 function teachPart(id = "infos") {
-    if (id !== "") {
+    if (id === "") {
+        $('#tutorialEnd').modal({show: false});
+        $('#tutorialEnd').modal('show');
+        document.getElementById("tutorialEndButton").addEventListener("click", e => {
+            document.getElementById("tutorialButton").click();
+        });
+    } else {
         // Next id to activate
         let nextId;
         switch (id) {
