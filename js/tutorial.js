@@ -2,8 +2,6 @@
 
 function launchTutorial(geoData) {
     console.log("Début du tutoriel");
-    $('#tutorialModal').modal({show: false});
-    $('#tutorialModal').modal('show');
 
     let button = document.getElementById("tutorialButton");
     $("#tutorialButton").tooltip('hide');
@@ -28,6 +26,12 @@ function launchTutorial(geoData) {
         return geoDataT;
     })
     .then(replaceListeners)
+    .then(geoDataT => {
+        $('#tutorialModal').modal({show: false});
+        $('#tutorialModal').modal('show');
+        
+        return geoDataT;
+    })
     .then(teach)
     .catch(console.error)
 }
