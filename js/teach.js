@@ -25,8 +25,8 @@ function setUpPopovers(geoData) {
 
 	document.getElementById("moveMap").setAttribute("data-content", moveMapDesc);
 	document.getElementById("movePoint").setAttribute("data-content", movePointDesc);
-	document.getElementById("undo").setAttribute("data-content", undoDesc); //
-	document.getElementById("redo").setAttribute("data-content", redoDesc); //
+	document.getElementById("undo").setAttribute("data-content", undoDesc); 
+	document.getElementById("redo").setAttribute("data-content", redoDesc); 
 	document.getElementById("addPoint").setAttribute("data-content", addPointDesc);
 	document.getElementById("deletePoint").setAttribute("data-content", deletePointDesc);
 	document.getElementById("link").setAttribute("data-content", linkDesc);
@@ -51,7 +51,7 @@ function desactivatePopover(id) {
     $(realId).popover('disable');
 }
 
-function teachPart(id) {
+function teachPart(id = "infos") {
     if (id !== "") {
         // Next id to activate
         let nextId;
@@ -103,6 +103,6 @@ function teachPart(id) {
 }
 
 function teach(geoData) {
-    teachPart("infos");
+    teachPart();
     return geoData;
 }

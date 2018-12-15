@@ -10,6 +10,8 @@ createGeoData()
 .then(setListenersUpdate)
 .then(geoData => {
 	moveMapMode(geoData);
+  	$("#tutorialButton").tooltip();
+  	
 	return geoData;
 })
 .then(console.log)

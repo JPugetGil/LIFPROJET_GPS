@@ -28,8 +28,8 @@
 		  <nav class="my-2 my-md-0 mr-md-3">
 				<div class="btn-group" role="group">
 					<input type="file" id="hiddenButton"/>
-					<input type="button" id="importButton" class="btn btn-outline-success" value="Importer"/>
-					<button type="button" id="tutorialButton" title="Lance un tutoriel" class="btn btn-outline-danger"><i id="tutorialToggle" class="fas fa-play"></i> Tutoriel</button>
+					<input type="button" id="importButton" class="btn btn-outline-success" title="Importer un fichier .gpx" value="Importer"/>
+					<button type="button" id="tutorialButton" data-toggle="tooltip" data-placement="bottom" title="Lance un tutoriel. Vous pouvez le quitter à tout moment pour revenir à l'état actuel" class="btn btn-outline-danger"><i id="tutorialToggle" class="fas fa-play"></i> Tutoriel</button>
 				</div>
 				<div class="btn-group" role="group">
 					<a type="button" id="aboutButton" class="btn btn-outline-warning" href="html/apropos.html" target="_blank">A Propos</a>
@@ -65,7 +65,7 @@
 		<footer class="footer row-1">
 			<div class="d-flex flex-column flex-md-row align-items-center px-md-4 border-bottom shadow-sm bg-secondary">
 				<h5 class="my-0 mr-md-auto font-weight-normal text-light">Visualisation et Edition de traces GPS sur le WEB</h5>
-				<button class="my-1 mr-md-auto btncol btn btn-dark btn-xs" data-toggle="collapse" data-target="#toHide" title="Collapse Graph"></button>
+				<button class="my-1 mr-md-auto btncol btn btn-dark btn-xs" data-toggle="collapse" data-target="#toHide" title="Afficher/Désafficher le graphe"></button>
 				<a class="p-2 text-light" href="#">GIL Jérôme - PEYROT Thomas - SCRIVEN Anthony</a><img width="1%" src="data/microsoft-logo.jpg"/>
 			</div>
 		</footer>

@@ -3,7 +3,9 @@
 function launchTutorial(geoData) {
     console.log("Début du tutoriel");
     let button = document.getElementById("tutorialButton");
-    button.title = "Stop le tutoriel";
+    $("#tutorialButton").tooltip('hide');
+    $("#tutorialButton").tooltip('disable');
+    button.title = "Quitte le tutoriel et revient à l'état d'avant son lancement";
     button.children[0].classList.remove("fa-play");
     button.children[0].classList.add("fa-stop");
 
@@ -18,6 +20,7 @@ function launchTutorial(geoData) {
         clone = button.cloneNode(true);
         clone.addEventListener("click", evt => stopTutorial(geoData, geoDataT));
         button.parentNode.replaceChild(clone, button);
+        $("#tutorialButton").tooltip();
 
         return geoDataT;
     })
@@ -30,7 +33,9 @@ function launchTutorial(geoData) {
 function stopTutorial(geoData, geoDataT) {
     console.log("Fin du tutoriel");
     let button = document.getElementById("tutorialButton");
-    button.title = "Lance un tutoriel";
+    $("#tutorialButton").tooltip('hide');
+    $("#tutorialButton").tooltip('disable');
+    button.title = "Lance un tutoriel. Vous pouvez le quitter à tout moment pour revenir à l'état actuel";
     button.children[0].classList.remove("fa-stop");
     button.children[0].classList.add("fa-play");
 
@@ -43,6 +48,7 @@ function stopTutorial(geoData, geoDataT) {
     clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
     button.parentNode.replaceChild(clone, button);
+    $("#tutorialButton").tooltip();
 }
 
 function mapReplacements(geoData, geoDataT) {
