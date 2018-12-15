@@ -97,3 +97,7 @@ button.btn.btncol:before
 	border: solid 1px;
 	background-color: #C0C0C0;
 }
+
+.popover .arrow::after {
+	border-left-color: red;
+}
