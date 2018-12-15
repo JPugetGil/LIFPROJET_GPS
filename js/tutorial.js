@@ -6,7 +6,7 @@ function launchTutorial(geoData) {
     let button = document.getElementById("tutorialButton");
     $("#tutorialButton").tooltip('hide');
     $("#tutorialButton").tooltip('disable');
-    button.title = "Quitte le tutoriel et revient à l'état d'avant son lancement";
+    button.title = "Quitte le tutoriel et retour à l'état d'avant son lancement";
     button.children[0].classList.remove("fa-play");
     button.children[0].classList.add("fa-stop");
 
@@ -29,7 +29,7 @@ function launchTutorial(geoData) {
     .then(geoDataT => {
         $('#tutorialModal').modal({show: false});
         $('#tutorialModal').modal('show');
-        
+
         return geoDataT;
     })
     .then(teach)
