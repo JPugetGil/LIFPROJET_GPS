@@ -103,6 +103,6 @@ function teachPart(id = "infos") {
 }
 
 function teach(geoData) {
-    teachPart();
+    document.getElementById("tutorialModalButton").addEventListener('click', () => teachPart());
     return geoData;
 }
