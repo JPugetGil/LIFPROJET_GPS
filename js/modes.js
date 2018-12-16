@@ -170,13 +170,7 @@ function removePoint(geoData, markerIndex, index) {
 }
 
 function linkMode(geoData) {
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
-	geoData.mode = "link";
-	console.log("mode : " + geoData.mode);
-	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	if (geoData.paths.length < 2){
 		document.getElementById("link").removeAttribute("data-toggle", "modal");
 		alert("Vous devez avoir plusieurs traces pour pouvoir utiliser la fonction Lier.");
@@ -386,12 +380,7 @@ function infoTrace(geoData){
 }
 
 function undoMode(geoData){
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
-	geoData.mode = "undo";
-	console.log("mode : " + geoData.mode);
 	itWasBetterBefore(geoData);
 
 	document.getElementById("tutorialButton").dispatchEvent(new Event("undo"));
@@ -437,12 +426,7 @@ function itWasBetterBefore(geoData){
 }
 
 function redoMode(geoData){
-	geoData.map.dragging.enable();
-	geoData.map.off("click");
-	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
-	geoData.mode = "redo";
-	console.log("mode : " + geoData.mode);
 	backToTheFuture(geoData);
 }
 
