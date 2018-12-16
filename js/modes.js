@@ -453,3 +453,9 @@ function backToTheFuture(geoData){
 		alert("Il n'y a rien à réitérer.");
 	}
 }
+
+function setModeStyle(event) {
+	let buttons = Array.from(document.getElementsByClassName("modeButton"));
+	buttons.forEach(button => button.classList.remove("currentMode"));
+	event.target.classList.add("currentMode");
+}

@@ -9,7 +9,7 @@ createGeoData()
 .then(setListeners)
 .then(setListenersUpdate)
 .then(geoData => {
-	moveMapMode(geoData);
+	document.getElementById("moveMap").click();
   	$("#tutorialButton").tooltip();
   	
 	return geoData;
@@ -53,23 +53,21 @@ function generateIndex(geoData) {
 	}
 	document.getElementById("mapid").setAttribute("style","height:"+ ($(document).height() * 5/6) +"px");
 	document.getElementById("mapid").style.zIndex=0;
-	document.getElementById("features").innerHTML = document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-arrows-alt"></i></button>
-					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-hand-pointer"></i></button>
+	document.getElementById("features").innerHTML = document.getElementById("features").innerHTML = `<button type="button" id="moveMap" alt="DeplacerCarte" title="Déplacer Carte" class="btn btn-dark btn-xs btn-block modeButton" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-arrows-alt"></i></button>
+					<button type="button" id="movePoint" alt="DeplacerPoint" title="Déplacer Point" class="btn btn-dark btn-xs btn-block modeButton" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-hand-pointer"></i></button>
+					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block modeButton" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-plus"></i></button>
+					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block modeButton" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-minus"></i></button>
+					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block modeButton" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-unlink"></i></button>
+					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-link"></i></button>
 					<button type="button" id="undo" alt="Annuler" title="Annuler" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-undo"></i></button>
 					<button type="button" id="redo" alt="Réitérer" title="Réitérer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-redo"></i></button>
-					<button type="button" id="addPoint" alt="Ajouter un point" title="Ajouter un point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-plus"></i></button>
-					<button type="button" id="deletePoint" alt="Supprimer un point" title="Supprimer un point" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-minus"></i></button>
-					<button type="button" id="link" alt="Lier" title="Lier" class="btn btn-dark btn-xs btn-block" data-target="#modalLink" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-link"></i></button>
-					<button type="button" id="unlink" alt="Délier" title="Délier" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-unlink"></i></button>
 					<div class="form-group">
 					    <input type="text" class="form-control" id="samplingFactor" placeholder="Insérez" data-toggle="popover" data-placement="left" data-html="true" data-content="">
 					    <button type="button" id="reSample" alt="reSample" title="Rééchantillonner" class="btn btn-dark btn-xs btn-block"><i class="fas fa-divide"></i></button>
 					</div>
-
-					<button id="print" type="button" alt="Imprimer" Title="Imprimer" value="Imprimer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-print"></i></button>
-					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-file-download"></i></button>
 					<button id="infos" type="button" data-toggle="collapse" data-target="#traceInfos" alt="Ouvre une fenêtre avec plus d'informations sur la trace" title="Ouvre une fenêtre avec plus d'informations sur la trace" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-info-circle"></i></button>
-				</div>`;
+					<button id="saveButton" type="button" alt="Télécharger" title="Télécharger" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-file-download"></i></button>
+					<button id="print" type="button" alt="Imprimer" Title="Imprimer" value="Imprimer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-print"></i></button>`;
 	document.getElementById("features").style.zIndex=1;
 	document.getElementById("workPlan").innerHTML +=
 		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -436,6 +434,7 @@ function setListeners(geoData) {
 	document.getElementById("deletePoint").addEventListener("click", () => deletePointMode(geoData));
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
+	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 	document.getElementById("infos").addEventListener("click", () => infoTrace(geoData));
 	document.getElementById("print").addEventListener("click", () => {
 		document.getElementById("tutorialButton").dispatchEvent(new Event("print"));
@@ -443,6 +442,10 @@ function setListeners(geoData) {
 	});
 	document.getElementById("undo").addEventListener("click", () => undoMode(geoData));
 	document.getElementById("redo").addEventListener("click", () => redoMode(geoData));
+
+	Array.from(document.getElementsByClassName("modeButton")).forEach(button => {
+		button.addEventListener('click', evt => setModeStyle(evt));
+	});
 
     return geoData;
 }
@@ -466,7 +469,6 @@ function setListenersUpdate(geoData) {
 		});
 	});
 
-	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
 	return geoData;
 }
 
