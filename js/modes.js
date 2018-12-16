@@ -195,8 +195,14 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 	else{
 		traceBorn.file = document.getElementById("traceName").value;
 	}
-	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes");
-	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates");
+	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes") && geoData.paths[idTrace2].features[0].properties.hasOwnProperty("coordTimes");
+	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates") && geoData.paths[idTrace2].features[0].properties.hasOwnProperty("heartRates");
+	if (!definedCoordTimes) {
+		delete traceBorn.coordTimes;	
+	}
+	if (!definedHeartRates) {
+		delete traceBorn.heartRates;
+	}
 	switch(mode) {
 		case 'fd':
 			traceBorn.features[0].geometry.coordinates = geoData.paths[idTrace1].features[0].geometry.coordinates.slice(0).concat(geoData.paths[idTrace2].features[0].geometry.coordinates.slice(0));
