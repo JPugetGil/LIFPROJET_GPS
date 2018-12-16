@@ -63,7 +63,7 @@ function desactivatePopover(id) {
     $(realId).popover('disable');
 }
 
-function teachPart(id = "infos") {
+function teach(id = "infos") {
     if (id === "") {
         $('#tutorialEnd').modal({show: false});
         $('#tutorialEnd').modal('show');
@@ -121,9 +121,4 @@ function teachPart(id = "infos") {
             teachPart(nextId);
         });
     }
-}
-
-function teach(geoData) {
-    document.getElementById("tutorialModalButton").addEventListener('click', () => teachPart());
-    return geoData;
 }

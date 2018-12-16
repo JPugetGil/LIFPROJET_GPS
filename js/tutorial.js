@@ -32,7 +32,6 @@ function launchTutorial(geoData) {
 
         return geoDataT;
     })
-    .then(teach)
     .catch(console.error)
 }
 
