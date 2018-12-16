@@ -97,9 +97,13 @@ function resetPopovers() {
     Array.from($('[data-toggle="popover"]')).forEach(button => {
         titles.push(button.title);
     });
+    titles.push(document.getElementById("infos").title);
     $('[data-toggle="popover"]').popover('hide');
     $('[data-toggle="popover"]').popover('disable');
+    $("#infos").popover('hide');
+    $("#infos").popover('disable');
     Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
         button.title = titles[i];
    	});
-}
+    document.getElementById("infos").title = titles[titles.length -1];
+}  
