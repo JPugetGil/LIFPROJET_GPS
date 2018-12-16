@@ -27,6 +27,7 @@ function launchTutorial(geoData) {
     })
     .then(replaceListeners)
     .then(geoDataT => {
+        infoTrace(geoDataT);
         $('#tutorialModal').modal({show: false});
         $('#tutorialModal').modal('show');
 
@@ -49,6 +50,7 @@ function stopTutorial(geoData, geoDataT) {
     replaceListeners(geoData);
     movePOV(geoData);
     setFocusClass(geoData);
+    infoTrace(geoData);
 
     clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
