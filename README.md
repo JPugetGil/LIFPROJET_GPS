@@ -9,7 +9,7 @@ Mettez votre fichier dans le dossier data. :open_file_folder: <br/>
 Dans l'interface vous pouvez importer vos fichiers.
 
 ## Description des fonctionnalités
-* Visualisation de traces GPS
+* Visualisation de traces GPS :eye:
 * Ajout/Suppression de points :heavy_plus_sign: / :heavy_minus_sign:
 * Déplacement de points :airplane:
 * Rééchantillonage des points, c'est-à-dire réduction du nombre de points :heavy_division_sign:
