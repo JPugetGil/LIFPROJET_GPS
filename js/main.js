@@ -69,56 +69,16 @@ function generateIndex(geoData) {
 					<button id="saveButton" type="button" alt="Téléchargement" title="Téléchargement" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-file-download"></i></button>
 					<button id="print" type="button" alt="Imprimer" Title="Imprimer" value="Imprimer" class="btn btn-dark btn-xs btn-block" data-toggle="popover" data-placement="left" data-html="true" data-content=""><i class="fas fa-print"></i></button>`;
 	document.getElementById("features").style.zIndex=1;
-	document.getElementById("workPlan").innerHTML +=
-		`<div class="modal fade" id="modalLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
- 			<div class="modal-dialog" role="document">
-    			<div class="modal-content">
-      				<div class="modal-header">
-      					<h4 class="modal-title">Lier</h4>
-        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      				</div>
-      				<div class="modal-body">
-        				<p><b>Choississez les deux traces à lier :</b><p>
-        					<div class="row-sm">
-	        					<div class="col-6-sm">
-	        						<label for="trace1">Première trace : </label>
-	        						<select id="t1" name="Trace1" size=1>
-	        						</select>
-	        						<div>
-	        							<input type="radio" id="start1" name="firstTrace" value="d">Début</input>
-	        							<input type="radio" id="end1" name="firstTrace" value="f" checked>Fin</input>
-	        						</div>
-	        					</div>
-	        					<div class="col-6-sm">
-	        						<label for="trace2">Deuxième trace : </label>
-	        						<select id="t2" name="Trace2" size=1>
-	        						</select>
-	        						<div>
-	        							<input type="radio" id="start2" name="secondTrace" value="d" checked>Début</input>
-	        							<input type="radio" id="end2" name="secondTrace" value="f">Fin</input>
-	        						</div>
-	        					</div>
-        					</div><br />
-        					<label for="traceName"><b>Entrez le nom de la nouvelle trace : </b></label><br />
-        					<input type="text" id="traceName" placeholder="Entrez le nom de la nouvelle trace (Max. 50 caractères)" maxlength="50" rows="1" cols="50" size="50"></input>
-        					<div class="modal-footer">
-        						<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-        						<input type="button" class="btn btn-primary" id="buttonLink" value="Soumettre"></button>
-     						</div>
-      				</div>
-    			</div>
-  			</div>
-		</div>`;
 
-		let titles = [];
-    	Array.from($('[data-toggle="popover"]')).forEach(button => {
-        	titles.push(button.title);
-    	});
-		$('[data-toggle="popover"]').popover();
-    	Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
-       	 button.title = titles[i];
-   		});
-		$('[data-toggle="popover"]').popover('disable');
+	let titles = [];
+	Array.from($('[data-toggle="popover"]')).forEach(button => {
+    	titles.push(button.title);
+	});
+	$('[data-toggle="popover"]').popover();
+	Array.from($('[data-toggle="popover"]')).forEach( (button, i) => {
+   	 button.title = titles[i];
+		});
+	$('[data-toggle="popover"]').popover('disable');
 
 	return geoData;
 }
