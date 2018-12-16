@@ -63,62 +63,21 @@ function desactivatePopover(id) {
     $(realId).popover('disable');
 }
 
-function teach(id = "infos") {
-    if (id === "") {
+function teach(index = 0) {
+    let ids = ["moveMap", "movePoint", "addPoint", "deletePoint", "unlink", "link", "undo", "redo", "infos", "samplingFactor", "saveButton", "print"];
+
+    if (index >= ids.length) {
         $('#tutorialEnd').modal({show: false});
         $('#tutorialEnd').modal('show');
         document.getElementById("tutorialEndButton").addEventListener("click", e => {
             document.getElementById("tutorialButton").click();
         });
     } else {
-        // Next id to activate
-        let nextId;
-        switch (id) {
-            case "infos":
-                nextId = "movePoint";
-                break;
-            case "movePoint":
-                nextId = "addPoint";
-                break;
-            case "addPoint":
-                nextId = "deletePoint";
-                break;
-            case "deletePoint":
-                nextId = "moveMap";
-                break;
-            case "moveMap":
-                nextId = "unlink";
-                break;
-            case "unlink":
-                nextId = "link";
-                break;
-            case "link":
-                nextId = "samplingFactor";
-                break;
-            case "samplingFactor":
-                nextId = "undo";
-                break;
-            case "undo":
-                nextId = "redo";
-                break;
-            case "redo":
-                nextId = "saveButton";
-                break;
-            case "saveButton":
-                nextId = "print";
-                break;
-            case "print":
-                nextId = "";
-                break;
-            default:
-                nextId = "";
-        }
-
-        // Current execution
+        let id = ids[index];
         activatePopover(id);
         document.getElementById("tutorialButton").addEventListener(id, () => {
             desactivatePopover(id);
-            teachPart(nextId);
+            teach(index +1); // Recursion
         });
     }
 }
