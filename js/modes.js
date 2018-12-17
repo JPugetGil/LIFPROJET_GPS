@@ -380,8 +380,6 @@ function copyAllPaths(geoData, paths) {
 }
 
 function infoTrace(geoData){
-	document.getElementById("tutorialButton").dispatchEvent(new Event("infos"));
-
 	let distance = calculateDistance(geoData.paths[geoData.focus]);
 	document.getElementById("colInfo3").innerHTML = distance;
 	document.getElementById("colInfo4").innerHTML = geoData.paths[geoData.focus].features[0].geometry.coordinates.length;

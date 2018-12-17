@@ -395,11 +395,15 @@ function setListeners(geoData) {
 	document.getElementById("link").addEventListener("click", () => linkMode(geoData));
 	document.getElementById("buttonLink").addEventListener("click", () => linkTrace(geoData));
 	document.getElementById("unlink").addEventListener("click", () => unlinkMode(geoData));
-	document.getElementById("infos").addEventListener("click", () => infoTrace(geoData));
+	document.getElementById("infos").addEventListener("click", () => {
+		document.getElementById("tutorialButton").dispatchEvent(new Event("infos"));
+		infoTrace(geoData);
+	});
 	document.getElementById("print").addEventListener("click", () => {
 		document.getElementById("tutorialButton").dispatchEvent(new Event("print"));
 		window.print();
 	});
+
 	document.getElementById("undo").addEventListener("click", () => undoMode(geoData));
 	document.getElementById("redo").addEventListener("click", () => redoMode(geoData));
 
