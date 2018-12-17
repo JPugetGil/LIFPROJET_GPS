@@ -59,7 +59,7 @@ function movePointMode(geoData) {
 // Return : polyline => a L.polyline object
 function dragHandler(e, polyline) {
     let latlngs = polyline.getLatLngs();
-	let latlng = L.latLng(e.target.getLatLng().lat, e.target.getLatLng().lng, e.oldLatLng.alt);
+		let latlng = L.latLng(e.target.getLatLng().lat, e.target.getLatLng().lng, e.oldLatLng.alt);
     latlngs.splice(e.target.options.index, 1, latlng);
     polyline.setLatLngs(latlngs);
 }
@@ -71,7 +71,6 @@ function dragEndHandler(geoData) {
 	document.getElementById("tutorialButton").dispatchEvent(new Event("movePoint"));
 	savePaths(geoData);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	//generateFilesTab(geoData);
 	generateGraph(geoData);
 	infoTrace(geoData);
 }
@@ -88,7 +87,10 @@ function addPointMode(geoData) {
 		if (geoData.focus !== undefined) {
 			savePaths(geoData);
 			var trace = geoData.paths[geoData.focus].features[0];
-			trace.geometry.coordinates.push(Array(Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), 0)); //Pour l'instant, l'altitude des nouveaux points est à 0 par défaut
+			let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+Number(e.latlng.lat.toFixed(6))+","+Number(e.latlng.lng.toFixed(6))+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+			$.getJSON(link, function(data) {
+				trace.geometry.coordinates.push([Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), data.resourceSets[0].resources[0].elevations[0]]);
+			});
 			let latlngs = geoData.layers[geoData.focus].getLatLngs();
 			let latlng = L.latLng(Array(Number(e.latlng.lat.toFixed(6)), Number(e.latlng.lng.toFixed(6)), 0));
 			latlngs.push(latlng);
@@ -150,7 +152,7 @@ function removePoint(geoData, markerIndex, index) {
     latlngs.splice(index, 1);
     geoData.layers[geoData.focus].setLatLngs(latlngs);
     let trace = geoData.paths[geoData.focus].features[0];
-	trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
+		trace.geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 
      if (trace.hasOwnProperty("properties")) {
         if (trace.properties.hasOwnProperty("coordTimes")) {
@@ -198,7 +200,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 	let definedCoordTimes = traceBorn.features[0].properties.hasOwnProperty("coordTimes") && geoData.paths[idTrace2].features[0].properties.hasOwnProperty("coordTimes");
 	let definedHeartRates = traceBorn.features[0].properties.hasOwnProperty("heartRates") && geoData.paths[idTrace2].features[0].properties.hasOwnProperty("heartRates");
 	if (!definedCoordTimes) {
-		delete traceBorn.coordTimes;	
+		delete traceBorn.coordTimes;
 	}
 	if (!definedHeartRates) {
 		delete traceBorn.heartRates;
