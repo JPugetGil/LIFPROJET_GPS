@@ -121,11 +121,11 @@ function addPath(geoData, file, name = "") {
 		geoData.paths[index] = toGeoJSON.gpx((new DOMParser()).parseFromString(gpx, 'text/xml'));
 		geoData.paths[index].file = (name === "" ? filename : name);
 		geoData.paths[index].shown = true;
-		//geoData.markersColor = [blackMarker, blueMarker, redMarker, greenMarker, purpleMarker, yellowMarker];
 		geoData.focus = index;
 		savePaths(geoData);
 		geoData.savedState.upload = true;
 		checkElevation(geoData);
+		infoTrace(geoData);
         return geoData;
 	});
 }
