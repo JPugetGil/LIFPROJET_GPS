@@ -43,7 +43,7 @@ function movePointMode(geoData) {
 					index: point.index
 				})
 				.on('drag', e => dragHandler(e, geoData.layers[geoData.focus]))
-				.on('dragend', e => dragEndHandler(geoData));
+				.on('dragend', e => dragEndHandler(geoData, e.target.options.index));
 				geoData.tempMarkers.push(marker);
 				marker.addTo(geoData.map);
 			});
@@ -67,12 +67,19 @@ function dragHandler(e, polyline) {
 // Update geoData with map layers
 // Param : geoData
 // Return : None
-function dragEndHandler(geoData) {
+function dragEndHandler(geoData, index) {
 	document.getElementById("tutorialButton").dispatchEvent(new Event("movePoint"));
 	savePaths(geoData);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
-	generateGraph(geoData);
-	infoTrace(geoData);
+	let link = "https://dev.virtualearth.net/REST/v1/Elevation/List?points="+geoData.paths[geoData.focus].features[0].geometry.coordinates[index][1]+","+geoData.paths[geoData.focus].features[0].geometry.coordinates[index][0]+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+	console.log(link);
+	$.getJSON(link, function(data) {
+		console.log( data.resourceSets[0].resources[0].elevations[0]);
+		geoData.paths[geoData.focus].features[0].geometry.coordinates[index][2] = data.resourceSets[0].resources[0].elevations[0];
+		console.log(geoData.paths[geoData.focus].features[0].geometry.coordinates[index]);
+		generateGraph(geoData);
+		infoTrace(geoData);
+	});
 }
 
 function addPointMode(geoData) {
