@@ -1,8 +1,10 @@
 // Tutorial functions
 
+// Called to launch the tutorial
 function launchTutorial(geoData) {
     console.log("Début du tutoriel");
 
+    // Change tutorial button design
     let button = document.getElementById("tutorialButton");
     $("#tutorialButton").tooltip('hide');
     $("#tutorialButton").tooltip('disable');
@@ -10,6 +12,7 @@ function launchTutorial(geoData) {
     button.children[0].classList.remove("fa-play");
     button.children[0].classList.add("fa-stop");
 
+    // Create a new version of geoData
     createGeoData()
     .then(setUpPopovers)
     .then(geoDataT => mapReplacements(geoData, geoDataT))
@@ -36,8 +39,11 @@ function launchTutorial(geoData) {
     .catch(console.error)
 }
 
+// Called to stop the tutorial
 function stopTutorial(geoData, geoDataT) {
     console.log("Fin du tutoriel");
+
+    // Change tutorial button design
     let button = document.getElementById("tutorialButton");
     $("#tutorialButton").tooltip('hide');
     $("#tutorialButton").tooltip('disable');
@@ -58,6 +64,7 @@ function stopTutorial(geoData, geoDataT) {
     $("#tutorialButton").tooltip();
 }
 
+// Replace geoData layer controls by geoDataT's
 function mapReplacements(geoData, geoDataT) {
     deleteOldMarkers(geoData);
     geoDataT.map = geoData.map;
@@ -68,6 +75,7 @@ function mapReplacements(geoData, geoDataT) {
     return geoDataT;
 }
 
+// Replace geoDataT layer controls by geoData's 
 function mapOriginals(geoData, geoDataT) {
     deleteOldMarkers(geoDataT);
     geoDataT.layers.forEach(layer => layer.remove());
@@ -78,10 +86,12 @@ function mapOriginals(geoData, geoDataT) {
     }
 }
 
+// Replace a element by a clone => Remove all listeners
 function createClone(element) {
     element.parentNode.replaceChild(element.cloneNode(true), element);
 }
 
+// Add listeners to features
 function replaceListeners(geoData) {
     Array.from(document.querySelectorAll("#features button")).forEach(button => {
         createClone(button);
@@ -93,6 +103,7 @@ function replaceListeners(geoData) {
     return geoData;
 }
 
+// Hide and disable popovers
 function resetPopovers() {
     let titles = [];
     Array.from($('[data-toggle="popover"]')).forEach(button => {
