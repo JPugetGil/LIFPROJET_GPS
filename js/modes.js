@@ -87,7 +87,7 @@ function addPointMode(geoData) {
 		if (geoData.focus !== undefined) {
 			savePaths(geoData);
 			var trace = geoData.paths[geoData.focus].features[0];
-			let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+Number(e.latlng.lat.toFixed(6))+","+Number(e.latlng.lng.toFixed(6))+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+			let link = "https://dev.virtualearth.net/REST/v1/Elevation/List?points="+Number(e.latlng.lat.toFixed(6))+","+Number(e.latlng.lng.toFixed(6))+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
 			$.getJSON(link, function(data) {
 				trace.geometry.coordinates.push([Number(e.latlng.lng.toFixed(6)), Number(e.latlng.lat.toFixed(6)), data.resourceSets[0].resources[0].elevations[0]]);
 			});

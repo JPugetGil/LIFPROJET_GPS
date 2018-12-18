@@ -11,7 +11,7 @@ createGeoData()
 .then(geoData => {
 	document.getElementById("moveMap").click();
   	$("#tutorialButton").tooltip();
-  	
+
 	return geoData;
 })
 .then(console.log)
@@ -153,7 +153,7 @@ function checkElevation(geoData){
 				listCoord += geoData.paths[j].features[0].geometry.coordinates[i][1] + "," + geoData.paths[j].features[0].geometry.coordinates[i][0] + ",";
 				if (((i===geoData.paths[j].features[0].geometry.coordinates.length-1) || (i%50===0) && (i!==0))){
 					listCoord = listCoord.substring(0, listCoord.length-1);
-					let link = "http://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
+					let link = "https://dev.virtualearth.net/REST/v1/Elevation/List?points="+listCoord+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
 					tabPromises.push($.getJSON(link, function(data) {}));
 					listCoord = "";
 				}
