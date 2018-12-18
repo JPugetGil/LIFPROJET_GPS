@@ -1,3 +1,4 @@
+// Allows popovers to be shown
 function setUpPopovers(geoData) {
     let moveMapDesc = `Les 5 premiers boutons de la colonne sont les boutons de mode. Le mode actif est celui en rouge.<br/>
         Le mode activé par ce bouton empêche de modifier la trace.
@@ -51,18 +52,21 @@ function setUpPopovers(geoData) {
 	return geoData;
 }
 
+// Show the popover corresponding to the button with id in parameters
 function activatePopover(id) {
     let realId = '#' + id;
     $(realId).popover('show');
     $(realId).popover('disable');
 }
 
+// Hide the popover corresponding to the button with id in parameters
 function desactivatePopover(id) {
     let realId = '#' + id;
     $(realId).popover('hide');
     $(realId).popover('disable');
 }
 
+// The main part of the tutorial, tips are shown recursively
 function teach(index = 0) {
     let ids = ["moveMap", "movePoint", "addPoint", "deletePoint", "unlink", "link", "undo", "redo", "infos", "samplingFactor", "saveButton", "print"];
 
