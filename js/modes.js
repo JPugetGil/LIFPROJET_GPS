@@ -14,7 +14,6 @@ function moveMapMode(geoData) {
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
 	geoData.mode = "movemap";
-	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='move'");
 	document.getElementById("tutorialButton").dispatchEvent(new Event("moveMap"));
 }
@@ -28,7 +27,6 @@ function movePointMode(geoData) {
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
 	geoData.mode = "movepoint";
-	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='pointer'");
 
 	geoData.map.on("contextmenu", e => {
@@ -72,11 +70,8 @@ function dragEndHandler(geoData, index) {
 	savePaths(geoData);
 	geoData.paths[geoData.focus].features[0].geometry = geoData.layers[geoData.focus].toGeoJSON().geometry;
 	let link = "https://dev.virtualearth.net/REST/v1/Elevation/List?points="+geoData.paths[geoData.focus].features[0].geometry.coordinates[index][1]+","+geoData.paths[geoData.focus].features[0].geometry.coordinates[index][0]+"&key=AuhAPaqRM0jgPmFRoNzjuOoB8te9aven3EH_L6sj2pFjDSxyvJ796hueyskwz4Aa";
-	console.log(link);
 	$.getJSON(link, function(data) {
-		console.log( data.resourceSets[0].resources[0].elevations[0]);
 		geoData.paths[geoData.focus].features[0].geometry.coordinates[index][2] = data.resourceSets[0].resources[0].elevations[0];
-		console.log(geoData.paths[geoData.focus].features[0].geometry.coordinates[index]);
 		generateGraph(geoData);
 		infoTrace(geoData);
 	});
@@ -88,7 +83,6 @@ function addPointMode(geoData) {
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
 	geoData.mode = "addpoint";
-	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("click", e => {
 		if (geoData.focus !== undefined) {
@@ -125,7 +119,6 @@ function deletePointMode(geoData) {
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
 	geoData.mode = "deletepoint";
-	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='help'");
 
 	geoData.map.on("contextmenu", e => {
@@ -293,7 +286,6 @@ function unlinkMode(geoData) {
 	geoData.map.off("contextmenu");
 	deleteOldMarkers(geoData);
 	geoData.mode = "unlink";
-	console.log("mode : " + geoData.mode);
 	document.getElementById("mapid").setAttribute("onmouseover", "this.style.cursor='crosshair'");
 	geoData.map.on("contextmenu", e => {
 		deleteOldMarkers(geoData);
