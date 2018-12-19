@@ -1,3 +1,5 @@
+// Teaching part of the tutorial
+
 // Allows popovers to be shown
 function setUpPopovers(geoData) {
     let moveMapDesc = `Les 5 premiers boutons de la colonne sont les boutons de mode. Le mode actif est celui en rouge.<br/>

@@ -8,12 +8,10 @@ self.onmessage = event => {
         number = event.data;
     } else {
         let path = event.data;
-        let tolerence = 0.00001;
         let tabDistanceApres = [];
         let tabDistanceAvant = [];
         let tabEcart = [];
         let indexMin = 0;
-        let totalDistance = calculateDistance(path);
         for (let i=1; i<path.features[0].geometry.coordinates.length-2; i++){
             tabDistanceApres.push(DistanceBetween2Points(path.features[0].geometry.coordinates[i-1],path.features[0].geometry.coordinates[i+1]));
         }
@@ -32,4 +30,4 @@ self.onmessage = event => {
         }
         self.postMessage(path);
     }
-}
+};

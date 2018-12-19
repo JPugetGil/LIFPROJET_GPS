@@ -1,4 +1,4 @@
-// Tutorial functions
+// Launch and stop the tutorial
 
 // Called to launch the tutorial
 function launchTutorial(geoData) {
@@ -21,7 +21,7 @@ function launchTutorial(geoData) {
     .then(geoDataT => displayPath(geoDataT, 0))
     .then(movePOV)
     .then(geoDataT => {
-        clone = button.cloneNode(true);
+        let clone = button.cloneNode(true);
         clone.addEventListener("click", evt => stopTutorial(geoData, geoDataT));
         button.parentNode.replaceChild(clone, button);
         $("#tutorialButton").tooltip();
@@ -36,7 +36,7 @@ function launchTutorial(geoData) {
 
         return geoDataT;
     })
-    .catch(console.error)
+    .catch(console.error);
 }
 
 // Called to stop the tutorial
@@ -58,7 +58,7 @@ function stopTutorial(geoData, geoDataT) {
     setFocusClass(geoData);
     infoTrace(geoData);
 
-    clone = button.cloneNode(true);
+    let clone = button.cloneNode(true);
     clone.addEventListener("click", evt => launchTutorial(geoData));
     button.parentNode.replaceChild(clone, button);
     $("#tutorialButton").tooltip();

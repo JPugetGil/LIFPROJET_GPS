@@ -30,4 +30,4 @@ self.onmessage = event => {
         console.log(nombreDeDonnees);
         self.postMessage(path);
     }
-}
+};

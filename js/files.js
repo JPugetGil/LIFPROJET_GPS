@@ -14,10 +14,7 @@ function hiddenUpload(geoData) {
     addPath(geoData, url, file.name)
 		.then(geoData => displayPath(geoData, geoData.paths.length-1))
 		.then(movePOV)
-		/*.then(generateFilesTab)
-		.then(generateGraph)
-		.then(generatePoints)*/
-		.then(setListenersUpdate)
+		.then(setListenersUpdate);
 }
 
 // Page to File //

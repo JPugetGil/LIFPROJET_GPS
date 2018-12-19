@@ -136,7 +136,6 @@ function checkElevation(geoData){
 	let tabPromises;
 	let thereIsElevation;
 	let point;
-	var x;
 	for(let j=0; j<geoData.paths.length; j++){
 		tabPromises = [];
 		thereIsElevation = true;
@@ -221,7 +220,7 @@ function reSample(geoData, number){
 				document.getElementById("tutorialButton").dispatchEvent(new Event("samplingFactor"));
 				generateGraph(geoData);
 				infoTrace(geoData);
-			}
+			};
 			w.postMessage(number);
 			w.postMessage(geoData.paths[geoData.focus]);
 		}
@@ -245,7 +244,7 @@ function displayPath(geoData, index, display = true) {
 		geoData.map.addLayer(polyline);
 		setFocusClass(geoData);
 	}
-	setListenersUpdate(geoData)
+	setListenersUpdate(geoData);
 
 	return geoData;
 }
@@ -342,7 +341,7 @@ function generateGraph(geoData) {
 	                textAccessible: true,
 	            }
 	        }).draw();
-		}
+		};
 
 		w2.postMessage(geoData.paths[geoData.focus]);
 	}

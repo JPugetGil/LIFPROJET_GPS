@@ -184,7 +184,7 @@ function differenceBetween2coordTimes(coordT1, coordT2){
 
 function getElevationMean(geoData) {
 	let sum = 0;
-	for(i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length; i++){
+	for(let i=0; i<geoData.paths[geoData.focus].features[0].geometry.coordinates.length; i++){
 		sum += geoData.paths[geoData.focus].features[0].geometry.coordinates[i][2];
 	}
 	return sum/geoData.paths[geoData.focus].features[0].geometry.coordinates.length;
