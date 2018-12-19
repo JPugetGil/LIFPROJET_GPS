@@ -2,6 +2,7 @@
 importScripts("./maths.js");
 
 self.onmessage = event => {
+	// event.data contains the path we are working with
 	let cols = [];
 	let distance = [];
 	let ordonnee = [];

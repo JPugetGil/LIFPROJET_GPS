@@ -5,7 +5,6 @@
 // Return : the global distance
 function calculateDistance(trace) {
 	let distance = 0;
-	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
 	for(let i = 0; i<trace.features[0].geometry.coordinates.length-1; i++) {
 		distance += DistanceBetween2Points(trace.features[0].geometry.coordinates[i],trace.features[0].geometry.coordinates[i+1]);
 	}
@@ -14,7 +13,6 @@ function calculateDistance(trace) {
 
 function calculateDistance2(trace) {
 	let distance = 0;
-	//console.log(DistanceBetween2Points(trace.features[0].geometry.coordinates[0],trace.features[0].geometry.coordinates[1]));;
 	for(let i = 0; i<trace.length-1; i++) {
 		distance += DistanceBetween2Points(trace[i],trace[i+1]);
 	}
@@ -90,7 +88,7 @@ function getLengthAfterDot(number) {
 	return stringified.slice(stringified.indexOf('.') +1, stringified.length).length;
 }
 
-// Have we min <= x <= max
+// Do we have we min <= x <= max ?
 // Param : x => number
 // Param : min => number
 // Param : max => number
@@ -130,6 +128,7 @@ function pointsInInterval(coordinates, latitude, longitude, interval) {
 	return points;
 }
 
+// Return points in coordinates that are in the square formed by latlng1 and latlng2
 function pointsInSquare(coordinates, latlng1, latlng2) {
 	let points = [];
 	let lats = [latlng1.lat, latlng2.lat];

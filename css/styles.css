@@ -22,7 +22,7 @@
 	}
 }
 
-
+/* Hide the real <input type="file"> button */
 #hiddenButton {
 	display: none;
 }
@@ -33,6 +33,7 @@ footer {
 	width: 100%;
 }
 
+/* Colors current focused path */
 .focus {
 	color: red;
 }
@@ -98,10 +99,12 @@ button.btn.btncol:before
 	background-color: #C0C0C0;
 }
 
+/* Colors tutorial popovers array */
 .popover .arrow::after {
 	border-left-color: red;
 }
 
+/* Colors current mode */
 .currentMode,
 .currentMode:hover {
 	color: red;

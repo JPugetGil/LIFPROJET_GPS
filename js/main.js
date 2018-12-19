@@ -1,3 +1,5 @@
+// **** Main script **** //
+
 createGeoData()
 .then(generateIndex)
 .then(generateMap)
@@ -17,6 +19,8 @@ createGeoData()
 .then(console.log)
 .catch(console.error);
 
+// Create the so well-known variable geoData
+// Return a promise with geoData 
 function createGeoData() {
 	return new Promise((resolve, reject) => {
 		let isMobile = (function() {
@@ -45,6 +49,7 @@ function createGeoData() {
 	});
 }
 
+// Generate the main content (everything but header, footer and modals) of 'index.html'
 function generateIndex(geoData) {
 	if (geoData.isMobile){
 		document.getElementById("features").style.width= ($(document).width() * 1/20) +"px";
@@ -110,6 +115,8 @@ function generateTiles(geoData) {
 	return geoData;
 }
 
+// Param : file : an url corresponding to a *.gpx file
+// Param : name : Optionnal name of the path, if not given, the url name will be used
 function addPath(geoData, file, name = "") {
     return Promise.resolve($.ajax(file)).then(gpx => {
 		let index = geoData.paths.length;
@@ -130,6 +137,7 @@ function addPath(geoData, file, name = "") {
 	});
 }
 
+// Add elevation to all paths if not given
 function checkElevation(geoData){
 	var listCoord;
 	let compt;
@@ -174,6 +182,7 @@ function checkElevation(geoData){
 
 // MAP FUNCTIONS //
 
+// Center the map to the focused path
 function movePOV(geoData) {
 	if (geoData.focus !== undefined) {
 		geoData.map.fitBounds(geoData.layers[geoData.focus].getBounds());
@@ -229,12 +238,14 @@ function reSample(geoData, number){
 	}
 }
 
+// Allow to launch resample with Enter
 function keySample(geoData, keyCode) {
 	if (keyCode === 13) {
 		reSample(geoData, document.getElementById("samplingFactor").value);
 	}
 }
 
+// Display a path for geoData [index]
 function displayPath(geoData, index, display = true) {
 	let polyline = getPolyline(geoData, index);
 
@@ -256,6 +267,7 @@ function redisplayPath(geoData, index) {
 	displayPath(geoData, index);
 }
 
+// Return a polyline for geoData.path[index]
 function getPolyline(geoData, index) {
 	let color;
 	let mean = getElevationMean(geoData);
@@ -293,6 +305,7 @@ function getPolyline(geoData, index) {
 	return L.polyline(latlngs, {color: color});
 }
 
+// Use RGraph
 function generateGraph(geoData) {
 	if (document.getElementById("toHide").className === "collapse"){
 			$('#toHide').collapse('toggle');
@@ -369,6 +382,7 @@ function deleteTrace(geoData, id, conf = true) {
 	}
 }
 
+// Set listeners that are not concerned with the map
 function setGeneralListeners(geoData) {
 	// General
 	document.getElementById("workPlan").addEventListener("contextmenu", evt => evt.preventDefault());
@@ -378,6 +392,7 @@ function setGeneralListeners(geoData) {
 }
 
 
+// Set listeners that cares about the map
 function setListeners(geoData) {
 	// Files import
     document.getElementById("importButton").addEventListener("click", () => upload(geoData));
@@ -412,7 +427,7 @@ function setListeners(geoData) {
 
     return geoData;
 }
-
+// Those listeners need to be updated when files are changed
 function setListenersUpdate(geoData) {
 	document.querySelectorAll(".leaflet-control-layers-overlays > label > div > input").forEach(input => {
 		input.addEventListener("change", evt => {
@@ -435,6 +450,7 @@ function setListenersUpdate(geoData) {
 	return geoData;
 }
 
+// Get the index of the element in the file list
 function getIndexFile(element) {
 	let index = undefined;
 	let i = 0;
@@ -463,6 +479,8 @@ function resetFocus(geoData) {
 	}
 }
 
+// Add '.focus' to the focused path and remove it from the others
+// '.focus' allows us to know the path we are working with
 function setFocusClass(geoData) {
 	let lines = document.querySelectorAll(".leaflet-control-layers-overlays > label");
 	lines.forEach(input => {

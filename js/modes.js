@@ -142,6 +142,7 @@ function deletePointMode(geoData) {
 	});
 }
 
+// The function called during remove point mode
 function removePoint(geoData, markerIndex, index) {
 	savePaths(geoData);
 	geoData.map.removeLayer(geoData.tempMarkers[markerIndex]);
@@ -188,6 +189,7 @@ function linkMode(geoData) {
 	}
 }
 
+// Used during link mode
 function fusion(geoData, idTrace1, idTrace2, mode){
 	savePaths(geoData);
 	let traceBorn = copyAttrPath(geoData, geoData.paths[idTrace1]);
@@ -260,6 +262,7 @@ function fusion(geoData, idTrace1, idTrace2, mode){
 	}
 }
 
+// The function called during link mode
 function linkTrace(geoData){
 	let idTrace1 = document.getElementById('t1').value;
 	let idTrace2 = document.getElementById('t2').value;
@@ -307,6 +310,7 @@ function unlinkMode(geoData) {
 	});
 }
 
+// The function called during unlink mode
 function cutIn2(geoData, index) {
 	savePaths(geoData);
 	let coordinates = geoData.paths[geoData.focus].features[0].geometry.coordinates;
@@ -334,6 +338,8 @@ function cutIn2(geoData, index) {
 	document.getElementById("tutorialButton").dispatchEvent(new Event("unlink"));
 }
 
+// As a path is an object we can't copy it with a '=' statement,
+// We use this to return a copy of 'oldPath'
 function copyAttrPath(geoData, oldPath) {
 	let newPath = {};
 	newPath.features = [];
@@ -361,7 +367,7 @@ function copyAttrPath(geoData, oldPath) {
 
 	return newPath;
 }
-
+// Used for history purposes
 function copyAllPaths(geoData, paths) {
 	let tabPaths = [];
 	for(let i = 0; i<paths.length; i++){
@@ -378,6 +384,7 @@ function copyAllPaths(geoData, paths) {
 	return tabPaths;
 }
 
+// Called to update path infos
 function infoTrace(geoData){
 	let distance = calculateDistance(geoData.paths[geoData.focus]);
 	document.getElementById("colInfo3").innerHTML = distance;
@@ -391,12 +398,14 @@ function undoMode(geoData){
 	document.getElementById("tutorialButton").dispatchEvent(new Event("undo"));
 }
 
+// History : Save current state
 function savePaths(geoData){
 	geoData.savedState.paths = copyAllPaths(geoData, geoData.paths);
 	geoData.savedState.undo = false;
 	geoData.savedState.upload = false;
 }
 
+// History permutation of current state and saved one, or the other way round
 function permuteStates(geoData){
 	let temp = [];
 	temp = copyAllPaths(geoData, geoData.paths);
@@ -404,6 +413,7 @@ function permuteStates(geoData){
 	geoData.savedState.paths = copyAllPaths(geoData, temp);
 }
 
+// History : Called to undo
 function itWasBetterBefore(geoData){
 	if(geoData.savedState.upload){
 		geoData.savedState.undo = true;
@@ -435,6 +445,7 @@ function redoMode(geoData){
 	backToTheFuture(geoData);
 }
 
+// History : Called to redo
 function backToTheFuture(geoData){
 	if(geoData.savedState.undo){
 		geoData.map.removeLayer(geoData.layers[geoData.focus]);
@@ -459,6 +470,8 @@ function backToTheFuture(geoData){
 	}
 }
 
+// Add ".currentMode" to current mode button and remove it to all other buttons
+// ".currentMode" allows us to see which mode is currently on
 function setModeStyle(event) {
 	let buttons = Array.from(document.getElementsByClassName("modeButton"));
 	buttons.forEach(button => button.classList.remove("currentMode"));

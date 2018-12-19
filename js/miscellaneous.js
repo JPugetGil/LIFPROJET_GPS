@@ -1,3 +1,5 @@
+// Define our own markers
+
 var blackMarker = L.icon({
 	iconUrl: 'data/markers/blackMarker.png',
 	iconSize:     [40, 55],

@@ -1,13 +1,13 @@
 importScripts("./prototypes_modif.js");
 importScripts("./maths.js");
-//VERSION 1
+//VERSION 1 of resample
 let number = undefined;
 
 self.onmessage = event => {
     if (number === undefined) {
-        number = event.data;
+        number = event.data; // Equal to the number of points we want to remove
     } else {
-        let path = event.data;
+        let path = event.data; // Path where points will be removed
         let tolerence = 0.00001;
         let tabDistance = [];
         let totalDistance = calculateDistance(path);
@@ -27,7 +27,6 @@ self.onmessage = event => {
               tolerence += 0.0000002;
             }
         }
-        console.log(nombreDeDonnees);
         self.postMessage(path);
     }
 };

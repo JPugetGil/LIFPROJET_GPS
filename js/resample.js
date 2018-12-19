@@ -1,13 +1,13 @@
 importScripts("./prototypes_modif.js");
 importScripts("./maths.js");
-//VERSION 2
+//VERSION 2 of resample
 let number = undefined;
 
 self.onmessage = event => {
     if (number === undefined) {
-        number = event.data;
+        number = event.data; // Equal to the number of points we want to remove
     } else {
-        let path = event.data;
+        let path = event.data; // Path where points will be removed
         let tabDistanceApres = [];
         let tabDistanceAvant = [];
         let tabEcart = [];
