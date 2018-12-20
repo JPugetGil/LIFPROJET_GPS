@@ -34,6 +34,7 @@ Responsive design :computer: :on: :iphone:
 - [ ] Internet Explorer (Nous avons décidé de ne pas développer pour IE, car il ne supporte pas l'ES6.)
 
 ## Documentation
+* Rapport -> doc/Rapport de Projet.pdf
 * Cahier des charges -> doc/Cahier des Charges.pdf
 
 ###
