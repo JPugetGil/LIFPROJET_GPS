@@ -1,6 +1,6 @@
 # Improve my GPX
 Ce site web vous permet de visualiser et d'éditer vos traces GPS. <br/>
-Le lien de l'application web : http://persohemoreg.alwaysdata.net/works/improvemygpx/
+Le lien de l'application web : https://hemoreg.me/works/improvemygpx/
 
 ## Importer ses traces
 Accèder au site en ouvrant le fichier index.html dans votre navigateur web préféré. <br/>
