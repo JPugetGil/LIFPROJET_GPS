@@ -58,7 +58,7 @@ Nous avons choisi le sujet : AMRC4. Edition et visualisation de traces GPS sur l
 ## Participants
 
 ### Développeurs
-* Jérôme **G**IL 11608911
+* Jey PUGET **G**IL 11608911
 * Thomas **P**EYROT 11608040
 * Anthony **S**CRIVEN 11607550
 
